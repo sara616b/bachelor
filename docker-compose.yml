@@ -77,15 +77,15 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=pagemanager
-    working_dir: /app/project
+    working_dir: /app
     volumes:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    # command:
-    #   - npm
-    #   - run
-    #   - dev
+    command:
+      - npm
+      - run
+      - dev
     ports:
       - 3000:3000
     restart: always
