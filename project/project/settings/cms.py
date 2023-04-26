@@ -18,4 +18,4 @@ ROOT_URLCONF = 'project.urls.cms'
 
 STATIC_URL = 'static/'
 
-TEMPLATES[0]['DIRS'] = [BASE_DIR / 'sites/cms/templates']
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']

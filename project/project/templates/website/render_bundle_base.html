@@ -1,0 +1,19 @@
+{% extends "cms/base.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}{% if title %}{{ title }}{% endif %}{% endblock %}
+
+{% if initial_data %}
+    {% block initial_data %}
+        <script>
+            window.__INITIAL__ = {{initial_data|safe}};
+        </script>
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+{% if bundle_name %}
+    <section id='{{ bundle_name }}'></section>
+    {% render_bundle bundle_name %}
+{% endif %}
+{% endblock %}

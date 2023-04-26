@@ -6,6 +6,7 @@ module.exports = () => {
     const config = {
         context: __dirname,
         entry: {
+            'cms_login': ['/project/frontend/cms/Pages/LoginPage/LoginPage.jsx'],
             // cms_index: ['./frontend/CMS/Pages/Index/Index.jsx'],
             // cms_page_create: ['./frontend/CMS/Pages/CreatePage/CreatePage.jsx'],
             // cms_page_edit: ['./frontend/CMS/Pages/EditPage/EditPage.jsx'],

@@ -1,6 +1,131 @@
 {
   "status": "done",
-  "assets": {},
-  "chunks": {},
-  "publicPath": "http://localhost:3000/static/"
+  "assets": {
+    "cms_login.16da0f3c389bc452bddc.hot-update.js": {
+      "name": "cms_login.16da0f3c389bc452bddc.hot-update.js",
+      "path": "/app/static/cms_login.16da0f3c389bc452bddc.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.16da0f3c389bc452bddc.hot-update.js"
+    },
+    "cms_login.409134334967c06b8d7a.hot-update.js": {
+      "name": "cms_login.409134334967c06b8d7a.hot-update.js",
+      "path": "/app/static/cms_login.409134334967c06b8d7a.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.409134334967c06b8d7a.hot-update.js"
+    },
+    "cms_login.56404cffa87d6abb38ce.hot-update.js": {
+      "name": "cms_login.56404cffa87d6abb38ce.hot-update.js",
+      "path": "/app/static/cms_login.56404cffa87d6abb38ce.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.56404cffa87d6abb38ce.hot-update.js"
+    },
+    "cms_login.a3ed89e4b52b30b8d69c.hot-update.js": {
+      "name": "cms_login.a3ed89e4b52b30b8d69c.hot-update.js",
+      "path": "/app/static/cms_login.a3ed89e4b52b30b8d69c.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.a3ed89e4b52b30b8d69c.hot-update.js"
+    },
+    "cms_login.c1e75373e5ea6b07a218.hot-update.js": {
+      "name": "cms_login.c1e75373e5ea6b07a218.hot-update.js",
+      "path": "/app/static/cms_login.c1e75373e5ea6b07a218.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.c1e75373e5ea6b07a218.hot-update.js"
+    },
+    "cms_login.d6f2687b29bf81452aa2.hot-update.js": {
+      "name": "cms_login.d6f2687b29bf81452aa2.hot-update.js",
+      "path": "/app/static/cms_login.d6f2687b29bf81452aa2.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.d6f2687b29bf81452aa2.hot-update.js"
+    },
+    "cms_login.f9bcfb213c03bb280df0.hot-update.js": {
+      "name": "cms_login.f9bcfb213c03bb280df0.hot-update.js",
+      "path": "/app/static/cms_login.f9bcfb213c03bb280df0.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.f9bcfb213c03bb280df0.hot-update.js"
+    },
+    "cms_login.js": {
+      "name": "cms_login.js",
+      "path": "/app/static/cms_login.js",
+      "publicPath": "http://localhost:3000/static/cms_login.js"
+    },
+    "runtime.16da0f3c389bc452bddc.hot-update.js": {
+      "name": "runtime.16da0f3c389bc452bddc.hot-update.js",
+      "path": "/app/static/runtime.16da0f3c389bc452bddc.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.16da0f3c389bc452bddc.hot-update.js"
+    },
+    "runtime.16da0f3c389bc452bddc.hot-update.json": {
+      "name": "runtime.16da0f3c389bc452bddc.hot-update.json",
+      "path": "/app/static/runtime.16da0f3c389bc452bddc.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.16da0f3c389bc452bddc.hot-update.json"
+    },
+    "runtime.409134334967c06b8d7a.hot-update.js": {
+      "name": "runtime.409134334967c06b8d7a.hot-update.js",
+      "path": "/app/static/runtime.409134334967c06b8d7a.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.409134334967c06b8d7a.hot-update.js"
+    },
+    "runtime.409134334967c06b8d7a.hot-update.json": {
+      "name": "runtime.409134334967c06b8d7a.hot-update.json",
+      "path": "/app/static/runtime.409134334967c06b8d7a.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.409134334967c06b8d7a.hot-update.json"
+    },
+    "runtime.56404cffa87d6abb38ce.hot-update.js": {
+      "name": "runtime.56404cffa87d6abb38ce.hot-update.js",
+      "path": "/app/static/runtime.56404cffa87d6abb38ce.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.56404cffa87d6abb38ce.hot-update.js"
+    },
+    "runtime.56404cffa87d6abb38ce.hot-update.json": {
+      "name": "runtime.56404cffa87d6abb38ce.hot-update.json",
+      "path": "/app/static/runtime.56404cffa87d6abb38ce.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.56404cffa87d6abb38ce.hot-update.json"
+    },
+    "runtime.a3ed89e4b52b30b8d69c.hot-update.js": {
+      "name": "runtime.a3ed89e4b52b30b8d69c.hot-update.js",
+      "path": "/app/static/runtime.a3ed89e4b52b30b8d69c.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.a3ed89e4b52b30b8d69c.hot-update.js"
+    },
+    "runtime.a3ed89e4b52b30b8d69c.hot-update.json": {
+      "name": "runtime.a3ed89e4b52b30b8d69c.hot-update.json",
+      "path": "/app/static/runtime.a3ed89e4b52b30b8d69c.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.a3ed89e4b52b30b8d69c.hot-update.json"
+    },
+    "runtime.c1e75373e5ea6b07a218.hot-update.js": {
+      "name": "runtime.c1e75373e5ea6b07a218.hot-update.js",
+      "path": "/app/static/runtime.c1e75373e5ea6b07a218.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.c1e75373e5ea6b07a218.hot-update.js"
+    },
+    "runtime.c1e75373e5ea6b07a218.hot-update.json": {
+      "name": "runtime.c1e75373e5ea6b07a218.hot-update.json",
+      "path": "/app/static/runtime.c1e75373e5ea6b07a218.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.c1e75373e5ea6b07a218.hot-update.json"
+    },
+    "runtime.d6f2687b29bf81452aa2.hot-update.js": {
+      "name": "runtime.d6f2687b29bf81452aa2.hot-update.js",
+      "path": "/app/static/runtime.d6f2687b29bf81452aa2.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.d6f2687b29bf81452aa2.hot-update.js"
+    },
+    "runtime.d6f2687b29bf81452aa2.hot-update.json": {
+      "name": "runtime.d6f2687b29bf81452aa2.hot-update.json",
+      "path": "/app/static/runtime.d6f2687b29bf81452aa2.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.d6f2687b29bf81452aa2.hot-update.json"
+    },
+    "runtime.f9bcfb213c03bb280df0.hot-update.js": {
+      "name": "runtime.f9bcfb213c03bb280df0.hot-update.js",
+      "path": "/app/static/runtime.f9bcfb213c03bb280df0.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.f9bcfb213c03bb280df0.hot-update.js"
+    },
+    "runtime.f9bcfb213c03bb280df0.hot-update.json": {
+      "name": "runtime.f9bcfb213c03bb280df0.hot-update.json",
+      "path": "/app/static/runtime.f9bcfb213c03bb280df0.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.f9bcfb213c03bb280df0.hot-update.json"
+    },
+    "runtime.js": {
+      "name": "runtime.js",
+      "path": "/app/static/runtime.js",
+      "publicPath": "http://localhost:3000/static/runtime.js"
+    }
+  },
+  "chunks": {
+    "cms_login": [
+      "runtime.js",
+      "runtime.c1e75373e5ea6b07a218.hot-update.js",
+      "cms_login.js",
+      "cms_login.c1e75373e5ea6b07a218.hot-update.js"
+    ]
+  },
+  "publicPath": "http://localhost:3000/static/",
+  "error": "ModuleNotFoundError",
+  "message": "Module not found: Error: Can't resolve '../../Modules/Navigation/Navigation' in '/app/project/frontend/cms/Pages/LoginPage'"
 }
