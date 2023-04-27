@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # 'django_extensions',
     'page_manager',
     'webpack_loader',
+    'login',
 ]
 
 MIDDLEWARE = [
@@ -57,14 +58,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# WEBPACK_LOADER = {
-#   'DEFAULT': {
-#     'CACHE': not DEBUG,
-#     'STATS_FILE': os.path.join(BASE_DIR, '../webpack-stats.json'),
-#     'POLL_INTERVAL': 0.1,
-#     'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-#   }
-# }
+WEBPACK_LOADER = {
+  'DEFAULT': {
+    'CACHE': not DEBUG,
+    'STATS_FILE': os.path.join(BASE_DIR, '../../webpack-stats.json'),
+    'POLL_INTERVAL': 0.1,
+    'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+  }
+}
 
 TEMPLATES = [
     {

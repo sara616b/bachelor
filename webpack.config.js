@@ -6,6 +6,11 @@ module.exports = () => {
     const config = {
         context: __dirname,
         entry: {
+            'cms_login': ['/project/frontend/cms/Pages/LoginPage/LoginPage.jsx'],
+            'cms_frontpage': ['/project/frontend/cms/Pages/Frontpage/Frontpage.jsx'],
+            'cms_usersoverview': ['/project/frontend/cms/Pages/UsersOverview/UsersOverview.jsx'],
+            'cms_createuser': ['/project/frontend/cms/Pages/CreateUser/CreateUser.jsx'],
+            'cms_edituser': ['/project/frontend/cms/Pages/EditUser/EditUser.jsx'],
             // cms_index: ['./frontend/CMS/Pages/Index/Index.jsx'],
             // cms_page_create: ['./frontend/CMS/Pages/CreatePage/CreatePage.jsx'],
             // cms_page_edit: ['./frontend/CMS/Pages/EditPage/EditPage.jsx'],
