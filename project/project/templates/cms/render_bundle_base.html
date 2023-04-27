@@ -6,7 +6,7 @@
 {% if initial_data %}
     {% block initial_data %}
         <script>
-            window.__INITIAL__ = {{initial_data|safe}};
+            window.__INITIAL__ = {% if initial_data %}{{initial_data|safe}} {% else %} {} {% endif %}
         </script>
     {% endblock %}
 {% endif %}

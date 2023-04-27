@@ -1,115 +1,135 @@
 {
   "status": "done",
   "assets": {
-    "cms_login.16da0f3c389bc452bddc.hot-update.js": {
-      "name": "cms_login.16da0f3c389bc452bddc.hot-update.js",
-      "path": "/app/static/cms_login.16da0f3c389bc452bddc.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.16da0f3c389bc452bddc.hot-update.js"
+    "cms_createuser.js": {
+      "name": "cms_createuser.js",
+      "path": "/app/static/cms_createuser.js",
+      "publicPath": "http://localhost:3000/static/cms_createuser.js"
     },
-    "cms_login.409134334967c06b8d7a.hot-update.js": {
-      "name": "cms_login.409134334967c06b8d7a.hot-update.js",
-      "path": "/app/static/cms_login.409134334967c06b8d7a.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.409134334967c06b8d7a.hot-update.js"
+    "cms_edituser.0b85b268850670fea7bb.hot-update.js": {
+      "name": "cms_edituser.0b85b268850670fea7bb.hot-update.js",
+      "path": "/app/static/cms_edituser.0b85b268850670fea7bb.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.0b85b268850670fea7bb.hot-update.js"
     },
-    "cms_login.56404cffa87d6abb38ce.hot-update.js": {
-      "name": "cms_login.56404cffa87d6abb38ce.hot-update.js",
-      "path": "/app/static/cms_login.56404cffa87d6abb38ce.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.56404cffa87d6abb38ce.hot-update.js"
+    "cms_edituser.6ae21ad840238273cc79.hot-update.js": {
+      "name": "cms_edituser.6ae21ad840238273cc79.hot-update.js",
+      "path": "/app/static/cms_edituser.6ae21ad840238273cc79.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.6ae21ad840238273cc79.hot-update.js"
     },
-    "cms_login.a3ed89e4b52b30b8d69c.hot-update.js": {
-      "name": "cms_login.a3ed89e4b52b30b8d69c.hot-update.js",
-      "path": "/app/static/cms_login.a3ed89e4b52b30b8d69c.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.a3ed89e4b52b30b8d69c.hot-update.js"
+    "cms_edituser.7f3d9716fdb1c37253b5.hot-update.js": {
+      "name": "cms_edituser.7f3d9716fdb1c37253b5.hot-update.js",
+      "path": "/app/static/cms_edituser.7f3d9716fdb1c37253b5.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.7f3d9716fdb1c37253b5.hot-update.js"
     },
-    "cms_login.c1e75373e5ea6b07a218.hot-update.js": {
-      "name": "cms_login.c1e75373e5ea6b07a218.hot-update.js",
-      "path": "/app/static/cms_login.c1e75373e5ea6b07a218.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.c1e75373e5ea6b07a218.hot-update.js"
+    "cms_edituser.a4c239a664fb24bfeaa4.hot-update.js": {
+      "name": "cms_edituser.a4c239a664fb24bfeaa4.hot-update.js",
+      "path": "/app/static/cms_edituser.a4c239a664fb24bfeaa4.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.a4c239a664fb24bfeaa4.hot-update.js"
     },
-    "cms_login.d6f2687b29bf81452aa2.hot-update.js": {
-      "name": "cms_login.d6f2687b29bf81452aa2.hot-update.js",
-      "path": "/app/static/cms_login.d6f2687b29bf81452aa2.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.d6f2687b29bf81452aa2.hot-update.js"
+    "cms_edituser.af135d35c6cb1019b8be.hot-update.js": {
+      "name": "cms_edituser.af135d35c6cb1019b8be.hot-update.js",
+      "path": "/app/static/cms_edituser.af135d35c6cb1019b8be.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.af135d35c6cb1019b8be.hot-update.js"
     },
-    "cms_login.f9bcfb213c03bb280df0.hot-update.js": {
-      "name": "cms_login.f9bcfb213c03bb280df0.hot-update.js",
-      "path": "/app/static/cms_login.f9bcfb213c03bb280df0.hot-update.js",
-      "publicPath": "http://localhost:3000/static/cms_login.f9bcfb213c03bb280df0.hot-update.js"
+    "cms_edituser.d381c1b9c9105005d787.hot-update.js": {
+      "name": "cms_edituser.d381c1b9c9105005d787.hot-update.js",
+      "path": "/app/static/cms_edituser.d381c1b9c9105005d787.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.d381c1b9c9105005d787.hot-update.js"
+    },
+    "cms_edituser.js": {
+      "name": "cms_edituser.js",
+      "path": "/app/static/cms_edituser.js",
+      "publicPath": "http://localhost:3000/static/cms_edituser.js"
+    },
+    "cms_frontpage.js": {
+      "name": "cms_frontpage.js",
+      "path": "/app/static/cms_frontpage.js",
+      "publicPath": "http://localhost:3000/static/cms_frontpage.js"
+    },
+    "cms_login.386336347fac586906df.hot-update.js": {
+      "name": "cms_login.386336347fac586906df.hot-update.js",
+      "path": "/app/static/cms_login.386336347fac586906df.hot-update.js",
+      "publicPath": "http://localhost:3000/static/cms_login.386336347fac586906df.hot-update.js"
     },
     "cms_login.js": {
       "name": "cms_login.js",
       "path": "/app/static/cms_login.js",
       "publicPath": "http://localhost:3000/static/cms_login.js"
     },
-    "runtime.16da0f3c389bc452bddc.hot-update.js": {
-      "name": "runtime.16da0f3c389bc452bddc.hot-update.js",
-      "path": "/app/static/runtime.16da0f3c389bc452bddc.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.16da0f3c389bc452bddc.hot-update.js"
+    "cms_usersoverview.js": {
+      "name": "cms_usersoverview.js",
+      "path": "/app/static/cms_usersoverview.js",
+      "publicPath": "http://localhost:3000/static/cms_usersoverview.js"
     },
-    "runtime.16da0f3c389bc452bddc.hot-update.json": {
-      "name": "runtime.16da0f3c389bc452bddc.hot-update.json",
-      "path": "/app/static/runtime.16da0f3c389bc452bddc.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.16da0f3c389bc452bddc.hot-update.json"
+    "runtime.0b85b268850670fea7bb.hot-update.js": {
+      "name": "runtime.0b85b268850670fea7bb.hot-update.js",
+      "path": "/app/static/runtime.0b85b268850670fea7bb.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.0b85b268850670fea7bb.hot-update.js"
     },
-    "runtime.409134334967c06b8d7a.hot-update.js": {
-      "name": "runtime.409134334967c06b8d7a.hot-update.js",
-      "path": "/app/static/runtime.409134334967c06b8d7a.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.409134334967c06b8d7a.hot-update.js"
+    "runtime.0b85b268850670fea7bb.hot-update.json": {
+      "name": "runtime.0b85b268850670fea7bb.hot-update.json",
+      "path": "/app/static/runtime.0b85b268850670fea7bb.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.0b85b268850670fea7bb.hot-update.json"
     },
-    "runtime.409134334967c06b8d7a.hot-update.json": {
-      "name": "runtime.409134334967c06b8d7a.hot-update.json",
-      "path": "/app/static/runtime.409134334967c06b8d7a.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.409134334967c06b8d7a.hot-update.json"
+    "runtime.386336347fac586906df.hot-update.js": {
+      "name": "runtime.386336347fac586906df.hot-update.js",
+      "path": "/app/static/runtime.386336347fac586906df.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.386336347fac586906df.hot-update.js"
     },
-    "runtime.56404cffa87d6abb38ce.hot-update.js": {
-      "name": "runtime.56404cffa87d6abb38ce.hot-update.js",
-      "path": "/app/static/runtime.56404cffa87d6abb38ce.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.56404cffa87d6abb38ce.hot-update.js"
+    "runtime.386336347fac586906df.hot-update.json": {
+      "name": "runtime.386336347fac586906df.hot-update.json",
+      "path": "/app/static/runtime.386336347fac586906df.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.386336347fac586906df.hot-update.json"
     },
-    "runtime.56404cffa87d6abb38ce.hot-update.json": {
-      "name": "runtime.56404cffa87d6abb38ce.hot-update.json",
-      "path": "/app/static/runtime.56404cffa87d6abb38ce.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.56404cffa87d6abb38ce.hot-update.json"
+    "runtime.6ae21ad840238273cc79.hot-update.js": {
+      "name": "runtime.6ae21ad840238273cc79.hot-update.js",
+      "path": "/app/static/runtime.6ae21ad840238273cc79.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.6ae21ad840238273cc79.hot-update.js"
     },
-    "runtime.a3ed89e4b52b30b8d69c.hot-update.js": {
-      "name": "runtime.a3ed89e4b52b30b8d69c.hot-update.js",
-      "path": "/app/static/runtime.a3ed89e4b52b30b8d69c.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.a3ed89e4b52b30b8d69c.hot-update.js"
+    "runtime.6ae21ad840238273cc79.hot-update.json": {
+      "name": "runtime.6ae21ad840238273cc79.hot-update.json",
+      "path": "/app/static/runtime.6ae21ad840238273cc79.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.6ae21ad840238273cc79.hot-update.json"
     },
-    "runtime.a3ed89e4b52b30b8d69c.hot-update.json": {
-      "name": "runtime.a3ed89e4b52b30b8d69c.hot-update.json",
-      "path": "/app/static/runtime.a3ed89e4b52b30b8d69c.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.a3ed89e4b52b30b8d69c.hot-update.json"
+    "runtime.7f3d9716fdb1c37253b5.hot-update.js": {
+      "name": "runtime.7f3d9716fdb1c37253b5.hot-update.js",
+      "path": "/app/static/runtime.7f3d9716fdb1c37253b5.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.7f3d9716fdb1c37253b5.hot-update.js"
     },
-    "runtime.c1e75373e5ea6b07a218.hot-update.js": {
-      "name": "runtime.c1e75373e5ea6b07a218.hot-update.js",
-      "path": "/app/static/runtime.c1e75373e5ea6b07a218.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.c1e75373e5ea6b07a218.hot-update.js"
+    "runtime.7f3d9716fdb1c37253b5.hot-update.json": {
+      "name": "runtime.7f3d9716fdb1c37253b5.hot-update.json",
+      "path": "/app/static/runtime.7f3d9716fdb1c37253b5.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.7f3d9716fdb1c37253b5.hot-update.json"
     },
-    "runtime.c1e75373e5ea6b07a218.hot-update.json": {
-      "name": "runtime.c1e75373e5ea6b07a218.hot-update.json",
-      "path": "/app/static/runtime.c1e75373e5ea6b07a218.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.c1e75373e5ea6b07a218.hot-update.json"
+    "runtime.a4c239a664fb24bfeaa4.hot-update.js": {
+      "name": "runtime.a4c239a664fb24bfeaa4.hot-update.js",
+      "path": "/app/static/runtime.a4c239a664fb24bfeaa4.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.a4c239a664fb24bfeaa4.hot-update.js"
     },
-    "runtime.d6f2687b29bf81452aa2.hot-update.js": {
-      "name": "runtime.d6f2687b29bf81452aa2.hot-update.js",
-      "path": "/app/static/runtime.d6f2687b29bf81452aa2.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.d6f2687b29bf81452aa2.hot-update.js"
+    "runtime.a4c239a664fb24bfeaa4.hot-update.json": {
+      "name": "runtime.a4c239a664fb24bfeaa4.hot-update.json",
+      "path": "/app/static/runtime.a4c239a664fb24bfeaa4.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.a4c239a664fb24bfeaa4.hot-update.json"
     },
-    "runtime.d6f2687b29bf81452aa2.hot-update.json": {
-      "name": "runtime.d6f2687b29bf81452aa2.hot-update.json",
-      "path": "/app/static/runtime.d6f2687b29bf81452aa2.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.d6f2687b29bf81452aa2.hot-update.json"
+    "runtime.af135d35c6cb1019b8be.hot-update.js": {
+      "name": "runtime.af135d35c6cb1019b8be.hot-update.js",
+      "path": "/app/static/runtime.af135d35c6cb1019b8be.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.af135d35c6cb1019b8be.hot-update.js"
     },
-    "runtime.f9bcfb213c03bb280df0.hot-update.js": {
-      "name": "runtime.f9bcfb213c03bb280df0.hot-update.js",
-      "path": "/app/static/runtime.f9bcfb213c03bb280df0.hot-update.js",
-      "publicPath": "http://localhost:3000/static/runtime.f9bcfb213c03bb280df0.hot-update.js"
+    "runtime.af135d35c6cb1019b8be.hot-update.json": {
+      "name": "runtime.af135d35c6cb1019b8be.hot-update.json",
+      "path": "/app/static/runtime.af135d35c6cb1019b8be.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.af135d35c6cb1019b8be.hot-update.json"
     },
-    "runtime.f9bcfb213c03bb280df0.hot-update.json": {
-      "name": "runtime.f9bcfb213c03bb280df0.hot-update.json",
-      "path": "/app/static/runtime.f9bcfb213c03bb280df0.hot-update.json",
-      "publicPath": "http://localhost:3000/static/runtime.f9bcfb213c03bb280df0.hot-update.json"
+    "runtime.d381c1b9c9105005d787.hot-update.js": {
+      "name": "runtime.d381c1b9c9105005d787.hot-update.js",
+      "path": "/app/static/runtime.d381c1b9c9105005d787.hot-update.js",
+      "publicPath": "http://localhost:3000/static/runtime.d381c1b9c9105005d787.hot-update.js"
+    },
+    "runtime.d381c1b9c9105005d787.hot-update.json": {
+      "name": "runtime.d381c1b9c9105005d787.hot-update.json",
+      "path": "/app/static/runtime.d381c1b9c9105005d787.hot-update.json",
+      "publicPath": "http://localhost:3000/static/runtime.d381c1b9c9105005d787.hot-update.json"
     },
     "runtime.js": {
       "name": "runtime.js",
@@ -118,14 +138,34 @@
     }
   },
   "chunks": {
+    "cms_createuser": [
+      "runtime.js",
+      "runtime.386336347fac586906df.hot-update.js",
+      "cms_createuser.js"
+    ],
+    "cms_edituser": [
+      "runtime.js",
+      "runtime.386336347fac586906df.hot-update.js",
+      "cms_edituser.js"
+    ],
+    "cms_frontpage": [
+      "runtime.js",
+      "runtime.386336347fac586906df.hot-update.js",
+      "cms_frontpage.js"
+    ],
     "cms_login": [
       "runtime.js",
-      "runtime.c1e75373e5ea6b07a218.hot-update.js",
+      "runtime.386336347fac586906df.hot-update.js",
       "cms_login.js",
-      "cms_login.c1e75373e5ea6b07a218.hot-update.js"
+      "cms_login.386336347fac586906df.hot-update.js"
+    ],
+    "cms_usersoverview": [
+      "runtime.js",
+      "runtime.386336347fac586906df.hot-update.js",
+      "cms_usersoverview.js"
     ]
   },
   "publicPath": "http://localhost:3000/static/",
-  "error": "ModuleNotFoundError",
-  "message": "Module not found: Error: Can't resolve '../../Modules/Navigation/Navigation' in '/app/project/frontend/cms/Pages/LoginPage'"
+  "error": "ModuleBuildError",
+  "message": "Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /app/project/frontend/cms/Pages/EditUser/EditUser.jsx: Unexpected token, expected \"}\" (81:63)\n\n  79 |                                 id=\"firstname\"\n  80 |                                 label=\"First Name\"\n> 81 |                                 defaultValue={user?.first_name or ''}\n     |                                                                ^\n  82 |                             required\n  83 |                             />\n  84 |                             <TextInput\n    at instantiate (/app/node_modules/@babel/parser/lib/index.js:653:32)\n    at constructor (/app/node_modules/@babel/parser/lib/index.js:947:12)\n    at JSXParserMixin.raise (/app/node_modules/@babel/parser/lib/index.js:3271:19)\n    at JSXParserMixin.unexpected (/app/node_modules/@babel/parser/lib/index.js:3301:16)\n    at JSXParserMixin.expect (/app/node_modules/@babel/parser/lib/index.js:3643:28)\n    at JSXParserMixin.jsxParseExpressionContainer (/app/node_modules/@babel/parser/lib/index.js:6873:10)\n    at JSXParserMixin.jsxParseAttributeValue (/app/node_modules/@babel/parser/lib/index.js:6836:21)\n    at JSXParserMixin.jsxParseAttribute (/app/node_modules/@babel/parser/lib/index.js:6889:38)\n    at JSXParserMixin.jsxParseOpeningElementAfterName (/app/node_modules/@babel/parser/lib/index.js:6903:28)\n    at JSXParserMixin.jsxParseOpeningElementAt (/app/node_modules/@babel/parser/lib/index.js:6898:17)\n    at JSXParserMixin.jsxParseElementAt (/app/node_modules/@babel/parser/lib/index.js:6922:33)\n    at JSXParserMixin.jsxParseElementAt (/app/node_modules/@babel/parser/lib/index.js:6934:32)\n    at JSXParserMixin.jsxParseElementAt (/app/node_modules/@babel/parser/lib/index.js:6934:32)\n    at JSXParserMixin.jsxParseElementAt (/app/node_modules/@babel/parser/lib/index.js:6934:32)\n    at JSXParserMixin.jsxParseElementAt (/app/node_modules/@babel/parser/lib/index.js:6934:32)\n    at JSXParserMixin.jsxParseElementAt (/app/node_modules/@babel/parser/lib/index.js:6934:32)\n    at JSXParserMixin.jsxParseElement (/app/node_modules/@babel/parser/lib/index.js:6991:17)\n    at JSXParserMixin.parseExprAtom (/app/node_modules/@babel/parser/lib/index.js:7003:19)\n    at JSXParserMixin.parseExprSubscripts (/app/node_modules/@babel/parser/lib/index.js:10880:23)\n    at JSXParserMixin.parseUpdate (/app/node_modules/@babel/parser/lib/index.js:10863:21)\n    at JSXParserMixin.parseMaybeUnary (/app/node_modules/@babel/parser/lib/index.js:10839:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/app/node_modules/@babel/parser/lib/index.js:10677:61)\n    at JSXParserMixin.parseExprOps (/app/node_modules/@babel/parser/lib/index.js:10682:23)\n    at JSXParserMixin.parseMaybeConditional (/app/node_modules/@babel/parser/lib/index.js:10659:23)\n    at JSXParserMixin.parseMaybeAssign (/app/node_modules/@babel/parser/lib/index.js:10620:21)\n    at /app/node_modules/@babel/parser/lib/index.js:10590:39\n    at JSXParserMixin.allowInAnd (/app/node_modules/@babel/parser/lib/index.js:12265:12)\n    at JSXParserMixin.parseMaybeAssignAllowIn (/app/node_modules/@babel/parser/lib/index.js:10590:17)\n    at JSXParserMixin.parseParenAndDistinguishExpression (/app/node_modules/@babel/parser/lib/index.js:11498:28)\n    at JSXParserMixin.parseExprAtom (/app/node_modules/@babel/parser/lib/index.js:11149:23)\n    at JSXParserMixin.parseExprAtom (/app/node_modules/@babel/parser/lib/index.js:7008:20)\n    at JSXParserMixin.parseExprSubscripts (/app/node_modules/@babel/parser/lib/index.js:10880:23)\n    at JSXParserMixin.parseUpdate (/app/node_modules/@babel/parser/lib/index.js:10863:21)\n    at JSXParserMixin.parseMaybeUnary (/app/node_modules/@babel/parser/lib/index.js:10839:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/app/node_modules/@babel/parser/lib/index.js:10677:61)\n    at JSXParserMixin.parseExprOps (/app/node_modules/@babel/parser/lib/index.js:10682:23)\n    at JSXParserMixin.parseMaybeConditional (/app/node_modules/@babel/parser/lib/index.js:10659:23)\n    at JSXParserMixin.parseMaybeAssign (/app/node_modules/@babel/parser/lib/index.js:10620:21)\n    at JSXParserMixin.parseExpressionBase (/app/node_modules/@babel/parser/lib/index.js:10574:23)\n    at /app/node_modules/@babel/parser/lib/index.js:10570:39\n    at JSXParserMixin.allowInAnd (/app/node_modules/@babel/parser/lib/index.js:12260:16)\n    at JSXParserMixin.parseExpression (/app/node_modules/@babel/parser/lib/index.js:10570:17)\n    at JSXParserMixin.parseReturnStatement (/app/node_modules/@babel/parser/lib/index.js:12943:28)\n    at JSXParserMixin.parseStatementContent (/app/node_modules/@babel/parser/lib/index.js:12590:21)\n    at JSXParserMixin.parseStatementLike (/app/node_modules/@babel/parser/lib/index.js:12557:17)\n    at JSXParserMixin.parseStatementListItem (/app/node_modules/@babel/parser/lib/index.js:12537:17)\n    at JSXParserMixin.parseBlockOrModuleBlockBody (/app/node_modules/@babel/parser/lib/index.js:13129:61)\n    at JSXParserMixin.parseBlockBody (/app/node_modules/@babel/parser/lib/index.js:13122:10)\n    at JSXParserMixin.parseBlock (/app/node_modules/@babel/parser/lib/index.js:13110:10)\n    at JSXParserMixin.parseFunctionBody (/app/node_modules/@babel/parser/lib/index.js:11932:24)"
 }

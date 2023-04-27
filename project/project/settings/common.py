@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # 'django_extensions',
     'page_manager',
     'webpack_loader',
+    'login',
 ]
 
 MIDDLEWARE = [

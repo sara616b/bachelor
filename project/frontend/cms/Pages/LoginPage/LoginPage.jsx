@@ -1,13 +1,29 @@
 import React from 'react';
-import { Title, Text, Container, Button, Flex, Input } from '@mantine/core';
+import { Title, Text, Container, Button, Flex, TextInput } from '@mantine/core';
 import renderPage from '../../../Utils/renderPage';
+import Cookies from 'js-cookie';
+import axios from "axios";
 
 const App = () => {
 
+    const csrftoken = Cookies.get('csrftoken');
+    axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
+
     const SubmitForm = (e) => {
         e.preventDefault()
-        console.log(e)
-        console.log('submitting form');
+        const username = e.target.elements.username.value;
+        const password = e.target.elements.password.value;
+        const data = new FormData()
+        data.append('username', username);
+        data.append('password', password);
+        axios
+            .post('/login/', data)
+            .then((response) => {
+                if (response.status == 200) {
+                    // redirect
+                    location.href = '/'
+                }
+            });
     }
 
     return (
@@ -37,15 +53,20 @@ const App = () => {
                             px="xl"
                             py="xl"
                         >
-                            <Input
+                            <TextInput
                                 placeholder="Username"
                                 name="username"
                                 id="username"
+                                label="Username"
+                                required
                             />
-                            <Input
+                            <TextInput
                                 placeholder="Password"
                                 name="password"
                                 id="password"
+                                label="Password"
+                                type="password"
+                                required
                             />
                             <Button
                                 variant="gradient"
