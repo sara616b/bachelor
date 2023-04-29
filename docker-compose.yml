@@ -82,10 +82,7 @@ services:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    command:
-      - npm
-      - run
-      - dev
+    command: sh -c 'npm run dev'
     ports:
       - 3000:3000
     restart: always
