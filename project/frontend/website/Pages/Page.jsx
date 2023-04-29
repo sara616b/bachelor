@@ -31,7 +31,13 @@ const App = () => {
                             {
                                 section?.columns ? Object.entries(section?.columns).map(([key, column]) => {
                                     return (
-                                        <Column column={column} key={key}>
+                                        <Column
+                                            column={column}
+                                            key={key}
+                                            index={key}
+                                            alignContent={column.alignContent || ''}
+                                            wrap={section.wrap}
+                                        >
                                             {
                                                 column.components ? Object.entries(column.components).map(([key, component]) => {
                                                     return (

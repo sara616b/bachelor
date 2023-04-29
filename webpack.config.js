@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
+// const classNames = require('classnames');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = () => {
     const config = {
@@ -9,6 +11,7 @@ module.exports = () => {
             'website_main': ['/project/frontend/website/Main/Main.jsx'],
             'cms_main': ['/project/frontend/cms/Main/Main.jsx'],
             'cms_login': ['/project/frontend/cms/Main/Login.jsx'],
+            'tailwind': ['/project/frontend/tailwind.css'],
             // 'cms_login': ['/project/frontend/cms/Pages/LoginPage/LoginPage.jsx'],
             // 'cms_frontpage': ['/project/frontend/cms/Pages/Frontpage.jsx'],
             // 'cms_usersoverview': ['/project/frontend/cms/Pages/UsersOverview.jsx'],
@@ -54,6 +57,10 @@ module.exports = () => {
         },
         plugins: [
             new BundleTracker({ filename: 'webpack-stats.json' }),
+            new MiniCssExtractPlugin({
+                filename: './project/frontend/tailwind.css',
+                chunkFilename: 'tailwind.css'
+            }),
         ],
         module: {
             rules: [
@@ -69,7 +76,15 @@ module.exports = () => {
                             ]
                         }
                     }
-                }
+                },
+                {
+                    test: /\.css$/i,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        "css-loader",
+                        "postcss-loader"
+                    ],
+                },
             ]
         },
         resolve: {
