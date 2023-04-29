@@ -1,8 +1,8 @@
 from django.urls import path
-from pagemanager.views.website import (IndexView)
-
-app_name = 'pagemanager'
+from page_manager.views.website import (IndexView, WebsiteFrontend)
 
 urlpatterns = [
-    path('', IndexView.as_view(), name='IndexView'),
+    path('', WebsiteFrontend.as_view(), name='FrontpageView'),
+    path('<slug>/', WebsiteFrontend.as_view(), name='FrontpageView'),
+    # path('', IndexView.as_view(), name='IndexView'),
 ]

@@ -38,26 +38,28 @@ class CreateUserView(View):
         username = request.POST["username"]
         email = request.POST["email"]
         password = request.POST["password"]
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-            )
-        except IntegrityError as ex:
-            return JsonResponse({
-                'result': f'username and email must be unique. Error: {ex}'
-            }, status=400)
+        is_superuser = request.POST["is_superuser"]
+        permissions = request.POST["permissions"]
+        print(is_superuser)
+        # try:
+        #     user = User.objects.create_user(
+        #         username=username,
+        #         email=email,
+        #         password=password,
+        #     )
+        # except IntegrityError as ex:
+        #     return JsonResponse({
+        #         'result': f'username and email must be unique. Error: {ex}'
+        #     }, status=400)
 
-        user.first_name = firstname
-        user.last_name = lastname
-        user.is_staff = True
-        # if set_superuser:
+        # user.first_name = firstname
+        # user.last_name = lastname
+        # user.is_staff = True
+        # if is_superuser:
         #     user.is_superuser = True
-        # user.groups.add(group, group)
-        # user.user_permissions.add(perm, perm)
+        # user.user_permissions.set(permissions)
         
-        user.save()
+        # user.save()
 
         return redirect(reverse('UsersView'))
 

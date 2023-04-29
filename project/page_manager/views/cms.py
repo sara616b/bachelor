@@ -4,6 +4,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from pagemanager.models import Page
 
 
+
+class CmsFrontend(LoginRequiredMixin, View):
+    def get(self, request, **kwargs):
+        return render(
+            request,
+            'cms/render_bundle_base.html',
+            {
+                'title': 'CMS',
+                'bundle_name': 'cms_main',
+            }
+        )
+
+
 class FrontpageView(LoginRequiredMixin, View):
     def get(self, request):
         return render(

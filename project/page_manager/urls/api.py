@@ -1,7 +1,5 @@
 from django.urls import path
-from pagemanager.views.api import (GetAllPagesApi, GetPageApi, CreateNewPageApi, UpdatePageApi)
-
-app_name = 'pagemanager-api'
+from page_manager.views.api import (GetAllPagesApi, GetPageApi, CreateNewPageApi, UpdatePageApi)
 
 urlpatterns = [
     path('api/page/all/', GetAllPagesApi.as_view(), name='GetAllPagesApi'),
