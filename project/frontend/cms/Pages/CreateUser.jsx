@@ -8,7 +8,6 @@ import axios from "axios";
 const App = () => {
     const [permissions, setPermissions] = useState([])
     const [chosenPermissions, setChosenPermissions] = useState([])
-    console.log(chosenPermissions)
 
     const csrftoken = Cookies.get('csrftoken');
     axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
@@ -18,11 +17,9 @@ const App = () => {
             setPermissions(response.data.permissions);
         });
     }, []);
-    console.log(permissions)
 
     const SubmitForm = (e) => {
         e.preventDefault()
-        console.log(e.target.elements)
         const data = new FormData()
         data.append('firstname', e.target.elements.firstname.value);
         data.append('lastname', e.target.elements.lastname.value);
@@ -31,7 +28,6 @@ const App = () => {
         data.append('password', e.target.elements.password.value);
         data.append('is_superuser', e.target.elements.is_superuser.checked);
         data.append('permissions', chosenPermissions);
-        console.log(data)
         axios
             .post('/api/user/create/', data)
             .then((response) => {
@@ -108,6 +104,7 @@ const App = () => {
                                 name="password"
                                 id="password"
                                 label="Password"
+                                type="password"
                                 required
                             />
                             <Checkbox
@@ -140,5 +137,3 @@ const App = () => {
     )
 }
 export default <App />;
-
-// renderPage('cms_createuser', <App />)
