@@ -6,6 +6,7 @@ const Column = ({ column, index, wrap, alignContent, children }) => {
     const columnClassnames = classnames(
         "w-full",
         "grid",
+        "content-center",
         {
             "place-content-center": alignContent == "center",
             "place-content-end": alignContent == "right",

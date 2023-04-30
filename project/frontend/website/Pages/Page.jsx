@@ -23,11 +23,13 @@ const App = () => {
     }, []);
 
     return (
-        <main>
+        <main
+            className='grid'
+        >
             {
                 page?.data ? Object.entries(page.data.sections).map(([key, section]) => {
                     return (
-                        <Section props={section} key={key}>
+                        <Section props={section} key={key} index={key}>
                             {
                                 section?.columns ? Object.entries(section?.columns).map(([key, column]) => {
                                     return (

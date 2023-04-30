@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
 
-const Section = ({ props, children }) => {
+const Section = ({ section, index, children }) => {
     const numberOfSections = children.length
-    const backgroundColor = numberOfSections == 1 ? "blue" : "#d5a1d4";
-    const wrap = "reverse";
+    const backgroundColor = index == 1 ? "blue" : "#d5a1d4";
 
     const sectionClasses = classnames(
         "w-full",
@@ -27,7 +26,10 @@ const Section = ({ props, children }) => {
     return (
         <section
             className={sectionClasses}
-            style={{ backgroundColor: backgroundColor }}
+            style={{
+                backgroundColor: backgroundColor,
+                order: index,
+            }}
         >
             <div className={containerClasses}>
                 {React.Children.map(children, child => { return child })}

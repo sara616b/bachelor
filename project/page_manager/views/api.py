@@ -1,42 +1,34 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse
-import json
-from django.views.decorators.csrf import ensure_csrf_cookie
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from urllib.parse import quote_plus
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from bson.json_util import dumps, loads
+import json
+import requests
 
-from django.views.decorators.csrf import csrf_protect
-
+from page_manager.utils import mongo_client
 # from page_manager.models import Page
-from project.settings.secrets import MONGO_PASSWORD
-
-
-mongo_client = MongoClient(
-    f'mongodb+srv://sarah:{quote_plus(MONGO_PASSWORD)}@bachelor.rjkfkr1.mongodb.net/?retryWrites=true&w=majority',
-    server_api=ServerApi('1')
-)
 
 
 class GetAllPagesApi(View):
-    pass
-    # def get(self, request):
-    #     try:
-    #         pages = Page.objects.all().values(
-    #             'page_title',
-    #             'pk'
-    #         )
-    #     except Page.DoesNotExist:
-    #         return JsonResponse({
-    #             'result': 'no pages found'
-    #         }, status=404)
-
-    #     return JsonResponse(
-    #         data={'pages': list(pages)},
-    #         status=200
-    #     )
+    def get(self, request):
+        try:
+            database = mongo_client.Bachelor
+            pages = database['pages'].find()
+            return JsonResponse(
+                {
+                    'pages': json.loads(dumps(pages)),
+                    'status': 200,
+                }
+            )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'data': f'{e}',
+                    'status': 500,
+                }
+            )
 
 
 class GetPageApi(View):
@@ -49,7 +41,6 @@ class GetPageApi(View):
                 {
                     'data': f'{e}',
                     'status': 500,
-                    'safe': False,
                 }
             )
 
@@ -57,28 +48,57 @@ class GetPageApi(View):
             {
                 'data': json.loads(dumps(page)),
                 'status': 200,
-                'safe': False,
             }
         )
 
 
-class CreateNewPageApi(View):
-    pass
-    # def post(self, request):
-    #     new_page = Page.objects.create(
-    #         page_title = request.POST.get('title'),
-    #         slug = request.POST.get('slug'),
-    #     )
+class CreateNewPageApi(View, LoginRequiredMixin):
+    def post(self, request):
+        try:
+            database = mongo_client.Bachelor
+            pages = database['pages']
+            slug = request.POST.get('slug')
+            data = {
+                'page_title': request.POST.get('title'),
+                'page_slug': slug,
+                'data': {},
+            }
 
-    #     if new_page:
-    #         return JsonResponse({
-    #             'result': 'created',
-    #             'page_id': new_page.pk,
-    #             }, status=200)
-    #     else:
-    #         return JsonResponse({
-    #             'result': 'error',
-    #             }, status=500)
+            result = pages.insert_one(data)
+            if result.inserted_id:
+                return JsonResponse(
+                    {
+                        'result': 'created',
+                        'page_slug': slug,
+                    },
+                    status=200
+                )
+
+        except Exception as ex:
+            return JsonResponse(
+                {
+                    'result': f'error: {ex}',
+                },
+                status=500
+            )
+
+
+class DeletePageApi(View, LoginRequiredMixin):
+    def delete(self, request, slug):
+        try:
+            database = mongo_client.Bachelor
+            pages = database['pages']
+
+            pages.delete_one({'page_slug': slug})
+            return JsonResponse({
+                'result': 'deleted',
+                'page_slug': slug,
+                }, status=200)
+
+        except Exception as ex:
+            return JsonResponse({
+                'result': f'error: {ex}',
+                }, status=500)
 
 
 class UpdatePageApi(View):
@@ -108,3 +128,14 @@ class UpdatePageApi(View):
         #     return JsonResponse({
         #         'result': 'error',
         #         }, status=500)
+
+
+class UploadImageApi(View, LoginRequiredMixin):
+    def post(self, request):
+        print('upload')
+        print(request.POST.get('image_url'))
+
+        return JsonResponse({
+            'result': 'uploaded',
+            'image_src': 'slug',
+            }, status=200)

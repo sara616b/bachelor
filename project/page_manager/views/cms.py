@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from pagemanager.models import Page
 
 
-
 class CmsFrontend(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         return render(
@@ -42,14 +41,13 @@ class CreatePage(View):
 
 
 class EditPage(View):
-    def get(self, request, pk):
+    def get(self, request, slug):
         return render(
             request,
             'cms/render_bundle_base.html',
             {
                 'title': 'Edit Page | ',
                 'bundle_name': 'cms_page_edit',
-                'initial_data': {'id': pk}
             }
         )
 
