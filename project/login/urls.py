@@ -1,6 +1,5 @@
-from django.urls import path, include
+from django.urls import path
 from login.views import (LoginView, LogoutView)
-from page_manager.views.cms import (CmsFrontend)
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='LoginView'),

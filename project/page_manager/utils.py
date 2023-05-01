@@ -5,6 +5,6 @@ from urllib.parse import quote_plus
 
 
 mongo_client = MongoClient(
-    f'mongodb+srv://sarah:{quote_plus(MONGO_PASSWORD)}@bachelor.rjkfkr1.mongodb.net/?retryWrites=true&w=majority',
+    f'mongodb+srv://sarah:{quote_plus(MONGO_PASSWORD)}@bachelor.rjkfkr1.mongodb.net/?retryWrites=true&w=majority',  # noqa
     server_api=ServerApi('1')
 )

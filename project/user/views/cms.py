@@ -1,10 +1,9 @@
 from django.shortcuts import render, reverse, redirect
 from django.views import View
-from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-import json
+# import json
 from django.db import IntegrityError
 
 
@@ -58,7 +57,7 @@ class CreateUserView(View):
             if is_superuser:
                 user.is_superuser = True
             user.user_permissions.set(permissions)
-            
+
             user.save()
         except Exception as ex:
             return JsonResponse({

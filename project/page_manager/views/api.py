@@ -1,11 +1,11 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from bson.json_util import dumps, loads
+from bson.json_util import dumps
 import json
-import requests
+# import requests
 
 from page_manager.utils import mongo_client
 # from page_manager.models import Page
@@ -113,7 +113,7 @@ class UpdatePageApi(View):
         #     #     page.title = new_data['title']
         #     # if page.slug != new_data['slug']:
         #     #     page.slug = new_data['slug']
-            
+
         #     page.page_data = new_data['data']
 
         #     page.page_title = 'first ever page title'
@@ -123,7 +123,7 @@ class UpdatePageApi(View):
         #         'result': 'updated',
         #         'page_id': page.pk,
         #         }, status=200)
-    
+
         # except:
         #     return JsonResponse({
         #         'result': 'error',
