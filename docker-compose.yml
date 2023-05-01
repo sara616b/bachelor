@@ -1,3 +1,4 @@
+--- # yamllint disable-line
 version: "3.9"
 
 services:
@@ -11,9 +12,9 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=pagemanager
-    restart: always
     networks:
       - dbnetwork
+    restart: always
   website:
     build:
       context: ./
@@ -28,7 +29,7 @@ services:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000'
+    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
     ports:
       - "8002:8000"
     depends_on:
@@ -54,7 +55,7 @@ services:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000'
+    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
     ports:
       - "8001:8000"
     depends_on:
@@ -67,13 +68,11 @@ services:
       - dbnetwork
       - webnetwork
   assets:
-    environment:
-      - SITE=website
     build:
       context: ./
       dockerfile: Dockerfile
     environment:
-      - SITE=cms
+      - SITE=website
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=pagemanager
@@ -95,7 +94,7 @@ services:
       # - media:/media/
       - static:/static/
       - ./nginx/:/etc/nginx/conf.d/
-     
+
       # - ./nginx/${RTE}/conf.d:/etc/nginx/conf.d/sarahisabella.info.conf
       # - ./certs/:/etc/letsencrypt/
       # - static:/static/
@@ -107,7 +106,6 @@ services:
       - website
     networks:
       - webnetwork
-
 
 volumes:
   postgres_data:

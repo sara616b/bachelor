@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './project/**/templates/**/*.{html,js}',
-    './project/frontend/**/**/*.{jsx, js}',
+    "./project/**/templates/**/*.{html,js}",
+    "./project/frontend/**/**/*.{jsx, js}",
   ],
   theme: {
     // colors: {
@@ -28,7 +28,7 @@ module.exports = {
       // borderRadius: {
       //   '4xl': '2rem',
       // }
-    }
+    },
   },
   plugins: [],
-}
+};

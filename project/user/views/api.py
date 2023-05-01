@@ -1,14 +1,13 @@
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import reverse, redirect
 from django.views import View
-from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User, Permission, Group
+from django.contrib.auth.models import User, Permission
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 from django.http import JsonResponse
 from django.db import IntegrityError, transaction
-import json
-from django.views.decorators.csrf import ensure_csrf_cookie
-from urllib.parse import quote_plus
+# import json
+# from django.views.decorators.csrf import ensure_csrf_cookie
+# from urllib.parse import quote_plus
 
 
 class GetAllUsersApi(LoginRequiredMixin, View):
@@ -28,7 +27,7 @@ class GetAllUsersApi(LoginRequiredMixin, View):
             }, status=404)
 
         return JsonResponse(
-            data={ 
+            data={
                 'users': list(users),
             },
             status=200
@@ -52,7 +51,7 @@ class GetUserApi(LoginRequiredMixin, View):
             }, status=404)
 
         return JsonResponse(
-            data={ 
+            data={
                 'user': list(user),
             },
             status=200
@@ -104,7 +103,13 @@ class CreateUserApi(View):
                 user.is_staff = True
                 user.is_superuser = True if is_superuser == 'true' else False
                 if len(permissions) != 0 and permissions[0] != '':
-                    user.user_permissions.set([Permission.objects.get(codename=permission) for permission in permissions])
+                    user.user_permissions.set(
+                        [
+                            Permission.objects.get(codename=permission)
+                            for permission
+                            in permissions
+                        ]
+                    )
 
                 user.save()
         except IntegrityError as ex:

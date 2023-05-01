@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect
 from django.views import View
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -16,7 +16,7 @@ class LoginView(View):
                 'bundle_name': 'cms_login',
             }
         )
-    
+
     def post(self, request):
         username = request.POST["username"]
         password = request.POST["password"]
