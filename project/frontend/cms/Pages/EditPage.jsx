@@ -142,7 +142,7 @@ const App = () => {
       ) : (
         <Loader />
       )}
-      <AddImageForm />
+      <AddImageForm afterUpload={() => getPageInfo()} />
     </Container>
   );
 };

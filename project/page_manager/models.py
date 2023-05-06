@@ -9,5 +9,8 @@ class Page(models.Model):
 
 
 class Image(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
+    extension = models.CharField(max_length=10)
     url = models.URLField(max_length=255)
+    thumbnail_url = models.URLField(max_length=255, blank=True)
+    delete_url = models.URLField(max_length=255, blank=True)

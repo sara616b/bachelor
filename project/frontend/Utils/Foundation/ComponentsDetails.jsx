@@ -63,8 +63,12 @@ const components = {
     },
     customization: {
       link: {
-        type: "text",
+        type: "image",
         name: "Link",
+      },
+      alignment: {
+        type: "alignment",
+        name: "Image Alignment",
       },
     },
   },

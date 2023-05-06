@@ -13,6 +13,7 @@ import {
   Loader,
   Chip,
   Switch,
+  Select,
 } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -36,6 +37,11 @@ const App = ({
   const [booleans, setBooleans] = useState({
     bold: component?.bold || false,
   });
+  const [images, setImages] = useState(undefined);
+  const [selectedImage, setSelectedImage] = useState(undefined);
+
+  console.log(images);
+
   useEffect(() => {
     if (page?.data) {
       setComponentLength(
@@ -43,8 +49,22 @@ const App = ({
           page.data.sections[sectionKey].columns[columnKey].components,
         ).length,
       );
+      if (component.name === "Image") {
+        setSelectedImage(component.link);
+      }
     }
   }, [page]);
+
+  const getImages = () => {
+    const csrftoken = Cookies.get("csrftoken");
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.get(`/api/image/all/`).then((response) => {
+      if (response.status == 200) {
+        console.log(response);
+        setImages(response.data.images);
+      }
+    });
+  };
 
   const deleteComponent = (index) => {
     const data = new FormData();
@@ -82,7 +102,9 @@ const App = ({
 
     Object.entries(ComponentsDetails[component.name].customization).map(
       ([key]) => {
-        if (key === "alignment") {
+        if ((component.name = "Image" && key === "link")) {
+          newValues[key] = selectedImage;
+        } else if (key === "alignment") {
           newValues[key] = alignment;
         } else if (booleans.hasOwnProperty(key)) {
           newValues[key] = booleans[key];
@@ -166,13 +188,27 @@ const App = ({
                         key={`${key}${component}${component[key]}`}
                       />
                     );
-                  case "upload":
+                  case "image":
+                    let imageValues = [];
+                    if (images == undefined) {
+                      getImages();
+                    } else {
+                      imageValues = images.map((image) => {
+                        return {
+                          value: image.url,
+                          label: image.name,
+                        };
+                      });
+                    }
                     return (
-                      <FileInput
+                      <Select
                         name={key}
                         label={`${field.name}: `}
                         id={key}
+                        defaultValue={component[key]}
                         key={`${key}${component}${component[key]}`}
+                        data={imageValues}
+                        onChange={setSelectedImage}
                       />
                     );
                   case "boolean":

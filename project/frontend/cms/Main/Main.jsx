@@ -9,6 +9,7 @@ import {
   UsersOverview,
   Frontpage,
   LoginPage,
+  ImageOverview,
 } from "../Pages/index.jsx";
 import renderPage from "../../Utils/renderPage.jsx";
 import Navigation from "../Modules/Navigation.jsx";
@@ -21,6 +22,7 @@ const Main = () => {
         <Route exact path="/" element={Frontpage} />
         <Route path="/page/create/" element={CreatePage} />
         <Route path="/page/all/" element={PageOverview} />
+        <Route path="/image/all/" element={ImageOverview} />
         <Route path="/page/edit/:slug" element={EditPage} />
         <Route path="/user/create/" element={CreateUser} />
         <Route path="/user/edit/:username" element={EditUser} />

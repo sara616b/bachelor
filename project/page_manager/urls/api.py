@@ -13,6 +13,9 @@ from page_manager.views.api import (
     UpdateComponentApi,
     GetPagePreviewApi,
     UpdateSectionApi,
+    GetImagesApi,
+    DeleteImageApi,
+    UpdateImageApi,
 )
 
 urlpatterns = [
@@ -72,5 +75,18 @@ urlpatterns = [
     ),
     path(
         'api/image/create/', UploadImageApi.as_view(), name='UploadImageApi'
+    ),
+    path(
+        'api/image/all/', GetImagesApi.as_view(), name='GetImagesApi'
+    ),
+    path(
+        'api/image/delete/<name>/',
+        DeleteImageApi.as_view(),
+        name='DeleteImageApi'
+    ),
+    path(
+        'api/image/update/<name>/',
+        UpdateImageApi.as_view(),
+        name='UpdateImageApi'
     ),
 ]
