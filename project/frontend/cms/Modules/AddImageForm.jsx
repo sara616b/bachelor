@@ -3,7 +3,7 @@ import { Button, FileInput, Flex, ActionIcon, Divider } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const App = () => {
+const App = ({ afterUpload }) => {
   const csrftoken = Cookies.get("csrftoken");
   const [imageFile, setImageFile] = useState(null);
 
@@ -17,17 +17,21 @@ const App = () => {
       .post(`https://api.imgbb.com/1/upload`, data)
       .then((response) => {
         if (response.status == 200) {
-          console.log(response.data.data.display_url);
-          return response.data.data.display_url;
+          return response.data.data;
         }
       })
-      .then((image_url) => {
+      .then((data) => {
         const image_data = new FormData();
-        image_data.set("image_url", image_url);
+        image_data.set("name", data.title);
+        image_data.set("url", data.display_url);
+        image_data.set("extension", data.image.extension);
+        image_data.set("thumbnail_url", data.thumb.url);
+        image_data.set("delete_url", data.delete_url);
         axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
         axios.post(`/api/image/create/`, image_data).then((response) => {
           if (response.status == 200) {
             console.log("success");
+            afterUpload();
           }
         });
       });

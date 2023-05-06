@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Title,
   Text,
@@ -17,14 +18,10 @@ const App = () => {
 
   useEffect(() => {
     axios.get("/api/page/all/").then((response) => {
-      console.log(response);
       setPages(response.data.pages);
       setHasLoaded(true);
     });
   }, []);
-
-  console.log("hasLoaded", hasLoaded);
-  console.log("pages", pages);
 
   return (
     <Container size="lg">
@@ -39,7 +36,12 @@ const App = () => {
           px="xl"
           py="xl"
         >
-          <Title>All Pages</Title>
+          <Flex direction="row" gap="sm" justify="center" align="center">
+            <Title>All Pages</Title>
+            <Link to="/page/create/">
+              <Button>Create New Page</Button>
+            </Link>
+          </Flex>
           <Grid columns={1}>
             {hasLoaded ? (
               pages.length != 0 ? (

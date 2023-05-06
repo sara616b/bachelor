@@ -9,11 +9,11 @@ const App = () => {
         <Link to="/">
           <Button variant="default">Home</Button>
         </Link>
-        <Link to="/page/create/">
-          <Button variant="default">Create New Page</Button>
-        </Link>
         <Link to="/page/all/">
           <Button variant="default">Pages</Button>
+        </Link>
+        <Link to="/image/all/">
+          <Button variant="default">Images</Button>
         </Link>
         <Link to="/users/">
           <Button variant="default">Users</Button>

@@ -7,7 +7,7 @@ from bson.json_util import dumps
 import json
 
 from page_manager.utils import mongo_client
-from page_manager.models import Page
+from page_manager.models import Page, Image
 
 
 class GetAllPagesApi(View):
@@ -448,12 +448,114 @@ class UpdateSectionApi(View):
                 }, status=500)
 
 
+class GetImagesApi(View, LoginRequiredMixin):
+    def get(self, request):
+        try:
+            images = Image.objects.all().values(
+                'name',
+                'url',
+                'thumbnail_url',
+                'delete_url'
+            )
+            return JsonResponse(
+                {
+                    'images': json.loads(dumps(images)),
+                    'status': 200,
+                }
+            )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'data': f'{e}',
+                    'status': 500,
+                }
+            )
+
+
 class UploadImageApi(View, LoginRequiredMixin):
     def post(self, request):
-        print('upload')
-        print(request.POST.get('image_url'))
+        try:
+            name = request.POST.get('name')
+            url = request.POST.get('url')
+            extension = request.POST.get('extension')
+            thumbnail_url = request.POST.get('thumbnail_url')
+            delete_url = request.POST.get('delete_url')
+
+            Image.objects.create(
+                name=name,
+                url=url,
+                extension=extension,
+                thumbnail_url=thumbnail_url,
+                delete_url=delete_url
+            )
+
+        except Exception as ex:
+            return JsonResponse({
+                'result': f'error: {ex}',
+                }, status=500)
 
         return JsonResponse({
             'result': 'uploaded',
-            'image_src': 'slug',
+            'image_src': url,
             }, status=200)
+
+
+class UpdateImageApi(View, LoginRequiredMixin):
+    def post(self, request, slug):
+        try:
+            page = Page.objects.get(slug=slug)
+
+            title = request.POST.get('title')
+            new_slug = request.POST.get('slug')
+            thumbnail = request.POST.get('thumbnail')
+            online = True if request.POST.get('online') == 'true' else False
+
+            if (page.title != title):
+                page.title = title
+            if (page.slug != new_slug):
+                page.slug = new_slug
+            if (page.thumbnail_url != thumbnail):
+                page.thumbnail_url = thumbnail
+            if (page.online != online):
+                page.online = online
+            page.save()
+
+            database = mongo_client.Bachelor
+            pages = database['pages']
+
+            pages.update_one(
+                {
+                    'page_slug': slug
+                },
+                {
+                    '$set': {
+                        'page_title': title,
+                        'page_slug': new_slug,
+                    }
+                }
+            )
+
+            return JsonResponse({
+                'result': 'updated',
+                'page_slug': new_slug,
+                }, status=200)
+
+        except Exception as ex:
+            return JsonResponse({
+                'result': f'error: {ex}',
+                }, status=500)
+
+
+class DeleteImageApi(View):
+    def post(self, request, name):
+        try:
+            Image.objects.get(name=name).delete()
+
+            return JsonResponse({
+                'result': 'deleted',
+                }, status=200)
+
+        except Exception as ex:
+            return JsonResponse({
+                'result': f'error: {ex}',
+                }, status=500)
