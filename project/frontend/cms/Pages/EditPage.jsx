@@ -4,223 +4,145 @@ import {
   Title,
   Text,
   Container,
-  Button,
   Flex,
-  Input,
-  Grid,
   Accordion,
-  TextInput,
-  Box,
-  AccordionControlProps,
-  ActionIcon,
-  FileInput,
+  SegmentedControl,
+  Loader,
 } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
-import EditComponents from "../Modules/EditPageSections/EditComponents";
-import AccordionControl from "../Modules/AccordionControl";
+import EditComponents from "../Modules/EditComponents";
+import AddComponentForm from "../Modules/AddComponentForm";
+import EditColumnContainer from "../Modules/EditColumnContainer";
+import AddSectionForm from "../Modules/AddSectionForm";
+import EditSectionContainer from "../Modules/EditSectionContainer";
+import EditPageContainer from "../Modules/EditPageContainer";
+import AddImageForm from "../Modules/AddImageForm";
+import AddColumnForm from "../Modules/AddColumnForm";
+import EditSections from "../Modules/EditSections";
 
 const App = () => {
-  const csrftoken = Cookies.get("csrftoken");
   const [page, setPage] = useState({});
-  const [imageFile, setImageFile] = useState(null);
-  console.log(page);
-  const [newSectionName, setNewSectionName] = useState();
+  const [hasLoaded, setHasLoaded] = useState(false);
   const { slug } = useParams();
 
-  const getPageInfo = () => {
-    axios.get(`/api/page/${slug}/`).then((response) => {
-      if (response.status == 200) {
-        setPage(response?.data?.data);
-      } else {
-        console.log(response);
-      }
-    });
+  const getPageInfo = async () => {
+    const csrftoken = Cookies.get("csrftoken");
+    // axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    // axios.defaults.headers.common["Content-Type"] = "application/json";
+    axios
+      .get(
+        `/api/page/${slug}/`,
+        {},
+        {
+          headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+          },
+        },
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          setPage(response?.data?.data);
+          setHasLoaded(true);
+        } else {
+          console.log(response);
+        }
+        return response;
+      });
   };
 
   useEffect(() => {
     getPageInfo();
   }, []);
-
-  const savePage = () => {
-    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-    axios.defaults.headers.common["Content-Type"] = "application/json";
-    const data = new FormData();
-    data.append("page", JSON.stringify(page));
-    axios.post(`/api/page/${pageId}/update`, data).then((response) => {
-      console.log(response);
-      if (response.status == 200) {
-        getPageInfo();
-      }
-    });
-  };
-
-  const uploadImage = (event) => {
-    event.preventDefault();
-    const data = new FormData();
-    data.set("image", imageFile);
-    data.set("key", "61bf5339efd0f697d130a299c4c0cc02");
-    console.log("file", imageFile);
-    axios
-      .post(`https://api.imgbb.com/1/upload`, data)
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          console.log(response.data.data.display_url);
-          return response.data.data.display_url;
-        }
-      })
-      .then((image_url) => {
-        const image_data = new FormData();
-        image_data.set("image_url", image_url);
-        axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-        axios.post(`/api/image/create/`, image_data).then((response) => {
-          console.log(response);
-          if (response.status == 200) {
-            console.log("success");
-          }
-        });
-      });
-  };
-
-  const deleteSection = (section) => {
-    console.log("delete section", section);
-  };
+  console.log(page);
 
   return (
     <Container size="xs">
       {page ? (
-        <Flex
-          bg="blue.1"
-          gap="lg"
-          justify="center"
-          align="left"
-          direction="column"
-          wrap="wrap"
-          px="xl"
-          py="xl"
-        >
-          <Title>
-            <small>Edit Page:</small> {page.page_title}
-          </Title>
-          <Text>Slug: {page.page_slug}</Text>
-          <Title order={4} align="left">
-            Sections
-          </Title>
-          <Accordion chevronPosition="left">
-            <Flex direction="column">
-              {page?.data
-                ? Object.entries(page.data.sections).map(([key, section]) => {
-                    console.log(section);
-                    return (
-                      <div key={`${key}${section.name}`}>
-                        <Accordion.Item
-                          value={`${section.name}${key}`}
-                          bg="white"
-                          key={section.name}
-                          style={{ order: key }}
-                        >
-                          <AccordionControl
-                            deleteIcon={{
-                              display: true,
-                              props: {
-                                onClick: () => deleteSection(section),
+        <EditPageContainer page={page} getPageInfo={() => getPageInfo}>
+          {hasLoaded ? (
+            page?.data ? (
+              Object.entries(page.data.sections).map(
+                ([sectionKey, section]) => {
+                  return (
+                    <EditSectionContainer
+                      section={section}
+                      sectionKey={sectionKey}
+                      page={page}
+                      key={`${sectionKey}${section.name}`}
+                      getPageInfo={() => getPageInfo()}
+                    >
+                      <EditSections
+                        section={section}
+                        getPageInfo={() => getPageInfo()}
+                        index={sectionKey}
+                      >
+                        {/* <Accordion.Panel>
+                        <Flex direction="column" gap="md">
+                          <Title order={5}>Columns</Title>
+                          <AddColumnForm
+                            section={section}
+                            sectionKey={sectionKey}
+                            getPageInfo={() => getPageInfo()}
+                          /> */}
+                        {section?.columns
+                          ? Object.entries(section?.columns).map(
+                              ([columnKey, column]) => {
+                                return (
+                                  <EditColumnContainer
+                                    key={`${columnKey}${column.name}`}
+                                    column={column}
+                                    columnKey={columnKey}
+                                  >
+                                    {column.components &&
+                                    Object.entries(column.components).length !==
+                                      0
+                                      ? Object.entries(column.components).map(
+                                          ([key, component]) => {
+                                            return (
+                                              <EditComponents
+                                                component={component}
+                                                index={key}
+                                                key={`${key}${component.name}${page}`}
+                                                sectionKey={sectionKey}
+                                                columnKey={columnKey}
+                                                getPageInfo={() =>
+                                                  getPageInfo()
+                                                }
+                                                page={page}
+                                              />
+                                            );
+                                          },
+                                        )
+                                      : "No Components"}
+                                    <AddComponentForm
+                                      sectionKey={sectionKey}
+                                      columnKey={columnKey}
+                                      getPageInfo={() => getPageInfo()}
+                                    />
+                                  </EditColumnContainer>
+                                );
                               },
-                            }}
-                            moveUp={{
-                              props: {
-                                onClick: () => deleteSection(),
-                              },
-                            }}
-                            moveDown={{
-                              props: {
-                                onClick: () => deleteSection(),
-                              },
-                            }}
-                          >
-                            Nr. {key} // <strong>{section.name}</strong>
-                          </AccordionControl>
-                          <Accordion.Panel>
-                            <Flex direction="column" gap="md">
-                              <Title order={5}>Columns</Title>
-                              {section?.columns
-                                ? Object.entries(section?.columns).map(
-                                    ([key, column]) => {
-                                      console.log(column);
-                                      return (
-                                        <Flex
-                                          direction="column"
-                                          gap="md"
-                                          key={`${key}${column.name}`}
-                                        >
-                                          <Text>{key}. Column</Text>
-                                          <Accordion
-                                            defaultValue="customization"
-                                            chevronPosition="left"
-                                          >
-                                            {column.components
-                                              ? Object.entries(
-                                                  column.components,
-                                                ).map(([key, component]) => {
-                                                  return (
-                                                    <EditComponents
-                                                      component={component}
-                                                      index={key}
-                                                      key={`${key}${component.name}`}
-                                                    />
-                                                  );
-                                                })
-                                              : "error"}
-                                          </Accordion>
-                                          <Button>Add Component</Button>
-                                        </Flex>
-                                      );
-                                    },
-                                  )
-                                : "Error"}
-                              <Button>Save Section</Button>
-                            </Flex>
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                      </div>
-                    );
-                  })
-                : "No sections"}
-            </Flex>
-          </Accordion>
-          <Flex direction="row" wrap="wrap">
-            <TextInput
-              placeholder="Section Name..."
-              label="Section name"
-              onChange={(event) => setNewSectionName(event.target.value)}
-            />
-            <Button
-              onClick={() => {
-                setPage({
-                  ...page,
-                  data: {
-                    sections: [...page.data.sections, { name: newSectionName }],
-                  },
-                });
-              }}
-            >
-              Add New Section
-            </Button>
-          </Flex>
-          <Button onClick={() => savePage()}>SAVE PAGE</Button>
-        </Flex>
+                            )
+                          : "No Columns"}
+                      </EditSections>
+                    </EditSectionContainer>
+                  );
+                },
+              )
+            ) : (
+              "No sections"
+            )
+          ) : (
+            <Loader />
+          )}
+          <AddSectionForm getPageInfo={() => getPageInfo()} />
+        </EditPageContainer>
       ) : (
-        "Error"
+        <Loader />
       )}
-      <form onSubmit={(event) => uploadImage(event)}>
-        <FileInput
-          name="image"
-          label="Upload Image"
-          id="image"
-          onChange={setImageFile}
-        />
-        <Button type="submit">Upload Image</Button>
-      </form>
+      <AddImageForm />
     </Container>
   );
 };

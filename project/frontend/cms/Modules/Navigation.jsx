@@ -4,55 +4,19 @@ import { Link } from "react-router-dom";
 
 const App = () => {
   return (
-    <Flex
-      gap="lg"
-      justify="center"
-      align="center"
-      direction="column"
-      wrap="wrap"
-      px="xl"
-      py="xl"
-    >
-      <Button.Group>
+    <Button.Group>
+      <Flex direction="row" wrap="wrap" px="xl" py="sm" mx="auto">
         <Link to="/">
-          <Button
-            variant="default"
-            // component="a"
-            // rel="noopener noreferrer"
-            // href="/"
-          >
-            Home
-          </Button>
+          <Button variant="default">Home</Button>
         </Link>
         <Link to="/page/create/">
-          <Button
-            variant="default"
-            // component="a"
-            // rel="noopener noreferrer"
-            // href="/page/create/"
-          >
-            Create New Page
-          </Button>
+          <Button variant="default">Create New Page</Button>
         </Link>
         <Link to="/page/all/">
-          <Button
-            variant="default"
-            // component="a"
-            // rel="noopener noreferrer"
-            // href="/page/all/"
-          >
-            View All Pages
-          </Button>
+          <Button variant="default">Pages</Button>
         </Link>
         <Link to="/users/">
-          <Button
-            variant="default"
-            // component="a"
-            // rel="noopener noreferrer"
-            // href="/users/"
-          >
-            Users
-          </Button>
+          <Button variant="default">Users</Button>
         </Link>
         <Button
           variant="default"
@@ -62,8 +26,8 @@ const App = () => {
         >
           Log Out
         </Button>
-      </Button.Group>
-    </Flex>
+      </Flex>
+    </Button.Group>
   );
 };
 

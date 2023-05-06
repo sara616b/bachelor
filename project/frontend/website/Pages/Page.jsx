@@ -7,17 +7,18 @@ import axios from "axios";
 
 const App = () => {
   const [page, setPage] = useState({});
-  const { slug } = useParams();
-  console.log(page);
+  const { slug, preview } = useParams();
 
   useEffect(() => {
-    axios.get(`/api/page/${slug}/`).then((response) => {
-      if (response.status == 200) {
-        setPage(response?.data?.data);
-      } else {
-        console.log(response);
-      }
-    });
+    axios
+      .get(`/api/page/${slug}/${preview ? "preview/" : ""}`)
+      .then((response) => {
+        if (response.status == 200) {
+          setPage(response?.data?.data);
+        } else {
+          console.log(response);
+        }
+      });
   }, []);
 
   return (
@@ -25,7 +26,12 @@ const App = () => {
       {page?.data
         ? Object.entries(page.data.sections).map(([key, section]) => {
             return (
-              <Section props={section} key={key} index={key}>
+              <Section
+                props={section}
+                key={key}
+                index={key}
+                backgroundColor={section.background_color}
+              >
                 {section?.columns
                   ? Object.entries(section?.columns).map(([key, column]) => {
                       return (
@@ -34,7 +40,7 @@ const App = () => {
                           key={key}
                           index={key}
                           alignContent={column.alignContent || ""}
-                          wrap={section.wrap}
+                          wrapReverse={section.wrap_reverse || false}
                         >
                           {column.components
                             ? Object.entries(column.components).map(

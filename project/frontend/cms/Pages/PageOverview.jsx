@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Title, Text, Container, Button, Flex, Grid } from "@mantine/core";
+import {
+  Title,
+  Text,
+  Container,
+  Button,
+  Flex,
+  Grid,
+  Loader,
+} from "@mantine/core";
 import Item from "../Modules/StaticPageItem";
 import axios from "axios";
 
 const App = () => {
   const [pages, setPages] = useState([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
     axios.get("/api/page/all/").then((response) => {
+      console.log(response);
       setPages(response.data.pages);
+      setHasLoaded(true);
     });
   }, []);
+
+  console.log("hasLoaded", hasLoaded);
+  console.log("pages", pages);
 
   return (
     <Container size="lg">
@@ -27,11 +41,17 @@ const App = () => {
         >
           <Title>All Pages</Title>
           <Grid columns={1}>
-            {pages.length != 0
-              ? pages.map((item) => {
+            {hasLoaded ? (
+              pages.length != 0 ? (
+                pages.map((item) => {
                   return <Item key={item.page_slug} item={item} />;
                 })
-              : "No pages"}
+              ) : (
+                "There are no pages"
+              )
+            ) : (
+              <Loader />
+            )}
           </Grid>
         </Flex>
       </Container>
