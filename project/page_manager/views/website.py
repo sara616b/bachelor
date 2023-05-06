@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from django.views import View
+from page_manager.models import Page
 
 
 class WebsiteFrontend(View):
     def get(self, request, **kwargs):
+        title = 'Page'
+        if 'slug' in kwargs:
+            title = Page.objects.get(slug=kwargs.get('slug')).title
         return render(
             request,
             'website/render_bundle_base.html',
             {
-                'title': 'Page',
+                'title': title,
                 'bundle_name': 'website_main',
             }
         )

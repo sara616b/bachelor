@@ -8,7 +8,8 @@ const Main = () => {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={Page} />
-        <Route path="/:slug" element={Page} />
+        <Route path="/:slug/" element={Page} />
+        <Route path="/:slug/:preview/" element={Page} />
         {/* <Route path="/user/create/" element={CreateUser} />
                 <Route path="/user/edit/:username" element={EditUser} />
                 <Route path="/users/" element={UsersOverview} />

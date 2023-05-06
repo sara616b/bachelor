@@ -5,7 +5,14 @@ from page_manager.views.api import (
     CreateNewPageApi,
     UpdatePageApi,
     DeletePageApi,
-    UploadImageApi
+    UploadImageApi,
+    CreateObjectApi,
+    DeleteObjectApi,
+    MoveObjectApi,
+    ChangeColumnAmount,
+    UpdateComponentApi,
+    GetPagePreviewApi,
+    UpdateSectionApi,
 )
 
 urlpatterns = [
@@ -16,15 +23,52 @@ urlpatterns = [
         'api/page/create/', CreateNewPageApi.as_view(), name='CreateNewPageApi'
     ),
     path(
-        'api/page/delete/<slug>', DeletePageApi.as_view(), name='DeletePageApi'
+        'api/page/delete/<slug>/',
+        DeletePageApi.as_view(),
+        name='DeletePageApi'
+    ),
+    path(
+        'api/page/update/<slug>/',
+        UpdatePageApi.as_view(),
+        name='UpdatePageApi'
     ),
     path(
         'api/page/<slug>/', GetPageApi.as_view(), name='GetPageApi'
     ),
     path(
-        'api/page/<int:pk>/update',
-        UpdatePageApi.as_view(),
-        name='UpdatePageApi'
+        'api/page/<slug>/preview/',
+        GetPagePreviewApi.as_view(),
+        name='GetPagePreviewApi'
+    ),
+    path(
+        'api/page/<slug>/<object>/create/<name>/',
+        CreateObjectApi.as_view(),
+        name='CreateObjectApi'
+    ),
+    path(
+        'api/page/<slug>/<object>/delete/<index>/',
+        DeleteObjectApi.as_view(),
+        name='DeleteObjectApi'
+    ),
+    path(
+        'api/page/<slug>/<object>/move/<index>/<direction>/',
+        MoveObjectApi.as_view(),
+        name='MoveObjectApi'
+    ),
+    path(
+        'api/page/<slug>/column/change/<amount>/',
+        ChangeColumnAmount.as_view(),
+        name='ChangeColumnAmount'
+    ),
+    path(
+        'api/page/<slug>/component/update/<index>/',
+        UpdateComponentApi.as_view(),
+        name='UpdateComponentApi'
+    ),
+    path(
+        'api/page/<slug>/section/update/<index>/',
+        UpdateSectionApi.as_view(),
+        name='UpdateSectionApi'
     ),
     path(
         'api/image/create/', UploadImageApi.as_view(), name='UploadImageApi'

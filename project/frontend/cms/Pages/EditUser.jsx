@@ -117,5 +117,3 @@ const App = () => {
 };
 
 export default <App />;
-
-// renderPage('cms_edituser', <App />)

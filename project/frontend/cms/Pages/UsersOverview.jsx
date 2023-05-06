@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Title, Text, Container, Button, Flex, Stack } from "@mantine/core";
+import {
+  Title,
+  Text,
+  Container,
+  Button,
+  Flex,
+  Stack,
+  Loader,
+} from "@mantine/core";
 import renderPage from "../../Utils/renderPage";
 import { Link } from "react-router-dom";
 import Navigation from "../Modules/Navigation";
@@ -7,10 +15,12 @@ import axios from "axios";
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
     axios.get("/api/users/").then((response) => {
       setUsers(response.data.users);
+      setHasLoaded(true);
     });
   }, []);
 
@@ -51,8 +61,9 @@ const App = () => {
         </Flex>
 
         <Stack>
-          {users.length != 0
-            ? users.map((user) => {
+          {hasLoaded ? (
+            users.length != 0 ? (
+              users.map((user) => {
                 return (
                   <Text key={user.username}>
                     {user.first_name} {user.last_name} ({user.username})
@@ -71,11 +82,15 @@ const App = () => {
                   </Text>
                 );
               })
-            : "No users"}
+            ) : (
+              "There are no users"
+            )
+          ) : (
+            <Loader />
+          )}
         </Stack>
       </Flex>
     </Container>
   );
 };
 export default <App />;
-// renderPage('cms_usersoverview', <App />)
