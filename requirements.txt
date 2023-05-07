@@ -40,3 +40,12 @@ yamllint==1.31.0
 flake8_django==1.2
 pre-commit==3.2.2
 pre_commit==3.2.2
+
+
+click
+gunicorn
+h11
+httptools
+uvicorn
+uvloop
+websockets
