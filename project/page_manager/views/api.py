@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from bson.json_util import dumps
 import json
-
+from django.forms.models import model_to_dict
 from page_manager.utils import mongo_client
 from page_manager.models import Page
 
@@ -58,6 +58,99 @@ class GetPageApi(View):
                 'status': 200,
             }
         )
+
+
+def HTMXGetPages():
+    try:
+        pages = Page.objects.all()
+        for page in pages: 
+            print(page)
+
+    except Exception as e:
+        return JsonResponse(
+            {
+                'data': f'{e}',
+                'status': 500,
+            }
+        )
+
+    return JsonResponse(
+        {
+            'data': [model_to_dict(page) for page in pages],
+            'status': 200,
+        }
+    )
+
+
+class HTMXEditPage(View):
+    def post(self, request, slug):
+        try:
+            print(slug)
+            print(request.POST.get('title'))
+            print(request.POST.get('slug'))
+            print(request.POST.get('online'))
+            if 'online' in request.POST:
+                print('Online')
+            else:
+                print('Offline')
+            
+            page = Page.objects.get(slug=slug)
+
+            title = request.POST.get('title')
+            new_slug = request.POST.get('slug')
+            thumbnail = request.POST.get('thumbnail')
+            online = True if 'online' in request.POST else False
+            print(online)
+
+            if (page.title != title):
+                page.title = title
+            if (page.slug != new_slug):
+                page.slug = new_slug
+            if (page.thumbnail_url != thumbnail):
+                page.thumbnail_url = thumbnail
+            if (page.online != online):
+                print(page.online)
+                print(online)
+                page.online = online
+            page.save()
+
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'data': f'{e}',
+                    'status': 500,
+                }
+            )
+
+        return JsonResponse(
+            {
+                'data': 'edit',
+                'status': 200,
+            }
+        )
+
+
+def HTMXGetPage(slug):
+    try:
+        page = Page.objects.get(slug=slug, online=True)
+        database = mongo_client.Bachelor
+        page_data = database['pages'].find_one({'page_slug': slug})['data']
+
+    except Exception as e:
+        return JsonResponse(
+            {
+                'data': f'{e}',
+                'status': 500,
+            }
+        )
+
+    return {
+        'title': page.title,
+        'online': page.online,
+        'slug': page.slug,
+        'thumbnail_url': page.thumbnail_url,
+        'data': json.loads(dumps(page_data))
+    }
 
 
 class GetPagePreviewApi(View):
@@ -126,10 +219,12 @@ class CreateNewPageApi(View, LoginRequiredMixin):
 class DeletePageApi(View, LoginRequiredMixin):
     def delete(self, request, slug):
         try:
-            database = mongo_client.Bachelor
-            pages = database['pages']
+            # database = mongo_client.Bachelor
+            # pages = database['pages']
 
-            pages.delete_one({'page_slug': slug})
+            # pages.delete_one({'page_slug': slug})
+            Page.objects.get(slug=slug).delete()
+
             return JsonResponse({
                 'result': 'deleted',
                 'page_slug': slug,

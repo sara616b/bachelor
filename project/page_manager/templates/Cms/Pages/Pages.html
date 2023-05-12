@@ -1,0 +1,14 @@
+{% extends "cms/Layout.html" %}
+
+{% block navigation %}
+  {% include "cms/Modules/Navigation.html" with selected="Pages" %}
+{% endblock %}
+
+{% block header %}
+    {% include "cms/Components/Title.html" with text="All Pages" %}
+    {% include "cms/Components/Button.html" with text="Create New Page" post="/posts/create/" %}
+{% endblock %}
+
+{% block main_content %}
+    {% include "cms/Components/List.html" with items=pages %}
+{% endblock %}

@@ -1,0 +1,52 @@
+<details
+    style="order:{{component_key}};"
+    class="grid mx-2 leading-10 border border-white"
+>
+    <summary class="px-4 bg-indigo-50">{{component.name}}</summary>
+
+    <form class="grid gap-2 p-4 border">
+        {% for customization_key, customization in customization_data.items %}
+            {% if customization_key == component.name %}
+                {% for input_name, input_values in customization.customization.items %}
+
+                    {% if input_values.type == 'text' %}
+                        {% include "cms/Components/TextInput.html" with name=input_name|add:customization_key label=input_values.name value=component|get_item:input_name %}
+                    {% elif input_values.type == 'textarea' %}
+                        {% include "cms/Components/Textarea.html" with name=input_name|add:customization_key label=input_values.name value=component|get_item:input_name %}
+                    {% elif input_values.type == 'color' %}
+                        {% include "cms/Components/ColorInput.html" with name=input_name|add:customization_key label=input_values.name value=component|get_item:input_name %}
+                    {% elif input_values.type == 'boolean' %}
+                        {% include "cms/Components/Checkbox.html" with name=input_name|add:customization_key label=input_values.name value=component|get_item:input_name %}
+                    {% elif input_values.type == 'alignment' %}
+                        {% include "cms/Components/Alignment.html" with name=input_name|add:customization_key label=input_values.name value=component|get_item:input_name %}
+                    {% endif %}
+
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
+        {% include "cms/Components/Button.html" with text="Save "|add:component.name type="submit" %}
+    </form>
+</details>
+
+{% comment %} switch (field.type) {
+    case "alignment":
+    return (
+        <div key={`${key}${component}${component[key]}`}>
+        <Text>{`${field.name}: `}</Text>
+        <SegmentedControl
+            defaultValue={component?.[key]}
+            data={[
+            { label: "Left", value: "left" },
+            { label: "Center", value: "center" },
+            { label: "Right", value: "right" },
+            ]}
+            fullWidth
+            transitionDuration={200}
+            transitionTimingFunction="ease-out"
+            onChange={setAlignment}
+        />
+        </div>
+    );
+    default:
+    break; {% endcomment %}

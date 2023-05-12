@@ -34,7 +34,7 @@ services:
       - "8002:8000"
     depends_on:
       - database
-      - assets
+      # - assets
     restart: always
     links:
       - database:database
@@ -55,39 +55,40 @@ services:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
+    command: sh -c 'python manage.py check && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
+    # command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
     ports:
       - "8001:8000"
     depends_on:
       - database
-      - assets
+      # - assets
     links:
       - database:database
     restart: always
     networks:
       - dbnetwork
       - webnetwork
-  assets:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    environment:
-      - SITE=website
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
-    working_dir: /app
-    volumes:
-      - media:/app/project/media/
-      - static:/app/project/static/
-      - .:/app/
-    command: sh -c 'npm run dev'
-    ports:
-      - 3000:3000
-    restart: always
-    networks:
-      - webnetwork
-      - dbnetwork
+  # assets:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - SITE=website
+  #     - POSTGRES_USER=user
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=pagemanager
+  #   working_dir: /app
+  #   volumes:
+  #     - media:/app/project/media/
+  #     - static:/app/project/static/
+  #     - .:/app/
+  #   command: sh -c 'npm run dev'
+  #   ports:
+  #     - 3000:3000
+  #   restart: always
+  #   networks:
+  #     - webnetwork
+  #     - dbnetwork
   nginx:
     image: nginx:latest
     volumes:

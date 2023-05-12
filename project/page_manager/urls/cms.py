@@ -1,9 +1,9 @@
 from django.urls import path
-from page_manager.views.cms import (CmsFrontend)
+from page_manager.views.cms import (FrontpageView, PagesView, EditPage)
 
 urlpatterns = [
-    path('', CmsFrontend.as_view(), name='FrontpageView'),
-    path('page/create/', CmsFrontend.as_view(), name='CreatePage'),
-    path('page/all/', CmsFrontend.as_view(), name='PageOverview'),
-    path('page/edit/<slug>', CmsFrontend.as_view(), name='EditPage'),
+    path('', FrontpageView.as_view(), name='FrontpageView'),
+    path('pages/', PagesView.as_view(), name='PagesView'),
+    # path('page/create/', CmsFrontend.as_view(), name='CreatePage'),
+    path('pages/<slug>/', EditPage.as_view(), name='EditPage'),
 ]

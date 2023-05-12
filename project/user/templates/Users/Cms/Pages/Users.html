@@ -1,0 +1,85 @@
+{% extends "cms/Layout.html" %}
+
+{% block navigation %}
+    {% include "cms/Modules/Navigation.html" with selected="Users" %}
+{% endblock %}
+
+{% block header %}
+    {% include "cms/Components/Title.html" with text="All Users" %}
+    {% include "cms/Components/Button.html" with text="Create New User" get="/users/new/" %}
+{% endblock %}
+
+{% block main_content %}
+<ul
+    class="mdc-list mdc-list--two-line {% if item.thumbnail_url %}mdc-list--image-list{% else %}mdc-list--icon-list{% endif %}"
+>
+    {% for user in users %}
+        <div class="my-2 mdc-card">
+            <li
+                class="py-2 mdc-list-item"
+                tabindex="0"
+                hx-get="/users/{{user.username}}"
+                hx-swap="innerhtml"
+                hx-target="#main"
+                hx-push-url="true"
+            >
+                {% if user.superuser %}
+                    <span class="flex items-center mx-2 w-9 mdc-list-item__avatar">
+                        <img src="" alt="Thumbnail Image"/>
+                    </span>
+                {% else %}
+                    <span class="flex items-center mx-2 text-4xl mdc-list-item__graphic material-icons">
+                        face
+                    </span>
+                {% endif %}
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">
+                <span class="mdc-list-item__primary-text">{{user.first_name}} {{user.last_name}}</span>
+                <span class="flex flex-row flex-wrap justify-start gap-2 mdc-list-item__secondary-text">
+                    <span class="inline-flex px-2 text-center bg-blue-200 rounded-full w-fit">
+                        {{user.username}}
+                    </span>
+                    {% if user.is_superuser %}
+                        <span class="inline-flex px-2 text-center bg-green-200 rounded-full w-fit">
+                            Superuser
+                        </span>
+                    {% endif %}
+                </span>
+                </span>
+            </li>
+            <li role="separator" class="mdc-list-divider"></li>
+            <div class="justify-end mdc-card__actions">
+                {% comment %} <button
+                    class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100"
+                    hx-delete="/api/htmx/pages/delete/{{item.slug}}"
+                    hx-confirm="Are you sure you wish to delete the page?"
+                    hx-target="closest .mdc-card"
+                    hx-swap="delete"
+                >
+                    <div class="mdc-button__ripple"></div>
+                    <span class="text-red-800 mdc-button__label">Delete</span>
+                </button> {% endcomment %}
+                <button
+                    class="mdc-button mdc-card__action mdc-card__action--button"
+                    hx-get="/users/{{user.username}}"
+                    hx-swap="innerhtml"
+                    hx-target="#main"
+                    hx-push-url="true"
+                >
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Edit {{user.username}}</span>
+                </button>
+            </div>
+        </div>
+    {% empty %}
+        <li>There're no users yet!</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        mdc.list.MDCList.attachTo(document.querySelector('.mdc-list'));
+    </script>
+{% endblock %}

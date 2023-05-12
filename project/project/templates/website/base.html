@@ -1,5 +1,4 @@
 {% load static %}
-{% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
 <html>
@@ -10,6 +9,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.svg' %}"/>
+        <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+        <link rel="stylesheet" href="{% static 'Website/output.css' %}" />
         <style>
             * {
                 padding: 0;
@@ -17,9 +18,6 @@
                 box-sizing: border-box;
             }
         </style>
-        {% render_bundle 'tailwind' %}
-        {% block initial_data %}
-        {% endblock %}
     </head>
     <body>
     {% block content %}

@@ -1,0 +1,21 @@
+{% extends "cms/base.html" %}
+
+{% block title %}
+  {{title}}
+{% endblock %}
+
+{% block content %}
+  <main 
+    class="flex flex-col justify-center min-h-full p-2 transition-all lg:px-8 sm:mx-auto sm:w-full md:max-w-xl"
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+  >
+    <div
+      class="flex flex-row flex-wrap items-end justify-between gap-2"
+    >
+        {% block header %}
+        {% endblock %}
+    </div>
+    {% block main_content %}
+    {% endblock %}
+  </main>
+{% endblock  %}

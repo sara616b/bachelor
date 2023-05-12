@@ -1,0 +1,24 @@
+{% extends "cms/Layout.html" %}
+
+{% block navigation %}
+  {% include "cms/Modules/Navigation.html" with selected="Frontpage" %}
+{% endblock %}
+
+{% block header %}
+    {% include "cms/Components/Title.html" with text="CMS" %}
+    <div
+      class="italic opacity-40"
+    >
+      {% include "cms/Components/Text.html" with text="---Your Web Page Builder" %}
+    </div>
+{% endblock %}
+
+{% block main_content %}
+    {% include "cms/Components/Text.html" with text="This is the CMS for the bachelor project PageManager. Here, you can create and edit Pages." %}
+    <div
+      class="flex justify-center gap-2"
+    >
+      {% include "cms/Components/Button.html" with text="View Pages" get="/pages/" %}
+      {% include "cms/Components/Button.html" with text="Create New Page" get="/pages/create/" %}
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% comment %} <div>
+    <label for="{{name}}" class="block text-sm font-medium leading-6 text-gray-900">{{label}}</label>
+    <input id="{{name}}" name="{{name}}" type="{% if type %}{{type}}{% else %}text{% endif %}" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+</div> {% endcomment %}
+<label class="w-full my-2 mdc-text-field mdc-text-field--filled" for="{{name}}">
+    <span class="mdc-text-field__ripple"></span>
+    <span class="mdc-floating-label" id="my-label-id">{{label}}</span>
+
+    <input
+        class="mdc-text-field__input"
+        {% if not not_required %}required{% endif %} 
+        aria-labelledby="my-label-id"
+        id="{{name}}"
+        name="{{name}}"
+        type="{% if type %}{{type}}{% else %}text{% endif %}"
+        value="{% if value %}{{value}}{% endif %}"
+    />
+
+    <span class="mdc-line-ripple"></span>
+</label>
+
+{% block scripts %}
+    <script>
+        document.querySelectorAll('label[for="{{name}}"]').forEach((input) => {
+            mdc.textField.MDCTextField.attachTo(input);
+        })
+    </script>
+{% endblock %}

@@ -13,11 +13,18 @@ from page_manager.views.api import (
     UpdateComponentApi,
     GetPagePreviewApi,
     UpdateSectionApi,
+    HTMXEditPage,
 )
 
 urlpatterns = [
     path(
+        'api/htmx/pages/delete/<slug>', DeletePageApi.as_view()
+    ),
+    path(
         'api/page/all/', GetAllPagesApi.as_view(), name='GetAllPagesApi'
+    ),
+    path(
+        'api/htmx/pages/<slug>/', HTMXEditPage.as_view(), name='HTMXEditPage'
     ),
     path(
         'api/page/create/', CreateNewPageApi.as_view(), name='CreateNewPageApi'

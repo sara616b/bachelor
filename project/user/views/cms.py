@@ -5,26 +5,27 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 # import json
 from django.db import IntegrityError
+from django.forms.models import model_to_dict
 
 
 class UsersView(LoginRequiredMixin, View):
     def get(self, request):
+        users = User.objects.all()
         return render(
             request,
-            'cms/render_bundle_base.html',
+            'Users/Cms/Pages/Users.html',
             {
                 'title': 'Users | ',
-                'bundle_name': 'cms_usersoverview',
+                'users': [model_to_dict(user) for user in users]
             }
         )
-    pass
 
 
 class CreateUserView(View):
     def get(self, request):
         return render(
             request,
-            'cms/render_bundle_base.html',
+            'Users/Cms/Pages/CreateUser.html',
             {
                 'title': 'Create New User | ',
                 'bundle_name': 'cms_createuser',
@@ -70,19 +71,12 @@ class CreateUserView(View):
 class EditUserView(View):
     def get(self, request, username):
         user = User.objects.get(username=username)
-        print(user)
         return render(
             request,
-            'cms/render_bundle_base.html',
+            'Users/Cms/Pages/EditUser.html',
             {
                 'title': 'Edit User | ',
                 'bundle_name': 'cms_edituser',
                 'initial_data': {'username': username}
             }
         )
-
-    pass
-
-
-class DeleteUserView(View):
-    pass

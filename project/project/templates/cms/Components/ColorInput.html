@@ -1,0 +1,17 @@
+<div class="flex items-center colorInput">
+    {% include "cms/Components/TextInput.html" with name=name label=label value=value %}
+    <div
+        class="h-12 ml-2 rounded-full w-14 color-box"
+        style="background-color:{{value}}"
+    ></div>
+</div>
+
+{% block script %}
+    <script>
+        document.querySelectorAll(".colorInput input").forEach((input) => {
+            input.addEventListener('input', (event) => {
+                event.target.parentElement.parentElement.querySelector('.color-box').style.backgroundColor = event.target.value;
+            })
+        })
+    </script>
+{% endblock %}

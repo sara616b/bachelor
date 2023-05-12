@@ -1,0 +1,36 @@
+{% comment %} <button 
+    type="{{type}}"
+    class="flex w-full justify-center rounded-md bg-indigo-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    {% if post %}
+        hx-post={{post}}
+        hx-target="#main"
+    {% endif %}
+    hx-swap="innerhtml"
+>
+    {{text}}
+</button> {% endcomment %}
+<button
+    class="mb-2 mdc-button mdc-button--raised"
+    type="{{type}}"
+    {% if post %}
+        hx-post={{post}}
+        hx-target="#main"
+        hx-swap="innerhtml"
+    {% endif %}
+    {% if get %}
+        hx-get={{get}}
+        hx-target="#main"
+        hx-push-url="true"
+        hx-swap="innerhtml"
+    {% endif %}
+>
+    <span class="mdc-button__ripple"></span>
+    <span class="mdc-button__label">{{text}}</span>
+</button>
+{% block scripts %}
+    <script>
+        document.querySelectorAll('.mdc-button').forEach((button) => {
+            mdc.ripple.MDCRipple.attachTo(button);
+        })
+    </script>
+{% endblock %}

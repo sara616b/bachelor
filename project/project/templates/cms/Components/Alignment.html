@@ -1,0 +1,41 @@
+<div class="flex flex-wrap mdc-touch-target-wrapper">
+    <div class="flex items-end">
+    <div class="mdc-radio mdc-radio--touch">
+        <input class="mdc-radio__native-control" type="radio" id="left" name="alignment"
+            {% if value == 'left' %}checked{% endif %}
+        />
+        <div class="mdc-radio__background">
+            <div class="mdc-radio__outer-circle"></div>
+            <div class="mdc-radio__inner-circle"></div>
+        </div>
+        <div class="mdc-radio__ripple"></div>
+    </div>
+    <label for="left" class="mr-2">Left</label>
+    </div>
+    <div class="flex items-end">
+    <div class="mdc-radio mdc-radio--touch">
+        <input class="mdc-radio__native-control" type="radio" id="center" name="alignment"
+            {% if value == 'center' %}checked{% endif %}
+        />
+        <div class="mdc-radio__background">
+            <div class="mdc-radio__outer-circle"></div>
+            <div class="mdc-radio__inner-circle"></div>
+        </div>
+        <div class="mdc-radio__ripple"></div>
+    </div>
+    <label for="center" class="mr-2">Center</label>
+    </div>
+    <div class="flex items-end">
+    <div class="mdc-radio mdc-radio--touch">
+        <input class="mdc-radio__native-control" type="radio" id="right" name="alignment" 
+            {% if value == 'right' %}checked{% endif %}
+        />
+        <div class="mdc-radio__background">
+            <div class="mdc-radio__outer-circle"></div>
+            <div class="mdc-radio__inner-circle"></div>
+        </div>
+        <div class="mdc-radio__ripple"></div>
+    </div>
+    <label for="right" class="mr-2">Right</label>
+    </div>
+</div>

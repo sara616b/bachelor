@@ -1,0 +1,15 @@
+<details
+    style="order:{{section_key}};"
+    class="grid border"
+>
+    <summary class="p-4 bg-indigo-50">Section {{section_key}} - {{section.name}}</summary>
+    <form class="grid gap-2 p-1 mx-2 mt-2 border">
+        {% include "cms/Components/Checkbox.html" with name="wrapReverse"|add:section_key label="Wrap Reverse?" value=section.wrap_reverse %}
+        {% include "cms/Components/ColorInput.html" with name="backgroundColor"|add:section_key label="Background Color" value=section.background_color %}
+        
+        {% include "cms/Components/Button.html" with text="Save Section" type="submit" %}
+    </form>
+    {% for column_key, column in section.columns.items %}
+        {% include "Cms/Modules/ColumnEdit.html" %}
+    {% endfor %}
+</details>

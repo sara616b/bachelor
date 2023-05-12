@@ -1,0 +1,19 @@
+<section
+    class="w-full px-2 py-8 transition-all md:px-12"
+    style="background:{{section.background_color}};order:{{section_key}};"
+>
+    <div
+        class="
+            container
+            grid
+            gap-4
+            mx-auto
+            transition-all
+            md:grid-cols-{{section.columns|length}}
+        "
+    >
+    {% for column_key, column in section.columns.items %}
+        {% include "website/Partials/Column.html" %}
+    {% endfor %}
+    </div>
+</section>

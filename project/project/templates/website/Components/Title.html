@@ -1,0 +1,13 @@
+<h1
+    class="
+        w-full
+        text-3xl
+        {% if component.alignment == 'center' %}text-center{% endif %}
+        {% if component.alignment == 'right' %}text-right{% endif %}
+        {% if component.alignment == 'left' %}text-left{% endif %}
+        {% if component.bold == 'true' %}font-bold{% endif %}
+    "
+    style="color:{{component.title_color}};"
+>
+    {{component.text}}
+</h1>

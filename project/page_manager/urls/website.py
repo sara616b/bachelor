@@ -1,9 +1,6 @@
 from django.urls import path
-from page_manager.views.website import (WebsiteFrontend)
+from page_manager.views.website import PageView
 
 urlpatterns = [
-    path('', WebsiteFrontend.as_view(), name='FrontpageView'),
-    path('<slug>/', WebsiteFrontend.as_view(), name='FrontpageView'),
-    path('<slug>/preview/', WebsiteFrontend.as_view(), name='FrontpageView'),
-    # path('', IndexView.as_view(), name='IndexView'),
+    path('<slug>/', PageView.as_view(), name='PageView')
 ]

@@ -1,0 +1,20 @@
+<button 
+    class="mdc-tab {% if selected == label %}mdc-tab--active{% endif %}" 
+    role="tab"       
+    aria-selected="false" 
+    {% if selected == label %}aria-selected="true"{% endif %} 
+    tabindex="0"
+    hx-swap="innerhtml"
+    hx-get="{{link}}"
+    hx-target="#main"
+    hx-push-url="true"
+>
+    <span class="mdc-tab__content">
+    <span class="mdc-tab__icon material-icons" aria-hidden="true">{{icon}}</span>
+    <span class="mdc-tab__text-label">{{label}}</span>
+    </span>
+    <span class="mdc-tab-indicator {% if selected == label %}mdc-tab-indicator--active{% endif %}" >
+    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+    </span>
+    <span class="mdc-tab__ripple"></span>
+</button>

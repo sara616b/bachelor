@@ -5,10 +5,15 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}{% endblock %} CMS</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.svg' %}"/>
+        <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="{% static 'Cms/output.css' %}" />
         <style>
             * {
                 padding: 0;
@@ -16,10 +21,16 @@
                 box-sizing: border-box;
             }
         </style>
-        {% block initial_data %}
+        {% block scripts %}
+            {{ block.super }}
         {% endblock %}
     </head>
-    <body>
+    <body
+        id="main"
+    >
+    {% block navigation %}
+        {% include "cms/Modules/Navigation.html" %}
+    {% endblock %}
     {% block content %}
     {% endblock %}
     </body>

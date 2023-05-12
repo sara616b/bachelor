@@ -1,0 +1,25 @@
+<div
+    class="grid content-center w-full gap-4 transition-all
+        place-content-{{column.alignContent}}
+
+        {% if column_key == '2' and section.wrap_reverse == 'false' or  column_key == '1' and section.wrap_reverse == 'true' %}
+            order-2
+        {% else %}
+            order-1
+        {% endif %}
+
+        {% if column_key == '1' and section.wrap_reverse == 'false' or  column_key == '2' and section.wrap_reverse == 'true' %}
+            md:order-2
+        {% else %}
+            md:order-1
+        {% endif %}
+    "
+>
+    {% for component_key, component in column.components.items %}
+    <div>
+        {% with template_name=component.name|stringformat:"s"|add:".html" %}
+            {% include "website/Components/"|add:template_name %}
+        {% endwith %}
+    </div>
+    {% endfor %}
+</div>

@@ -10,7 +10,7 @@ class LoginView(View):
             return redirect('FrontpageView')
         return render(
             request,
-            'cms/render_bundle_base.html',
+            'cms/Pages/Login.html',
             {
                 'title': 'Log In | ',
                 'bundle_name': 'cms_login',
@@ -29,6 +29,6 @@ class LoginView(View):
 
 
 class LogoutView(View):
-    def get(self, request):
+    def post(self, request):
         logout(request)
         return redirect(reverse('LoginView'))

@@ -1,0 +1,13 @@
+{% extends "website/base.html" %}
+
+{% block title %}
+  {{title}}
+{% endblock %}
+
+{% block content %}
+  <main class="grid transition-all">
+    {% for section_key, section in page.data.sections.items %}
+      {% include "website/Partials/Section.html" %}
+    {% endfor %}
+  </main>
+{% endblock  %}

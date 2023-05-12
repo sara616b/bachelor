@@ -1,0 +1,42 @@
+{% extends "cms/Layout.html" %}
+
+{% block navigation %}
+    {% include "cms/Modules/Navigation.html" with selected="Pages" %}
+{% endblock %}
+
+{% block header %}
+    {% include "cms/Components/Title.html" with text="Edit" %}
+    {% include "cms/Components/Button.html" with text="Delete?" %}
+{% endblock %}
+
+{% block main_content %}
+    <form id="form"
+        hx-post="/api/htmx/pages/{{page.slug}}/"
+    >
+        {% include "cms/Components/TextInput.html" with name="title" label="Title" value=page.title %}
+        {% include "cms/Components/TextInput.html" with name="slug" label="Slug" value=page.slug %}
+        {% include "cms/Components/Checkbox.html" with name="online" label="Is Online" value=page.online %}
+        {% include "cms/Components/TextInput.html" with name="thumbnail" label="Thumbnail Image" value=page.thumbnail_url not_required="True" %}
+
+        {% include "cms/Components/Button.html" with text="Update Page" type="submit" %} 
+    </form>
+    <h2>Sections</h2>
+    <div class="flex flex-col gap-8">
+        {% for section_key, section in page_data.sections.items %}
+            {% include "Cms/Modules/SectionEdit.html" %}
+        {% endfor %}
+    </div>
+    {% include "cms/Components/Button.html" with text="Add Section Form" %}
+    {% include "cms/Components/Button.html" with text="Add Image Form" %}
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        const form = document.querySelector("#form")
+        form.onSubmit((e)=>{
+            e.preventDefault();
+            console.log(e)
+        })
+    </script>
+{% endblock %}

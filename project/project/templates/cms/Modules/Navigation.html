@@ -1,0 +1,50 @@
+<nav
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+>
+  {% comment %} <div class="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div class="relative flex items-center justify-between h-16">
+      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <!-- Mobile menu button-->
+        <button type="button" class="inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg class="block w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
+        <div class="flex items-center flex-shrink-0">
+            {% include "cms/Components/Icon.html" %}
+        </div>
+        <div class="hidden sm:ml-6 sm:block">
+            {% include "cms/Modules/MenuItems.html" %}
+        </div>
+      </div>
+      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        {% include "cms/Components/Button.html" with text="Log Out" post="/logout/" %}
+
+      </div>
+    </div>
+  </div> {% endcomment %}
+
+<div class="mdc-tab-bar" role="tablist">
+  <div class="mdc-tab-scroller">
+    <div class="mdc-tab-scroller__scroll-area">
+      <div class="mdc-tab-scroller__scroll-content">
+      
+        {% include "cms/Modules/MenuItems.html" with label="Frontpage" link="/" icon="home" %}
+        {% include "cms/Modules/MenuItems.html" with label="Pages" link="/pages/" icon="web" %}
+        {% include "cms/Modules/MenuItems.html" with label="Users" link="/users/" icon="face" %}
+        <div class="m-2">
+            {% include "cms/Components/Button.html" with text="Log Out" post="/logout/" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</nav>
+{% block scripts %}
+    <script>
+        mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.mdc-tab-bar'));
+    </script>
+{% endblock %}

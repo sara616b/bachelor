@@ -1,0 +1,15 @@
+<h1
+    class="
+        w-full
+        max-w-sm
+        mx-auto
+        text-base
+        {% if component.alignment == 'center' %}text-center{% endif %}
+        {% if component.alignment == 'right' %}text-right{% endif %}
+        {% if component.alignment == 'left' %}text-left{% endif %}
+        {% if component.bold == 'true' %}font-bold{% endif %}
+    "
+    style="color:{{component.text_color}};"
+>
+    {{component.text}}
+</h1>
