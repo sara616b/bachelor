@@ -1,2 +1,3 @@
 templates/
 webpack-stats.json
+docker-compose.yml

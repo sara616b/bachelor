@@ -81,8 +81,8 @@ const Page = () => {
             data: { data: { data: { sections: object } } };
           }) => {
             if (response.status === 200) {
-              setPage(response?.data?.data);
-              setSections(response?.data?.data?.data?.sections);
+              setPage(response.data.data);
+              setSections(response.data.data.data.sections);
               setLoaded(true);
             } else {
               console.log(response);
@@ -94,7 +94,7 @@ const Page = () => {
 
   return (
     <main className="grid">
-      {page?.data
+      {page.data
         ? Object.entries(sections).map(([key, section]) => {
             return (
               <Section
@@ -102,8 +102,8 @@ const Page = () => {
                 index={parseInt(key)}
                 backgroundColor={section.background_color}
               >
-                {section?.columns
-                  ? Object.entries(section?.columns).map(([key, column]) => {
+                {section.columns
+                  ? Object.entries(section.columns).map(([key, column]) => {
                       return (
                         <Column
                           key={key}

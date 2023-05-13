@@ -15,33 +15,31 @@ services:
     networks:
       - dbnetwork
     restart: always
-  # api:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - SITE=website
-  #     - POSTGRES_USER=user
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=pagemanager
-  #   working_dir: /app/project
-  #   volumes:
-  #     - media:/app/project/media/
-  #     - static:/app/project/static/
-  #     - .:/app/
-  #   command: sh -c 'python manage.py check &&
-  # python manage.py makemigrations && python manage.py
-  # migrate && python manage.py runserver 0.0.0.0:8000'  # noqa
-  #   ports:
-  #     - "8002:8000"
-  #   depends_on:
-  #     - database
-  #   restart: always
-  #   links:
-  #     - database:database
-  #   networks:
-  #     - dbnetwork
-  #     - webnetwork
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SITE=website
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pagemanager
+    working_dir: /app/project
+    volumes:
+      - media:/app/project/media/
+      - static:/app/project/static/
+      - .:/app/
+    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000'  # yamllint disable-line
+    ports:
+      - "8002:8000"
+    depends_on:
+      - database
+    restart: always
+    links:
+      - database:database
+    networks:
+      - dbnetwork
+      - webnetwork
   website:
     build:
       context: ./
@@ -53,14 +51,23 @@ services:
       - WATCHPACK_POLLING=true
     working_dir: /app/frontend
     volumes:
-      - ./frontend/src:/app/frontend/src
+      - ./frontend/src/Utils:/app/frontend/src/Utils
+      - ./frontend/src/Website:/app/frontend/src/Website
+      - ./frontend/src/App.test.js:/app/frontend/src/App.test.js
+      - ./frontend/src/index.css:/app/frontend/src/index.css
+      - ./frontend/src/index.Website.tsx:/app/frontend/src/index.tsx
+      - ./frontend/src/react-app-env.d.ts:/app/frontend/src/react-app-env.d.ts
+      - ./frontend/src/reportWebVitals.js:/app/frontend/src/reportWebVitals.js
+      - ./frontend/src/setupTests.js:/app/frontend/src/setupTests.js
+      - ./frontend/tsconfig.json:/app/frontend/tsconfig.json
+      - ./frontend/tailwind.config.js:/app/frontend/tailwind.config.js
       - ./frontend/public:/app/frontend/public
     command: sh -c 'npm run start-website'
     ports:
       - "3000:3000"
     depends_on:
       - database
-      # - api
+      - api
     restart: always
     links:
       - database:database
@@ -80,14 +87,24 @@ services:
       - CHOKIDAR_USEPOLLING=true
     working_dir: /app/frontend
     volumes:
-      - ./frontend/src:/app/frontend/src
+      - ./frontend/src/Utils:/app/frontend/src/Utils
+      - ./frontend/src/Cms:/app/frontend/src/Cms
+      - ./frontend/src/App.test.js:/app/frontend/src/App.test.js
+      - ./frontend/src/index.css:/app/frontend/src/index.css
+      - ./frontend/src/index.Cms.tsx:/app/frontend/src/index.tsx
+      - ./frontend/src/react-app-env.d.ts:/app/frontend/src/react-app-env.d.ts
+      - ./frontend/src/reportWebVitals.js:/app/frontend/src/reportWebVitals.js
+      - ./frontend/src/setupTests.js:/app/frontend/src/setupTests.js
+      - ./frontend/src/Website/Components:/app/frontend/src/Website/Components
+      - ./frontend/tsconfig.json:/app/frontend/tsconfig.json
+      - ./frontend/tailwind.config.js:/app/frontend/tailwind.config.js
       - ./frontend/public:/app/frontend/public
     command: sh -c 'npm run start-cms'
     ports:
       - "3002:3002"
     depends_on:
       - database
-      # - api
+      - api
     links:
       - database:database
     restart: always

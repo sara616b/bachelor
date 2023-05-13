@@ -5,11 +5,14 @@ import "./index.css";
 import Frontpage from "./Cms/Pages/Frontpage";
 import CreatePage from "./Cms/Pages/CreatePage";
 // import reportWebVitals from './reportWebVitals';
+// import Root, { rootLoader } from "./routes/root";
+// import Team, { teamLoader } from "./routes/team";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
+  Outlet,
 } from "react-router-dom";
 // import {
 //   CreatePage,
@@ -21,35 +24,23 @@ import {
 //   Frontpage,
 //   LoginPage,
 // } from "../Pages/index.jsx";
-// import Navigation from "../Modules/Navigation.jsx";
 import Navigation from "./Cms/Modules/Navigation";
-
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Frontpage />}>
+    <Route
+      element={
+        <div>
+          <Navigation />
+          <Outlet />
+        </div>
+      }
+    >
+      <Route path="/" element={<Frontpage />} />
       <Route path="/page/create/" element={<CreatePage />} />
       <Route path="/page/" element={<CreatePage />} />
     </Route>,
   ),
 );
-
-// const Main = () => {
-//   return (
-//     <BrowserRouter>
-//       <Navigation />
-//       <Routes>
-//         <Route exact path="/" element={Frontpage} />
-//         <Route path="/page/create/" element={CreatePage} />
-//         <Route path="/page/all/" element={PageOverview} />
-//         <Route path="/page/edit/:slug" element={EditPage} />
-//         <Route path="/user/create/" element={CreateUser} />
-//         <Route path="/user/edit/:username" element={EditUser} />
-//         <Route path="/users/" element={UsersOverview} />
-//         <Route path="/login/" element={LoginPage} />
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
