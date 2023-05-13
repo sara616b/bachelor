@@ -1,4 +1,4 @@
---- # yamllint disable-line
+---
 version: "3.9"
 
 services:
@@ -15,26 +15,52 @@ services:
     networks:
       - dbnetwork
     restart: always
+  # api:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - SITE=website
+  #     - POSTGRES_USER=user
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=pagemanager
+  #   working_dir: /app/project
+  #   volumes:
+  #     - media:/app/project/media/
+  #     - static:/app/project/static/
+  #     - .:/app/
+  #   command: sh -c 'python manage.py check &&
+  # python manage.py makemigrations && python manage.py
+  # migrate && python manage.py runserver 0.0.0.0:8000'  # noqa
+  #   ports:
+  #     - "8002:8000"
+  #   depends_on:
+  #     - database
+  #   restart: always
+  #   links:
+  #     - database:database
+  #   networks:
+  #     - dbnetwork
+  #     - webnetwork
   website:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.frontend
+      args:
+        - SITE=Website
     environment:
-      - SITE=website
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
-    working_dir: /app/project
+      - SITE=Website
+      - WATCHPACK_POLLING=true
+    working_dir: /app/frontend
     volumes:
-      - media:/app/project/media/
-      - static:/app/project/static/
-      - .:/app/
-    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/public:/app/frontend/public
+    command: sh -c 'npm run start-website'
     ports:
-      - "8002:8000"
+      - "3000:3000"
     depends_on:
       - database
-      - assets
+      # - api
     restart: always
     links:
       - database:database
@@ -44,50 +70,30 @@ services:
   cms:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.frontend
+      args:
+        - SITE=Cms
     environment:
-      - SITE=cms
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
-    working_dir: /app/project
+      - SITE=Cms
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=false
+      - CHOKIDAR_USEPOLLING=true
+    working_dir: /app/frontend
     volumes:
-      - media:/app/project/media/
-      - static:/app/project/static/
-      - .:/app/
-    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
+      - ./frontend/src:/app/frontend/src
+      - ./frontend/public:/app/frontend/public
+    command: sh -c 'npm run start-cms'
     ports:
-      - "8001:8000"
+      - "3002:3002"
     depends_on:
       - database
-      - assets
+      # - api
     links:
       - database:database
     restart: always
     networks:
       - dbnetwork
       - webnetwork
-  assets:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    environment:
-      - SITE=website
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
-    working_dir: /app
-    volumes:
-      - media:/app/project/media/
-      - static:/app/project/static/
-      - .:/app/
-    command: sh -c 'npm run dev'
-    ports:
-      - 3000:3000
-    restart: always
-    networks:
-      - webnetwork
-      - dbnetwork
   nginx:
     image: nginx:latest
     volumes:

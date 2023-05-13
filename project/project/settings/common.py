@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     'page_manager',
     'webpack_loader',
     'login',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,6 +59,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# change to https://app.example.com in production settings
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+
+# change to app.example.com in production settings
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000']
 
 WEBPACK_LOADER = {
   'DEFAULT': {

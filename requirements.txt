@@ -49,3 +49,4 @@ httptools
 uvicorn
 uvloop
 websockets
+django-cors-headers

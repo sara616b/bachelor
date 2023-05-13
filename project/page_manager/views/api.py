@@ -9,6 +9,8 @@ import json
 from page_manager.utils import mongo_client
 from page_manager.models import Page
 
+from django.middleware.csrf import get_token
+
 
 class GetAllPagesApi(View):
     def get(self, request):
@@ -457,3 +459,19 @@ class UploadImageApi(View, LoginRequiredMixin):
             'result': 'uploaded',
             'image_src': 'slug',
             }, status=200)
+
+
+class csrf(View):
+    def get(self, request):
+        return JsonResponse({'csrfToken': get_token(request)})
+
+    def post(self, request):
+        return JsonResponse({'csrfToken': get_token(request)})
+
+
+class PingApi(View):
+    def get(self, request):
+        return JsonResponse({'result': 'OK'})
+
+    def post(self, request):
+        return JsonResponse({'result': 'OK'})

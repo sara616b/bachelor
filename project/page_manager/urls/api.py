@@ -13,9 +13,13 @@ from page_manager.views.api import (
     UpdateComponentApi,
     GetPagePreviewApi,
     UpdateSectionApi,
+    csrf,
+    PingApi,
 )
 
 urlpatterns = [
+    path('api/csrf/', csrf.as_view(), name="csrf"),
+    path('api/ping/', PingApi.as_view(), name="ping"),
     path(
         'api/page/all/', GetAllPagesApi.as_view(), name='GetAllPagesApi'
     ),
