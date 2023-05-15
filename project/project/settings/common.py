@@ -25,11 +25,10 @@ SECRET_KEY = SECRET_KEY
 DEBUG = False if os.environ.get('RTE') == 'prod' else True
 
 ALLOWED_HOSTS = [
-    '139.144.66.165:8001',
-    '139.144.66.165:8000',
-    '127.0.0.1:8001',
-    '127.0.0.1:8000',
+    '139.144.66.165',
     '127.0.0.1',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3002',
 ]
 
 
@@ -63,10 +62,16 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 
 # change to https://app.example.com in production settings
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3002',
+]
 
-# change to app.example.com in production settings
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000']
+# change to app.example.com in production settingsCSRF_COOKIE_PATH = '/'
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3002',
+]
 
 WEBPACK_LOADER = {
   'DEFAULT': {
@@ -154,7 +159,7 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(realpath(join(dirname(__file__), '')), "static")
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'project/static'),]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

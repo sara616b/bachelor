@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-// import { MantineProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import Frontpage from "./Cms/Pages/Frontpage";
 import CreatePage from "./Cms/Pages/CreatePage";
+import EditPage from "./Cms/Pages/EditPage";
+import PagesOverview from "./Cms/Pages/PagesOverview";
+import CreateUser from "./Cms/Pages/CreateUser";
+import EditUser from "./Cms/Pages/EditUser";
+import UsersOverview from "./Cms/Pages/UsersOverview";
+import LoginPage from "./Cms/Pages/LoginPage";
+import Layout from "./Cms/Modules/Layout";
 // import reportWebVitals from './reportWebVitals';
-// import Root, { rootLoader } from "./routes/root";
-// import Team, { teamLoader } from "./routes/team";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -14,39 +19,32 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-// import {
-//   CreatePage,
-//   PageOverview,
-//   EditPage,
-//   CreateUser,
-//   EditUser,
-//   UsersOverview,
-//   Frontpage,
-//   LoginPage,
-// } from "../Pages/index.jsx";
 import Navigation from "./Cms/Modules/Navigation";
+import useIsAuthenticated from "./Cms/Hooks/useIsAuthenticated";
+import axios from "axios";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      element={
-        <div>
-          <Navigation />
-          <Outlet />
-        </div>
-      }
-    >
-      <Route path="/" element={<Frontpage />} />
-      <Route path="/page/create/" element={<CreatePage />} />
-      <Route path="/page/" element={<CreatePage />} />
-    </Route>,
+    <>
+      <Route path="/login/" element={<LoginPage />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<Frontpage />} />
+        <Route path="/pages/" element={<PagesOverview />} />
+        <Route path="/pages/create/" element={<CreatePage />} />
+        <Route path="/pages/:slug" element={<EditPage />} />
+        <Route path="/users/" element={<UsersOverview />} />
+        <Route path="/users/create/" element={<CreateUser />} />
+        <Route path="/users/edit/:username" element={<EditUser />} />
+      </Route>
+    </>,
   ),
 );
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
-    <RouterProvider router={router} />
-    {/* </MantineProvider> */}
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <RouterProvider router={router} />
+    </MantineProvider>
   </React.StrictMode>,
 );
 

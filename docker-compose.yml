@@ -61,6 +61,7 @@ services:
       - ./frontend/src/setupTests.js:/app/frontend/src/setupTests.js
       - ./frontend/tsconfig.json:/app/frontend/tsconfig.json
       - ./frontend/tailwind.config.js:/app/frontend/tailwind.config.js
+      - ./frontend/src/output.css:/app/frontend/src/output.css
       - ./frontend/public:/app/frontend/public
     command: sh -c 'npm run start-website'
     ports:
@@ -68,6 +69,7 @@ services:
     depends_on:
       - database
       - api
+      - website_assets
     restart: always
     links:
       - database:database
@@ -111,6 +113,26 @@ services:
     networks:
       - dbnetwork
       - webnetwork
+  website_assets:
+    build:
+      context: ./
+      dockerfile: Dockerfile.frontend
+      args:
+        - SITE=Website
+    environment:
+      - SITE=Website
+      - WATCHPACK_POLLING=true
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend/tailwind.config.js:/app/frontend/tailwind.config.js
+      - ./frontend/src/input.css:/app/frontend/src/input.css
+      - ./frontend/src/output.css:/app/frontend/src/output.css
+      - ./frontend/src/Website:/app/frontend/src/Website
+    command: sh -c 'npx tailwindcss -i ./src/input.css -o ./src/output.css --watch'  # yamllint disable-line
+    restart: always
+    networks:
+      - webnetwork
+    tty: true
   nginx:
     image: nginx:latest
     volumes:

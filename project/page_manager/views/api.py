@@ -1,8 +1,9 @@
 # from django.shortcuts import render
 from django.views import View
-from django.http import JsonResponse
-# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from bson.json_util import dumps
 import json
 
@@ -191,6 +192,7 @@ class UpdatePageApi(View, LoginRequiredMixin):
 
 class CreateObjectApi(View):
     def post(self, request, slug, object, name):
+        print("CreateObjectApi")
         try:
             database = mongo_client.Bachelor
             pages = database['pages']
@@ -459,6 +461,21 @@ class UploadImageApi(View, LoginRequiredMixin):
             'result': 'uploaded',
             'image_src': 'slug',
             }, status=200)
+
+
+class CsrfTokenView(View):
+    """Send to the login interface the token CSRF as a cookie."""
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        """Return a empty response with the token CSRF.
+
+        Returns
+        -------
+        Response
+            The response with the token CSRF as a cookie.
+        """
+        return HttpResponse(status=204)
 
 
 class csrf(View):

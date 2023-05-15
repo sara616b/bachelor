@@ -9,7 +9,9 @@ type Props = {
 };
 
 const Image: FC<Props> = ({ props }) => {
-  return <img src={props.link} alt="beautiful flowers" />;
+  return (
+    <img src={props.link} alt="beautiful flowers" className="animate-fade-in" />
+  );
 };
 
 export default Image;

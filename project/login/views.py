@@ -1,34 +1,44 @@
-from django.shortcuts import render, reverse, redirect
 from django.views import View
-# from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 
 
 class LoginView(View):
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('FrontpageView')
-        return render(
-            request,
-            'cms/render_bundle_base.html',
-            {
-                'title': 'Log In | ',
-                'bundle_name': 'cms_login',
-            }
-        )
-
     def post(self, request):
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect(reverse('FrontpageView'))
+            return JsonResponse(
+                {'result': 'logged in'},
+                status=200
+            )
         else:
-            return redirect(reverse('LoginView'))
+            return JsonResponse(
+                {'result': 'user not found'},
+                status=204
+            )
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect(reverse('LoginView'))
+        return JsonResponse(
+            {'result': 'okay'},
+            status=200
+        )
+
+
+class AuthenticatedView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return JsonResponse(
+                {'result': 'authenticated'},
+                status=200
+            )
+        else:
+            return JsonResponse(
+                {'result': 'unauthenticated'},
+                status=204
+            )
