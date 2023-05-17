@@ -141,7 +141,7 @@ class UserApiTests(TestCase):
         user = User.objects.get(username='johndoe')
         self.assertEqual(user.first_name, 'John')
         self.assertEqual(user.last_name, 'Stag')
-        self.assertEqual(user.email, 'john.doe@example.com')
+        self.assertEqual(user.email, 'johndoe@example.com')
         self.assertEqual(user.is_superuser, True)
         self.assertEqual(
             list(
