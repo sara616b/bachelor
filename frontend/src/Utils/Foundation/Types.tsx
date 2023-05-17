@@ -32,4 +32,5 @@ export type UserObjectProps = {
   last_name: string;
   username: string;
   email: string;
+  is_superuser: boolean;
 };

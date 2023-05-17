@@ -1,6 +1,7 @@
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 
 class LoginView(View):
@@ -17,7 +18,7 @@ class LoginView(View):
         else:
             return JsonResponse(
                 {'result': 'user not found'},
-                status=204
+                status=400
             )
 
 
@@ -40,5 +41,9 @@ class AuthenticatedView(View):
         else:
             return JsonResponse(
                 {'result': 'unauthenticated'},
-                status=204
+                status=200
             )
+
+
+def csrf(request):
+    return JsonResponse({'csrfToken': get_token(request)})

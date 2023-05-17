@@ -30,7 +30,7 @@ const CreateUser = () => {
   const SubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData();
-    const targetElemet = e.target as typeof e.target & {
+    const target = e.target as typeof e.target & {
       elements: {
         firstname: { value: string };
         lastname: { value: string };
@@ -40,20 +40,27 @@ const CreateUser = () => {
         is_superuser: { checked: string };
       };
     };
-    data.append("firstname", targetElemet.elements.firstname.value);
-    data.append("lastname", targetElemet.elements.lastname.value);
-    data.append("username", targetElemet.elements.username.value);
-    data.append("email", targetElemet.elements.email.value);
-    data.append("password", targetElemet.elements.password.value);
-    data.append("is_superuser", targetElemet.elements.is_superuser.checked);
+    data.append("firstname", target.elements.firstname.value);
+    data.append("lastname", target.elements.lastname.value);
+    data.append("email", target.elements.email.value);
+    data.append("password", target.elements.password.value);
+    data.append("is_superuser", target.elements.is_superuser.checked);
     if (chosenPermissions) {
       data.append("permissions", chosenPermissions.toString());
     }
     axios
-      .post("http://127.0.0.1:8002/api/users/create/", data)
+      .post(
+        `http://127.0.0.1:8002/api/users/${target.elements.username.value}/`,
+        data,
+      )
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
           navigate("/users/");
+        }
+      })
+      .catch((response) => {
+        if (response.status === 400) {
+          console.log(response.data.result);
         }
       });
   };
@@ -80,7 +87,10 @@ const CreateUser = () => {
           py="xl"
         >
           <Title>Create New User</Title>
-          <form onSubmit={(event) => SubmitForm(event)}>
+          <form
+            onSubmit={(event) => SubmitForm(event)}
+            style={{ width: "100%" }}
+          >
             <Flex
               bg="blue.1"
               gap="md"
@@ -88,6 +98,7 @@ const CreateUser = () => {
               align="center"
               direction="column"
               wrap="wrap"
+              w="100%"
             >
               <TextInput
                 placeholder="First Name"
@@ -95,6 +106,7 @@ const CreateUser = () => {
                 id="firstname"
                 label="First Name"
                 required
+                w="100%"
               />
               <TextInput
                 placeholder="Last Name"
@@ -102,6 +114,7 @@ const CreateUser = () => {
                 id="lastname"
                 label="Last Name"
                 required
+                w="100%"
               />
               <TextInput
                 placeholder="Username"
@@ -109,6 +122,7 @@ const CreateUser = () => {
                 id="username"
                 label="Username"
                 required
+                w="100%"
               />
               <TextInput
                 placeholder="Email"
@@ -116,6 +130,7 @@ const CreateUser = () => {
                 id="email"
                 label="Email"
                 required
+                w="100%"
               />
               <TextInput
                 placeholder="Password"
@@ -124,11 +139,13 @@ const CreateUser = () => {
                 label="Password"
                 type="password"
                 required
+                w="100%"
               />
               <Checkbox
                 label="Is Superuser"
                 name="is_superuser"
                 id="is_superuser"
+                w="100%"
               />
               <MultiSelect
                 value={chosenPermissions}
@@ -139,11 +156,13 @@ const CreateUser = () => {
                 label="User Permissions and Groups"
                 placeholder="Pick the permissions for the new user"
                 searchable
+                w="100%"
               />
               <Button
                 variant="gradient"
                 gradient={{ from: "indigo.5", to: "cyan.5", deg: 105 }}
                 type="submit"
+                w="100%"
               >
                 Create
               </Button>

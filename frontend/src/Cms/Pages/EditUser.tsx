@@ -1,47 +1,84 @@
 import { useState, useEffect, FormEvent } from "react";
-import { useParams } from "react-router-dom";
-import { Title, Container, Button, Flex, TextInput } from "@mantine/core";
-// import Cookies from "js-cookie";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import {
+  Title,
+  Container,
+  Button,
+  Flex,
+  TextInput,
+  Checkbox,
+  MultiSelect,
+} from "@mantine/core";
 import axios from "axios";
 import { UserObjectProps } from "../../Utils/Foundation/Types";
 
 const EditUser = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, csrftoken } = useOutletContext<{
+    isLoggedIn: boolean;
+    csrftoken: string;
+  }>();
   const { username } = useParams();
-  const [user, setUser] = useState<UserObjectProps>({
-    first_name: "loading",
-    last_name: "loading",
-    username: "loading",
-    email: "loading",
-  });
+  const [user, setUser] = useState<UserObjectProps>();
+  const [permissions, setPermissions] = useState<string[] | []>([]);
+  const [chosenPermissions, setChosenPermissions] = useState<string[] | []>([]);
 
   useEffect(() => {
+    if (isLoggedIn === undefined || !isLoggedIn) return;
+    axios.get("http://127.0.0.1:8002/api/permissions/").then((response) => {
+      setPermissions(response.data.permissions);
+    });
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn === undefined || !isLoggedIn) return;
     axios
-      .get(`http://127.0.0.1:8002/api/users/${username}`)
+      .get(`http://127.0.0.1:8002/api/users/${username}/`)
       .then((response) => {
-        setUser(response.data.user[0]);
+        setUser(response.data.user);
+        setChosenPermissions(response.data.user.permissions);
       });
-  }, [username]);
+  }, [username, isLoggedIn]);
 
-  // const csrftoken = Cookies.get('csrftoken');
-  // axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
+  const SubmitForm = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const target = event.target as typeof event.target & {
+      elements: {
+        firstname: { value: string };
+        lastname: { value: string };
+        username: { value: string };
+        email: { value: string };
+        password: { value: string };
+        is_superuser: { checked: string };
+      };
+    };
 
-  const SubmitForm = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    //     const data = new FormData()
-    //     data.append('firstname', e.target.elements.firstname.value);
-    //     data.append('lastname', e.target.elements.lastname.value);
-    //     data.append('username', e.target.elements.username.value);
-    //     data.append('email', e.target.elements.email.value);
-    //     data.append('password', e.target.elements.password.value);
-    //     axios
-    //         .post('/user/create/', data)
-    //         .then((response) => {
-    //             if (response.status == 200) {
-    //                 // redirect
-    //                 location.href = '/users/'
-    //             }
-    //         });
+    const data = new FormData();
+    data.append("firstname", target.elements.firstname.value);
+    data.append("lastname", target.elements.lastname.value);
+    data.append("username", target.elements.username.value);
+    data.append("email", target.elements.email.value);
+    data.append("is_superuser", target.elements.is_superuser.checked);
+    data.append("permissions", chosenPermissions.toString());
+    data.append("csrfmiddlewaretoken", csrftoken);
+
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
+    axios
+      .put(`http://127.0.0.1:8002/api/users/${username}/`, data)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate("/users/");
+        }
+      })
+      .catch((response) => {
+        if (response.status === 400) {
+          console.log(response.data.result);
+        }
+      });
   };
+
   return (
     <Container size="xs">
       <Flex
@@ -66,56 +103,87 @@ const EditUser = () => {
         >
           <Title>Edit User</Title>
         </Flex>
-        <form onSubmit={(event) => SubmitForm(event)}>
-          <Flex
-            bg="blue.1"
-            gap="md"
-            justify="center"
-            align="center"
-            direction="column"
-            wrap="wrap"
+        {user ? (
+          <form
+            onSubmit={(event) => SubmitForm(event)}
+            style={{ width: "100%" }}
           >
-            <TextInput
-              placeholder="First Name"
-              name="firstname"
-              id="firstname"
-              label="First Name"
-              defaultValue={user?.first_name || ""}
-              required
-            />
-            <TextInput
-              placeholder="Last Name"
-              name="lastname"
-              id="lastname"
-              label="Last Name"
-              defaultValue={user?.last_name || ""}
-              required
-            />
-            <TextInput
-              placeholder="Username"
-              name="username"
-              id="username"
-              label="Username"
-              defaultValue={user?.username || ""}
-              required
-            />
-            <TextInput
-              placeholder="Email"
-              name="email"
-              id="email"
-              label="Email"
-              defaultValue={user?.email || ""}
-              required
-            />
-            <Button
-              variant="gradient"
-              gradient={{ from: "indigo.5", to: "cyan.5", deg: 105 }}
-              type="submit"
+            <Flex
+              bg="blue.1"
+              gap="md"
+              justify="center"
+              align="center"
+              direction="column"
+              wrap="wrap"
+              w="100%"
             >
-              Create
-            </Button>
-          </Flex>
-        </form>
+              <TextInput
+                placeholder="First Name"
+                name="firstname"
+                id="firstname"
+                label="First Name"
+                defaultValue={user?.first_name || ""}
+                required
+                w="100%"
+              />
+              <TextInput
+                placeholder="Last Name"
+                name="lastname"
+                id="lastname"
+                label="Last Name"
+                defaultValue={user?.last_name || ""}
+                required
+                w="100%"
+              />
+              <TextInput
+                placeholder="Username"
+                name="username"
+                id="username"
+                label="Username"
+                defaultValue={user?.username || ""}
+                required
+                w="100%"
+              />
+              <TextInput
+                placeholder="Email"
+                name="email"
+                id="email"
+                label="Email"
+                defaultValue={user?.email || ""}
+                required
+                w="100%"
+              />
+              <Checkbox
+                label="Is Superuser"
+                name="is_superuser"
+                id="is_superuser"
+                defaultChecked={user?.is_superuser}
+                w="100%"
+              />
+              <MultiSelect
+                value={chosenPermissions}
+                onChange={setChosenPermissions}
+                name="permissions"
+                id="permissions"
+                data={permissions}
+                label="User Permissions and Groups"
+                placeholder="Pick the permissions for the new user"
+                searchable
+                w="100%"
+              />
+              <Button
+                variant="gradient"
+                gradient={{ from: "indigo.5", to: "cyan.5", deg: 105 }}
+                type="submit"
+                w="100%"
+              >
+                Edit
+              </Button>
+            </Flex>
+          </form>
+        ) : (
+          "Loading..."
+        )}
       </Flex>
     </Container>
   );

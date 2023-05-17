@@ -6,8 +6,9 @@ import useIsAuthenticated from "../Hooks/useIsAuthenticated";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, csrftoken } = useIsAuthenticated(false);
+  const { isLoggedIn, csrftoken } = useIsAuthenticated();
   useEffect(() => {
+    if (isLoggedIn === undefined) return;
     if (isLoggedIn) {
       navigate("/");
     }
@@ -32,6 +33,7 @@ const LoginPage = () => {
       return null;
     }
     axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    // axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     const data = new FormData();
     data.append("username", username);

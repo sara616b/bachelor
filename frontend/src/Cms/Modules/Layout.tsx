@@ -5,8 +5,10 @@ import Navigation from "./Navigation";
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useIsAuthenticated(true);
+  const { isLoggedIn, csrftoken } = useIsAuthenticated();
+  console.log(isLoggedIn);
   useEffect(() => {
+    if (isLoggedIn === undefined) return;
     if (!isLoggedIn) {
       navigate("/login/");
     }
@@ -15,7 +17,7 @@ const Layout = () => {
   return (
     <div>
       <Navigation />
-      <Outlet />
+      <Outlet context={{ isLoggedIn: isLoggedIn, csrftoken: csrftoken }} />
     </div>
   );
 };

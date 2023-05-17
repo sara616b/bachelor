@@ -8,20 +8,39 @@ import {
   Stack,
   Loader,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { UserObjectProps } from "../../Utils/Foundation/Types";
 
 const UsersOverview = () => {
   const [users, setUsers] = useState<UserObjectProps[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const { isLoggedIn, csrftoken } = useOutletContext<{
+    isLoggedIn: boolean;
+    csrftoken: string;
+  }>();
 
   useEffect(() => {
+    if (isLoggedIn === undefined || !isLoggedIn) return;
     axios.get("http://127.0.0.1:8002/api/users/").then((response) => {
-      setUsers(response.data.users);
+      if (response.status === 200) {
+        setUsers(response.data.users);
+      }
       setHasLoaded(true);
     });
-  }, []);
+  }, [hasLoaded]);
+
+  const deleteUser = (username: string) => {
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
+    axios
+      .delete(`http://127.0.0.1:8002/api/users/${username}/`)
+      .then((response) => {
+        if (response.status === 200) {
+          setHasLoaded(false);
+        }
+      });
+  };
 
   return (
     <Container size="xs">
@@ -56,25 +75,57 @@ const UsersOverview = () => {
           </Link>
         </Flex>
 
-        <Stack>
+        <Stack w="100%" align="stretch">
           {hasLoaded ? (
             users.length !== 0 ? (
-              users.map((user) => {
-                return (
-                  <Text key={user.username}>
-                    {user.first_name} {user.last_name} ({user.username})
-                    <Link to={`/users/${user.username}`}>
-                      <Button
-                        variant="gradient"
-                        gradient={{ from: "indigo.5", to: "cyan.5", deg: 105 }}
-                        mx="xl"
+              users
+                .sort((a, b) => a.first_name.localeCompare(b.first_name))
+                .map((user) => {
+                  return (
+                    <Flex
+                      key={user.username}
+                      direction="row"
+                      wrap="wrap"
+                      justify="space-between"
+                      gap="xs"
+                      bg="white"
+                      p="xs"
+                    >
+                      <Text>
+                        {user.first_name} {user.last_name} ({user.username})
+                      </Text>
+                      <Flex
+                        key={user.username}
+                        direction="row"
+                        wrap="wrap"
+                        gap="xs"
                       >
-                        Edit {user.username}
-                      </Button>
-                    </Link>
-                  </Text>
-                );
-              })
+                        <Link to={`/users/${user.username}`}>
+                          <Button
+                            variant="gradient"
+                            compact
+                            gradient={{
+                              from: "indigo.5",
+                              to: "cyan.5",
+                              deg: 105,
+                            }}
+                            title={`Edit ${user.username}`}
+                          >
+                            Edit
+                          </Button>
+                        </Link>
+                        <Button
+                          compact
+                          color="red"
+                          title={`Delete ${user.username}`}
+                          onClick={() => deleteUser(user.username)}
+                        >
+                          Delete
+                        </Button>
+                      </Flex>
+                    </Flex>
+                  );
+                })
             ) : (
               "There are no users"
             )

@@ -19,4 +19,4 @@ STATIC_URL = 'static/'
 
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
 
-LOGIN_URL = 'LoginView'
+LOGIN_URL = 'login/'

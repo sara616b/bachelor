@@ -27,7 +27,7 @@ class LoginViewTest(TestCase):
             'username': self.username,
             'password': 'wrongpassword',
         })
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(
             json.loads(response.content)['result'], 'user not found'
         )
@@ -62,7 +62,7 @@ class AuthenticatedViewTest(TestCase):
 
     def test_unauthenticated(self):
         response = self.client.get(reverse('AuthenticatedView'))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
             json.loads(response.content)['result'], 'unauthenticated'
         )

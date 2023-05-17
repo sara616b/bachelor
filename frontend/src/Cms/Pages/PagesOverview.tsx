@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Title, Container, Flex, Grid, Loader } from "@mantine/core";
+import { Title, Container, Flex, Stack, Loader } from "@mantine/core";
 import Item from "../Modules/PageItem";
 import axios from "axios";
 import { PageObjectProps } from "../../Utils/Foundation/Types";
@@ -21,7 +21,7 @@ const PageOverview = () => {
     <Container size="lg">
       <Container size="xs">
         <Flex
-          bg="blue.2"
+          bg="blue.1"
           gap="lg"
           justify="center"
           align="center"
@@ -31,7 +31,7 @@ const PageOverview = () => {
           py="xl"
         >
           <Title>All Pages</Title>
-          <Grid columns={1}>
+          <Stack w="100%" align="stretch">
             {hasLoaded ? (
               pages.length !== 0 ? (
                 pages.map((page) => {
@@ -43,7 +43,7 @@ const PageOverview = () => {
             ) : (
               <Loader />
             )}
-          </Grid>
+          </Stack>
         </Flex>
       </Container>
     </Container>

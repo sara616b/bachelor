@@ -1,6 +1,6 @@
 import React from "react";
 import Cookies from "js-cookie";
-import { Title, Button, Flex, Grid } from "@mantine/core";
+import { Text, Button, Flex } from "@mantine/core";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { PageObjectProps } from "../../Utils/Foundation/Types";
@@ -32,33 +32,42 @@ const PageItem = ({ item }: Props) => {
       });
   };
   return (
-    <Grid.Col span={1}>
-      <Flex
-        bg="blue.1"
-        gap="md"
-        direction="row"
-        wrap="wrap"
-        justify="space-between"
-        px="md"
-        py="md"
-      >
-        <Title order={3}>{item.page_title}</Title>
-        <Flex gap="sm">
+    <Flex
+      direction="row"
+      wrap="wrap"
+      justify="space-between"
+      gap="xs"
+      bg="white"
+      p="xs"
+    >
+      <Text>{item.page_title}</Text>
+      <Flex gap="sm">
+        <Link to={`/pages/${item.page_slug}`}>
           <Button
             compact
-            color="red"
-            onClick={(event) => {
-              deletePage(event);
+            variant="gradient"
+            gradient={{
+              from: "indigo.5",
+              to: "cyan.5",
+              deg: 105,
             }}
+            title={`Edit ${item.page_title}`}
           >
-            Delete
+            Edit
           </Button>
-          <Link to={`/pages/${item.page_slug}`}>
-            <Button compact>Edit</Button>
-          </Link>
-        </Flex>
+        </Link>
+        <Button
+          compact
+          color="red"
+          title={`Delete ${item.page_title}`}
+          onClick={(event) => {
+            deletePage(event);
+          }}
+        >
+          Delete
+        </Button>
       </Flex>
-    </Grid.Col>
+    </Flex>
   );
 };
 
