@@ -1,24 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useParams } from "react-router-dom";
 import { Title, Container, Button, Flex, TextInput } from "@mantine/core";
 // import Cookies from "js-cookie";
 import axios from "axios";
+import { UserObjectProps } from "../../Utils/Foundation/Types";
 
 const EditUser = () => {
-  const [user, setUser] = useState({});
-  // const username = window.__INITIAL__.username
   const { username } = useParams();
+  const [user, setUser] = useState<UserObjectProps>({
+    first_name: "loading",
+    last_name: "loading",
+    username: "loading",
+    email: "loading",
+  });
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8002/api/user/${username}`).then((response) => {
-      setUser(response.data.user[0]);
-    });
+    axios
+      .get(`http://127.0.0.1:8002/api/users/${username}`)
+      .then((response) => {
+        setUser(response.data.user[0]);
+      });
   }, [username]);
 
   // const csrftoken = Cookies.get('csrftoken');
   // axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
 
-  const SubmitForm = (e) => {
+  const SubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //     const data = new FormData()
     //     data.append('firstname', e.target.elements.firstname.value);

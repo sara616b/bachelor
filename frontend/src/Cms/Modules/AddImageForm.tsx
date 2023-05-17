@@ -1,23 +1,24 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Button, FileInput, Flex, ActionIcon, Divider } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 
 const App = () => {
   const csrftoken = Cookies.get("csrftoken");
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const uploadImage = (event) => {
+  const uploadImage = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData();
-    data.set("image", imageFile);
+    if (imageFile !== null) {
+      data.set("image", imageFile);
+    }
     data.set("key", "61bf5339efd0f697d130a299c4c0cc02");
     delete axios.defaults.headers.common["X-CSRFToken"];
     axios
       .post(`https://api.imgbb.com/1/upload`, data)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data.data.display_url);
           return response.data.data.display_url;
         }
       })

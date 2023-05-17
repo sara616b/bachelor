@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import classnames from "classnames";
 
 type TextProps = {
@@ -11,7 +10,7 @@ type Props = {
   props: TextProps;
 };
 
-const Text: FC<Props> = ({ props }) => {
+const Text = ({ props }: Props) => {
   const textClassnames = classnames(
     "max-w-sm",
     "w-full",

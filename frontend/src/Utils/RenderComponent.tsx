@@ -1,11 +1,10 @@
-import React, { FC } from "react";
 import componentsObject from "./Foundation/ComponentsDetails";
 
-type PropTypes = {
+type Props = {
   component: any;
 };
 
-const RenderComponent: FC<PropTypes> = ({ component }) => {
+const RenderComponent = ({ component }: Props) => {
   const Element = componentsObject[component.name]["component"];
   return <Element props={component} key={Math.random()} />;
 };

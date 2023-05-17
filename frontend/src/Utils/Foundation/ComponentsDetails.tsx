@@ -4,12 +4,14 @@ import Image from "../../Website/Components/Image";
 
 type ComponentValues = {
   component: any;
-  values: object;
+  values: {
+    [index: string]: string | boolean;
+  };
   customization: object;
 };
 
 export interface ComponentTypes {
-  [key: string]: ComponentValues;
+  [index: string]: ComponentValues;
 }
 
 const components: ComponentTypes = {

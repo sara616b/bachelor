@@ -10,11 +10,11 @@ import AddSectionForm from "../Modules/AddSectionForm";
 import EditSectionContainer from "../Modules/EditSectionContainer";
 import EditPageContainer from "../Modules/EditPageContainer";
 import AddImageForm from "../Modules/AddImageForm";
-// import AddColumnForm from "../Modules/AddColumnForm";
 import EditSections from "../Modules/EditSections";
+import { PageObjectProps } from "../../Utils/Foundation/Types";
 
 const EditPage = () => {
-  const [page, setPage] = useState({});
+  const [page, setPage] = useState<PageObjectProps | undefined>();
   const [hasLoaded, setHasLoaded] = useState(false);
   const { slug } = useParams();
 
@@ -50,7 +50,7 @@ const EditPage = () => {
                   return (
                     <EditSectionContainer
                       section={section}
-                      sectionKey={sectionKey}
+                      sectionKey={Number(sectionKey)}
                       page={page}
                       key={`${sectionKey}${section.name}`}
                       getPageInfo={() => getPageInfo()}
@@ -58,16 +58,8 @@ const EditPage = () => {
                       <EditSections
                         section={section}
                         getPageInfo={() => getPageInfo()}
-                        index={sectionKey}
+                        index={Number(sectionKey)}
                       >
-                        {/* <Accordion.Panel>
-                        <Flex direction="column" gap="md">
-                          <Title order={5}>Columns</Title>
-                          <AddColumnForm
-                            section={section}
-                            sectionKey={sectionKey}
-                            getPageInfo={() => getPageInfo()}
-                          /> */}
                         {section?.columns
                           ? Object.entries(section?.columns).map(
                               ([columnKey, column]) => {
@@ -75,7 +67,7 @@ const EditPage = () => {
                                   <EditColumnContainer
                                     key={`${columnKey}${column.name}`}
                                     column={column}
-                                    columnKey={columnKey}
+                                    columnKey={Number(columnKey)}
                                   >
                                     {column.components &&
                                     Object.entries(column.components).length !==
@@ -85,10 +77,10 @@ const EditPage = () => {
                                             return (
                                               <EditComponents
                                                 component={component}
-                                                index={key}
+                                                index={Number(key)}
                                                 key={`${key}${component.name}${page}`}
-                                                sectionKey={sectionKey}
-                                                columnKey={columnKey}
+                                                sectionKey={Number(sectionKey)}
+                                                columnKey={Number(columnKey)}
                                                 getPageInfo={() =>
                                                   getPageInfo()
                                                 }
@@ -99,8 +91,8 @@ const EditPage = () => {
                                         )
                                       : "No Components"}
                                     <AddComponentForm
-                                      sectionKey={sectionKey}
-                                      columnKey={columnKey}
+                                      sectionKey={Number(sectionKey)}
+                                      columnKey={Number(columnKey)}
                                       getPageInfo={() => getPageInfo()}
                                     />
                                   </EditColumnContainer>

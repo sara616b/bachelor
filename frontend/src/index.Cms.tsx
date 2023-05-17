@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { MantineProvider } from "@mantine/core";
@@ -17,11 +17,7 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
-  Outlet,
 } from "react-router-dom";
-import Navigation from "./Cms/Modules/Navigation";
-import useIsAuthenticated from "./Cms/Hooks/useIsAuthenticated";
-import axios from "axios";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,7 +30,7 @@ const router = createBrowserRouter(
         <Route path="/pages/:slug" element={<EditPage />} />
         <Route path="/users/" element={<UsersOverview />} />
         <Route path="/users/create/" element={<CreateUser />} />
-        <Route path="/users/edit/:username" element={<EditUser />} />
+        <Route path="/users/:username" element={<EditUser />} />
       </Route>
     </>,
   ),

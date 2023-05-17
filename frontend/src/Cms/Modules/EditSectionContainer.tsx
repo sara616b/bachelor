@@ -4,14 +4,25 @@ import { Accordion } from "@mantine/core";
 import AccordionControl from "./AccordionControl";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { PageObjectProps } from "../../Utils/Foundation/Types";
 
-const App = ({ children, section, sectionKey, page, getPageInfo }) => {
+type Props = {
+  children: React.ReactNode;
+  section: {
+    name: string;
+  };
+  sectionKey: number;
+  page: PageObjectProps;
+  getPageInfo: Function;
+};
+
+const App = ({ children, section, sectionKey, page, getPageInfo }: Props) => {
   const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   axios.defaults.withCredentials = true;
 
-  const [sectionLength, setSectionLength] = useState();
+  const [sectionLength, setSectionLength] = useState<number | undefined>();
   const { slug } = useParams();
 
   useEffect(() => {
@@ -20,7 +31,7 @@ const App = ({ children, section, sectionKey, page, getPageInfo }) => {
     }
   }, [page]);
 
-  const deleteSection = (index) => {
+  const deleteSection = (index: number) => {
     axios
       .post(`http://127.0.0.1:8002/api/page/${slug}/section/delete/${index}/`)
       .then((response) => {
@@ -31,7 +42,7 @@ const App = ({ children, section, sectionKey, page, getPageInfo }) => {
       });
   };
 
-  const moveSection = (index, direction) => {
+  const moveSection = (index: number, direction: string) => {
     axios
       .post(
         `http://127.0.0.1:8002/api/page/${slug}/section/move/${index}/${direction}/`,

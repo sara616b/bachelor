@@ -53,7 +53,6 @@ services:
     volumes:
       - ./frontend/src/Utils:/app/frontend/src/Utils
       - ./frontend/src/Website:/app/frontend/src/Website
-      - ./frontend/src/App.test.js:/app/frontend/src/App.test.js
       - ./frontend/src/index.css:/app/frontend/src/index.css
       - ./frontend/src/index.Website.tsx:/app/frontend/src/index.tsx
       - ./frontend/src/react-app-env.d.ts:/app/frontend/src/react-app-env.d.ts
@@ -91,7 +90,6 @@ services:
     volumes:
       - ./frontend/src/Utils:/app/frontend/src/Utils
       - ./frontend/src/Cms:/app/frontend/src/Cms
-      - ./frontend/src/App.test.js:/app/frontend/src/App.test.js
       - ./frontend/src/index.css:/app/frontend/src/index.css
       - ./frontend/src/index.Cms.tsx:/app/frontend/src/index.tsx
       - ./frontend/src/react-app-env.d.ts:/app/frontend/src/react-app-env.d.ts

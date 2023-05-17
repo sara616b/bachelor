@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useParams } from "react-router-dom";
 import {
   Text,
@@ -16,6 +16,19 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import AccordionControl from "./AccordionControl";
 import ComponentsDetails from "../../Utils/Foundation/ComponentsDetails";
+import { PageObjectProps } from "../../Utils/Foundation/Types";
+
+type Props = {
+  component: {
+    name: string;
+    [index: string]: string | boolean;
+  };
+  index: number;
+  sectionKey: number;
+  columnKey: number;
+  getPageInfo: Function;
+  page: PageObjectProps;
+};
 
 const App = ({
   component,
@@ -24,16 +37,18 @@ const App = ({
   columnKey,
   getPageInfo,
   page,
-}) => {
+}: Props) => {
   const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   axios.defaults.withCredentials = true;
   const { slug } = useParams();
-  const [componentLength, setComponentLength] = useState();
+  const [componentLength, setComponentLength] = useState<number | undefined>(
+    undefined,
+  );
   const [alignment, setAlignment] = useState(component?.alignment || undefined);
-  const [booleans, setBooleans] = useState({
-    bold: component?.bold || false,
+  const [booleans, setBooleans] = useState<{ [index: string]: boolean }>({
+    bold: Boolean(component?.bold) || false,
   });
   useEffect(() => {
     if (page?.data) {
@@ -45,10 +60,10 @@ const App = ({
     }
   }, [page, sectionKey, columnKey]);
 
-  const deleteComponent = (index) => {
+  const deleteComponent = (index: number) => {
     const data = new FormData();
-    data.append("section_key", sectionKey);
-    data.append("column_key", columnKey);
+    data.append("section_key", sectionKey.toString());
+    data.append("column_key", columnKey.toString());
     axios
       .post(
         `http://127.0.0.1:8002/api/page/${slug}/component/delete/${index}/`,
@@ -61,10 +76,10 @@ const App = ({
       });
   };
 
-  const moveComponent = (index, direction) => {
+  const moveComponent = (index: number, direction: string) => {
     const data = new FormData();
-    data.append("section_key", sectionKey);
-    data.append("column_key", columnKey);
+    data.append("section_key", sectionKey.toString());
+    data.append("column_key", columnKey.toString());
     axios
       .post(
         `http://127.0.0.1:8002/api/page/${slug}/component/move/${index}/${direction}/`,
@@ -77,12 +92,19 @@ const App = ({
       });
   };
 
-  const saveComponent = (event) => {
+  const saveComponent = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const target = event.target as typeof event.target & {
+      elements: {
+        [index: string]: { value: string };
+      };
+    };
     const data = new FormData();
-    data.append("section_key", sectionKey);
-    data.append("column_key", columnKey);
-    const newValues = {};
+    data.append("section_key", sectionKey.toString());
+    data.append("column_key", columnKey.toString());
+    const newValues: {
+      [index: string]: boolean | string | undefined;
+    } = {};
     newValues["name"] = component.name;
 
     Object.entries(ComponentsDetails[component.name].customization).forEach(
@@ -92,7 +114,7 @@ const App = ({
         } else if (booleans.hasOwnProperty(key)) {
           newValues[key] = booleans[key];
         } else {
-          newValues[key] = event.target.elements[key].value;
+          newValues[key] = target.elements[key].value;
         }
       },
     );
@@ -148,10 +170,10 @@ const App = ({
                         label={`${field.name}: `}
                         name={key}
                         id={key}
-                        defaultValue={
+                        defaultValue={String(
                           component[key] ||
-                          ComponentsDetails[component.name].values[key]
-                        }
+                            ComponentsDetails[component.name].values[key],
+                        )}
                         key={`${key}${component}${component[key]}`}
                       />
                     );
@@ -162,7 +184,7 @@ const App = ({
                         name={key}
                         label={`${field.name}: `}
                         id={key}
-                        defaultValue={component[key]}
+                        defaultValue={component[key].toString()}
                         key={`${key}${component}${component[key]}`}
                       />
                     );
@@ -173,7 +195,7 @@ const App = ({
                         name={key}
                         label={`${field.name}: `}
                         id={key}
-                        defaultValue={component[key]}
+                        defaultValue={component[key].toString()}
                         key={`${key}${component}${component[key]}`}
                       />
                     );
@@ -215,7 +237,7 @@ const App = ({
                       <div key={`${key}${component}${component[key]}`}>
                         <Text>{`${field.name}: `}</Text>
                         <SegmentedControl
-                          defaultValue={component?.[key]}
+                          defaultValue={component?.[key].toString()}
                           data={[
                             { label: "Left", value: "left" },
                             { label: "Center", value: "center" },

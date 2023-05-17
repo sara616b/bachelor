@@ -1,11 +1,10 @@
-import { FC } from "react";
 import RenderComponent from "../../Utils/RenderComponent";
 
-type PropTypes = {
+type Props = {
   component: any;
 };
 
-const ComponentWrapper: FC<PropTypes> = ({ component }) => {
+const ComponentWrapper = ({ component }: Props) => {
   console.log(component);
   // @ts-ignore
   return RenderComponent({ component });

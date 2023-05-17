@@ -10,9 +10,10 @@ import {
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { UserObjectProps } from "../../Utils/Foundation/Types";
 
 const UsersOverview = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UserObjectProps[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const UsersOverview = () => {
           py="xl"
         >
           <Title>Users</Title>
-          <Link to="/user/create/">
+          <Link to="/users/create/">
             <Button
               variant="gradient"
               gradient={{ from: "indigo.5", to: "cyan.5", deg: 105 }}
@@ -62,7 +63,7 @@ const UsersOverview = () => {
                 return (
                   <Text key={user.username}>
                     {user.first_name} {user.last_name} ({user.username})
-                    <Link to={`/user/edit/${user.username}`}>
+                    <Link to={`/users/${user.username}`}>
                       <Button
                         variant="gradient"
                         gradient={{ from: "indigo.5", to: "cyan.5", deg: 105 }}

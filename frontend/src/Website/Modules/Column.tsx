@@ -1,19 +1,14 @@
-import React, { FC, ReactNode } from "react";
+import React from "react";
 import classnames from "classnames";
 
-type ColumnProps = {
+type Props = {
   index: number;
   wrapReverse: boolean;
   alignContent: string;
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
-const Column: FC<ColumnProps> = ({
-  index,
-  wrapReverse,
-  alignContent,
-  children,
-}) => {
+const Column = ({ index, wrapReverse, alignContent, children }: Props) => {
   const columnClassnames = classnames(
     "w-full",
     "grid",

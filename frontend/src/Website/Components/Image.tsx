@@ -1,5 +1,3 @@
-import React, { FC } from "react";
-
 type ImageProps = {
   link: string;
 };
@@ -8,7 +6,7 @@ type Props = {
   props: ImageProps;
 };
 
-const Image: FC<Props> = ({ props }) => {
+const Image = ({ props }: Props) => {
   return (
     <img src={props.link} alt="beautiful flowers" className="animate-fade-in" />
   );

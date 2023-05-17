@@ -4,7 +4,15 @@ import { Flex, Text, SegmentedControl } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const App = ({ section, sectionKey, getPageInfo }) => {
+type Props = {
+  section: {
+    columns: object;
+  };
+  sectionKey: number;
+  getPageInfo: Function;
+};
+
+const App = ({ section, sectionKey, getPageInfo }: Props) => {
   const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
@@ -17,7 +25,7 @@ const App = ({ section, sectionKey, getPageInfo }) => {
   useEffect(() => {
     if (columnAmount !== Object.keys(section?.columns).length.toString()) {
       const data = new FormData();
-      data.append("section_key", sectionKey);
+      data.append("section_key", sectionKey.toString());
       axios
         .post(
           `http://127.0.0.1:8002/api/page/${slug}/column/change/${columnAmount}/`,

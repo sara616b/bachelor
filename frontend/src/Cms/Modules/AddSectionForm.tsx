@@ -1,12 +1,16 @@
-import { useEffect } from "react";
+import { FormEvent, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Flex, TextInput, Divider } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const App = ({ getPageInfo }) => {
+type Props = {
+  getPageInfo: Function;
+};
+
+const App = ({ getPageInfo }: Props) => {
   const { slug } = useParams();
-  const csrftoken = Cookies.get("csrftoken");
+  const csrftoken: string | undefined = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   axios.defaults.withCredentials = true;
@@ -19,11 +23,16 @@ const App = ({ getPageInfo }) => {
     });
   }, []);
 
-  const createSection = (event) => {
+  const createSection = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    const target = event.target as typeof event.target & {
+      elements: {
+        sectionname: { value: string };
+      };
+    };
     // axios.defaults.headers.common["Conteknt-Type"] = "application/json";
-    const sectionname = event.target.elements.sectionname.value;
+    const sectionname = target.elements.sectionname.value;
     const sectionObject = JSON.stringify({
       name: sectionname,
       columns: {
@@ -34,7 +43,9 @@ const App = ({ getPageInfo }) => {
     });
     const data = new FormData();
     data.append("object_to_add", sectionObject);
-    data.append("csrfmiddlewaretoken", csrftoken);
+    if (csrftoken !== undefined) {
+      data.append("csrfmiddlewaretoken", csrftoken);
+    }
 
     axios
       .post(

@@ -1,19 +1,6 @@
 import { Title, Text, Container, Button, Flex } from "@mantine/core";
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import useIsAuthenticated from "../Hooks/useIsAuthenticated";
 
 const Frontpage = () => {
-  // const navigate = useNavigate();
-  // const { isLoggedIn, csrftoken } = useIsAuthenticated();
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate("/");
-  //   }
-  // }, [isLoggedIn]);
-
   return (
     <Container size="xs">
       <Flex

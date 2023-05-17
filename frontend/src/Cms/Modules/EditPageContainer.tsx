@@ -10,8 +10,15 @@ import {
 } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { PageObjectProps } from "../../Utils/Foundation/Types";
 
-const App = ({ children, page, getPageInfo }) => {
+type Props = {
+  children: React.ReactNode;
+  page: PageObjectProps;
+  getPageInfo: Function;
+};
+
+const App = ({ children, page, getPageInfo }: Props) => {
   const [online, setOnline] = useState(page.online);
   useEffect(() => {
     setOnline(page.online);
@@ -23,13 +30,18 @@ const App = ({ children, page, getPageInfo }) => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const updatePage = (event) => {
+  const updatePage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const target = event.target as typeof event.target & {
+      elements: {
+        [index: string]: { value: string };
+      };
+    };
     const data = new FormData();
-    data.append("title", event.target.elements.title.value);
-    data.append("slug", event.target.elements.slug.value);
-    data.append("thumbnail", event.target.elements.thumbnail.value);
-    data.append("online", online);
+    data.append("title", target.elements.title.value);
+    data.append("slug", target.elements.slug.value);
+    data.append("thumbnail", target.elements.thumbnail.value);
+    data.append("online", online.toString());
     axios.post(`/api/page/update/${slug}/`, data).then((response) => {
       if (response.status === 200) {
         if (response.data.page_slug !== slug) {
@@ -93,8 +105,8 @@ const App = ({ children, page, getPageInfo }) => {
           <Button type="submit">Update Page</Button>
         </Flex>
       </form>
-
       <Divider label="Sections" labelPosition="center" color="black" />
+      {/* @ts-ignore */}
       <Accordion chevronPosition="left" variant="separated" gap="sm">
         {React.Children.map(children, (child) => {
           return child;

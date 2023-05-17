@@ -1,7 +1,28 @@
 import React from "react";
 import { Flex, Accordion, Box, ActionIcon } from "@mantine/core";
 
-const AccordionControl = ({ children, deleteIcon, moveUp, moveDown }) => {
+type Props = {
+  children: React.ReactNode;
+  deleteIcon: {
+    display: boolean;
+    props: any;
+  };
+  moveUp: {
+    display: boolean;
+    props: any;
+  };
+  moveDown: {
+    display: boolean;
+    props: any;
+  };
+};
+
+const AccordionControl = ({
+  children,
+  deleteIcon,
+  moveUp,
+  moveDown,
+}: Props) => {
   return (
     <Box
       sx={{

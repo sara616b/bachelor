@@ -1,19 +1,17 @@
-import { useEffect, useState, useReducer } from "react";
-import { useNavigate, Outlet, useLoaderData } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import useIsAuthenticated from "../Hooks/useIsAuthenticated";
 import Navigation from "./Navigation";
-import Cookies from "js-cookie";
-import axios from "axios";
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, csrftoken } = useIsAuthenticated(true);
-  console.log(isLoggedIn);
+  const { isLoggedIn } = useIsAuthenticated(true);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login/");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
+
   return (
     <div>
       <Navigation />

@@ -4,7 +4,18 @@ import { Title, Button, Flex, Accordion, ColorInput } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const App = ({ section, index, children, getPageInfo }) => {
+type Props = {
+  section: {
+    wrap_reverse: boolean;
+    background_color: string;
+    name: string;
+  };
+  index: number;
+  children: React.ReactNode;
+  getPageInfo: Function;
+};
+
+const App = ({ section, index, children, getPageInfo }: Props) => {
   const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
@@ -22,7 +33,7 @@ const App = ({ section, index, children, getPageInfo }) => {
   const saveSection = () => {
     const data = new FormData();
     data.append("background_color", backgroundColor);
-    data.append("wrap_reverse", wrapReverse);
+    data.append("wrap_reverse", wrapReverse.toString());
     axios
       .post(`/api/page/${slug}/section/update/${index}/`, data)
       .then((response) => {

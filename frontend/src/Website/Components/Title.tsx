@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import classnames from "classnames";
 
 type TitleProps = {
@@ -12,8 +11,7 @@ type Props = {
   props: TitleProps;
 };
 
-const Title: FC<Props> = ({ props }) => {
-  console.log(props);
+const Title = ({ props }: Props) => {
   const textClassnames = classnames("w-full", "text-3xl", {
     "text-center": props?.alignment === "center",
     "text-right": props?.alignment === "right",

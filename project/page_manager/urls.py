@@ -1,5 +1,5 @@
 from django.urls import path
-from page_manager.views.api import (
+from page_manager.views import (
     GetAllPagesApi,
     GetPageApi,
     CreateNewPageApi,

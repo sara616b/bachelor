@@ -1,26 +1,36 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Flex, Select, Popover } from "@mantine/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 import componentMap from "../../Utils/Foundation/ComponentsDetails";
 
-const App = ({ sectionKey, columnKey, getPageInfo }) => {
+type Props = {
+  columnKey: number;
+  sectionKey: number;
+  getPageInfo: Function;
+};
+
+const App = ({ sectionKey, columnKey, getPageInfo }: Props) => {
   const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   axios.defaults.withCredentials = true;
-  const [componentName, setComponentName] = useState(null);
+  const [componentName, setComponentName] = useState<string>("");
   const [opened, setOpened] = useState(false);
   const { slug } = useParams();
 
-  const createComponent = (event, sectionKey, columnKey) => {
+  const createComponent = (
+    event: FormEvent<HTMLFormElement>,
+    sectionKey: number,
+    columnKey: number,
+  ) => {
     event.preventDefault();
     const componentObject = JSON.stringify(componentMap[componentName].values);
     const data = new FormData();
     data.append("object_to_add", componentObject);
-    data.append("section_key", sectionKey);
-    data.append("column_key", columnKey);
+    data.append("section_key", sectionKey.toString());
+    data.append("column_key", columnKey.toString());
     axios
       .post(
         `http://127.0.0.1:8002/api/page/${slug}/component/create/${componentName}/`,
@@ -43,7 +53,7 @@ const App = ({ sectionKey, columnKey, getPageInfo }) => {
         onChange={setOpened}
       >
         <Popover.Target>
-          <Button onClick={setOpened} title="Add New Component" mt="sm">
+          <Button onClick={() => setOpened} title="Add New Component" mt="sm">
             {opened ? "x" : "+"}
           </Button>
         </Popover.Target>
@@ -66,7 +76,7 @@ const App = ({ sectionKey, columnKey, getPageInfo }) => {
                 maxDropdownHeight={280}
                 data={Object.keys(componentMap)}
                 value={componentName}
-                onChange={setComponentName}
+                onChange={() => setComponentName}
               />
               <Button type="submit">Add</Button>
             </Flex>

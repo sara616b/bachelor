@@ -1,7 +1,15 @@
 import React from "react";
 import { Flex, Accordion, Divider } from "@mantine/core";
 
-const App = ({ children, column, columnKey }) => {
+type Props = {
+  children: React.ReactNode;
+  column: {
+    name: string;
+  };
+  columnKey: number;
+};
+
+const App = ({ children, column, columnKey }: Props) => {
   return (
     <Flex direction="column" gap="md" key={`${columnKey}${column.name}`}>
       <Divider label={`Column ${columnKey}`} labelPosition="center" />

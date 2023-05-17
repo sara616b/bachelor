@@ -1,8 +1,7 @@
 import { Title, Container, Button, Flex, TextInput } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { FormEvent, useEffect } from "react";
 import useIsAuthenticated from "../Hooks/useIsAuthenticated";
 
 const LoginPage = () => {
@@ -12,23 +11,42 @@ const LoginPage = () => {
     if (isLoggedIn) {
       navigate("/");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
-  const SubmitForm = (e) => {
+  const SubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const username = e.target.elements.username.value;
-    const password = e.target.elements.password.value;
+    const target = e.target as typeof e.target & {
+      elements: {
+        username: { value: string };
+        password: { value: string };
+      };
+    };
+    const username = target.elements.username.value;
+    const password = target.elements.password.value;
+    if (
+      password === undefined ||
+      password === "" ||
+      username === undefined ||
+      username === ""
+    ) {
+      return null;
+    }
     axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
     axios.defaults.withCredentials = true;
     const data = new FormData();
     data.append("username", username);
     data.append("password", password);
     data.append("csrfmiddlewaretoken", csrftoken);
-    axios.post("http://127.0.0.1:8002/login/", data).then((response) => {
-      if (response.status === 200) {
-        navigate("/");
-      }
-    });
+    axios
+      .post("http://127.0.0.1:8002/login/", data)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

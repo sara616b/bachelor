@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Title, Container, Flex, Grid, Loader } from "@mantine/core";
 import Item from "../Modules/PageItem";
 import axios from "axios";
+import { PageObjectProps } from "../../Utils/Foundation/Types";
 
 const PageOverview = () => {
-  const [pages, setPages] = useState([]);
+  const [pages, setPages] = useState<PageObjectProps[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
@@ -33,8 +34,8 @@ const PageOverview = () => {
           <Grid columns={1}>
             {hasLoaded ? (
               pages.length !== 0 ? (
-                pages.map((item) => {
-                  return <Item key={item.page_slug} item={item} />;
+                pages.map((page) => {
+                  return <Item key={page.page_slug} item={page} />;
                 })
               ) : (
                 "There are no pages"

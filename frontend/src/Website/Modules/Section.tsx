@@ -1,14 +1,14 @@
-import React, { FC } from "react";
+import React from "react";
 import classnames from "classnames";
 
-type PropTypes = {
+type Props = {
   index: number;
-  children: any;
+  children: React.ReactNode;
   backgroundColor: string;
 };
 
-const Section: FC<PropTypes> = ({ index, children, backgroundColor }) => {
-  const numberOfSections = children.length;
+const Section = ({ index, children, backgroundColor }: Props) => {
+  const numberOfSections: number = React.Children.count(children);
 
   const sectionClasses = classnames("w-full", "py-8", "px-2", "md:px-12");
 

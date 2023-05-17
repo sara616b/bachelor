@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   Title,
   Container,
@@ -14,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 
 const CreateUser = () => {
   const navigate = useNavigate();
-  const [permissions, setPermissions] = useState([]);
-  const [chosenPermissions, setChosenPermissions] = useState([]);
+  const [permissions, setPermissions] = useState<string[] | []>([]);
+  const [chosenPermissions, setChosenPermissions] = useState<string[] | []>([]);
 
   const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
@@ -27,18 +27,30 @@ const CreateUser = () => {
     });
   }, []);
 
-  const SubmitForm = (e) => {
+  const SubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("firstname", e.target.elements.firstname.value);
-    data.append("lastname", e.target.elements.lastname.value);
-    data.append("username", e.target.elements.username.value);
-    data.append("email", e.target.elements.email.value);
-    data.append("password", e.target.elements.password.value);
-    data.append("is_superuser", e.target.elements.is_superuser.checked);
-    data.append("permissions", chosenPermissions);
+    const targetElemet = e.target as typeof e.target & {
+      elements: {
+        firstname: { value: string };
+        lastname: { value: string };
+        username: { value: string };
+        email: { value: string };
+        password: { value: string };
+        is_superuser: { checked: string };
+      };
+    };
+    data.append("firstname", targetElemet.elements.firstname.value);
+    data.append("lastname", targetElemet.elements.lastname.value);
+    data.append("username", targetElemet.elements.username.value);
+    data.append("email", targetElemet.elements.email.value);
+    data.append("password", targetElemet.elements.password.value);
+    data.append("is_superuser", targetElemet.elements.is_superuser.checked);
+    if (chosenPermissions) {
+      data.append("permissions", chosenPermissions.toString());
+    }
     axios
-      .post("http://127.0.0.1:8002/api/user/create/", data)
+      .post("http://127.0.0.1:8002/api/users/create/", data)
       .then((response) => {
         if (response.status === 200) {
           navigate("/users/");
