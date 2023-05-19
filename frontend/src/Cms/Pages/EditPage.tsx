@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Container, Loader } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
 import EditComponents from "../Modules/EditComponents";
 import AddComponentForm from "../Modules/AddComponentForm";
@@ -11,33 +10,36 @@ import EditSectionContainer from "../Modules/EditSectionContainer";
 import EditPageContainer from "../Modules/EditPageContainer";
 import AddImageForm from "../Modules/AddImageForm";
 import EditSections from "../Modules/EditSections";
-import { PageObjectProps } from "../../Utils/Foundation/Types";
+import {
+  AuthenticationProps,
+  PageObjectProps,
+} from "../../Utils/Foundation/Types";
+import AddColumnForm from "../Modules/AddColumnForm";
 
 const EditPage = () => {
   const [page, setPage] = useState<PageObjectProps | undefined>();
   const [hasLoaded, setHasLoaded] = useState(false);
   const { slug } = useParams();
+  const { isLoggedIn, csrftoken } = useOutletContext<AuthenticationProps>();
 
   const getPageInfo = React.useCallback(async () => {
-    const csrftoken = Cookies.get("csrftoken");
-    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.headers.common["Content-Type"] = "application/json";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .get(`http://127.0.0.1:8002/api/page/${slug}/`, {})
+      .get(`http://127.0.0.1:8002/api/pages/${slug}/`, {})
       .then((response) => {
         if (response.status === 200) {
           setPage(response?.data?.data);
           setHasLoaded(true);
-        } else {
-          console.log(response);
         }
-        return response;
       });
-  }, [slug]);
+  }, [slug, csrftoken]);
 
   useEffect(() => {
+    if (isLoggedIn === undefined || !isLoggedIn) return;
     getPageInfo();
-  }, [getPageInfo]);
+  }, [getPageInfo, isLoggedIn]);
 
   return (
     <Container size="xs">
@@ -60,6 +62,11 @@ const EditPage = () => {
                         getPageInfo={() => getPageInfo()}
                         index={Number(sectionKey)}
                       >
+                        <AddColumnForm
+                          section={section}
+                          getPageInfo={() => getPageInfo()}
+                          sectionKey={Number(sectionKey)}
+                        />
                         {section?.columns
                           ? Object.entries(section?.columns).map(
                               ([columnKey, column]) => {
@@ -116,7 +123,7 @@ const EditPage = () => {
       ) : (
         <Loader />
       )}
-      <AddImageForm />
+      <AddImageForm onSuccess={undefined} />
     </Container>
   );
 };

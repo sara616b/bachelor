@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Flex, Text, SegmentedControl } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
+import { AuthenticationProps } from "../../Utils/Foundation/Types";
 
 type Props = {
   section: {
@@ -12,11 +12,9 @@ type Props = {
   getPageInfo: Function;
 };
 
-const App = ({ section, sectionKey, getPageInfo }: Props) => {
-  const csrftoken = Cookies.get("csrftoken");
-  axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.withCredentials = true;
+const AddColumnForm = ({ section, sectionKey, getPageInfo }: Props) => {
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   const { slug } = useParams();
   const [columnAmount, setColumnAmount] = useState(
     Object.keys(section?.columns).length.toString(),
@@ -26,18 +24,39 @@ const App = ({ section, sectionKey, getPageInfo }: Props) => {
     if (columnAmount !== Object.keys(section?.columns).length.toString()) {
       const data = new FormData();
       data.append("section_key", sectionKey.toString());
+
+      axios.defaults.headers.common["Content-Type"] = "application/json";
+      axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+      axios.defaults.withCredentials = true;
       axios
-        .post(
-          `http://127.0.0.1:8002/api/page/${slug}/column/change/${columnAmount}/`,
+        .put(
+          `http://127.0.0.1:8002/api/pages/${slug}/column/change/${columnAmount}/`,
           data,
         )
         .then((response) => {
           if (response.status === 200) {
             getPageInfo();
           }
+        })
+        .catch((error) => {
+          if (error.response.status === 403) {
+            setNotificationText(
+              "Permission denied! You're not allowed to create pages.",
+            );
+            setNotificationOpen(true);
+          }
         });
     }
-  }, [columnAmount, getPageInfo, section, sectionKey, slug]);
+  }, [
+    columnAmount,
+    getPageInfo,
+    section,
+    sectionKey,
+    slug,
+    csrftoken,
+    setNotificationText,
+    setNotificationOpen,
+  ]);
 
   return (
     <Flex direction="row" gap="sm" align="center">
@@ -57,4 +76,4 @@ const App = ({ section, sectionKey, getPageInfo }: Props) => {
   );
 };
 
-export default App;
+export default AddColumnForm;

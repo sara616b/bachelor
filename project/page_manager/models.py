@@ -9,5 +9,5 @@ class Page(models.Model):
 
 
 class Image(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     url = models.URLField(max_length=255)

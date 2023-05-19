@@ -49,6 +49,8 @@ services:
     environment:
       - SITE=Website
       - WATCHPACK_POLLING=true
+      - FAST_REFRESH=false
+      - CHOKIDAR_USEPOLLING=true
     working_dir: /app/frontend
     volumes:
       - ./frontend/src/Utils:/app/frontend/src/Utils

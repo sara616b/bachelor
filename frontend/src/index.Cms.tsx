@@ -11,6 +11,7 @@ import EditUser from "./Cms/Pages/EditUser";
 import UsersOverview from "./Cms/Pages/UsersOverview";
 import LoginPage from "./Cms/Pages/LoginPage";
 import Layout from "./Cms/Modules/Layout";
+import ImagesOverview from "./Cms/Pages/ImagesOverview";
 // import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
@@ -30,7 +31,8 @@ const router = createBrowserRouter(
         <Route path="/pages/:slug" element={<EditPage />} />
         <Route path="/users/" element={<UsersOverview />} />
         <Route path="/users/create/" element={<CreateUser />} />
-        <Route path="/users/:username" element={<EditUser />} />
+        <Route path="/users/:username/" element={<EditUser />} />
+        <Route path="/images/" element={<ImagesOverview />} />
       </Route>
     </>,
   ),

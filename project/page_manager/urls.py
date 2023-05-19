@@ -1,43 +1,32 @@
 from django.urls import path
 from page_manager.views import (
     GetAllPagesApi,
-    GetPageApi,
-    CreateNewPageApi,
-    UpdatePageApi,
-    DeletePageApi,
+    PageApi,
+    PageDataApi,
     UploadImageApi,
-    CreateObjectApi,
-    DeleteObjectApi,
-    MoveObjectApi,
+    MovePageObjectApi,
     ChangeColumnAmount,
     UpdateComponentApi,
     GetPagePreviewApi,
+    GetPageApi,
     UpdateSectionApi,
-    PingApi,
-    CsrfTokenView,
 )
 
 urlpatterns = [
-    path('api/csrf/', CsrfTokenView.as_view(), name="CsrfTokenView"),
-    path('api/ping/', PingApi.as_view(), name="ping"),
     path(
-        'api/pages/', GetAllPagesApi.as_view(), name='GetAllPagesApi'
+        'api/pages/',
+        GetAllPagesApi.as_view(),
+        name='GetAllPagesApi'
     ),
     path(
-        'api/page/create/', CreateNewPageApi.as_view(), name='CreateNewPageApi'
+        'api/pages/<slug>/',
+        PageApi.as_view(),
+        name='PageApi'
     ),
     path(
-        'api/page/delete/<slug>/',
-        DeletePageApi.as_view(),
-        name='DeletePageApi'
-    ),
-    path(
-        'api/page/update/<slug>/',
-        UpdatePageApi.as_view(),
-        name='UpdatePageApi'
-    ),
-    path(
-        'api/page/<slug>/', GetPageApi.as_view(), name='GetPageApi'
+        'api/pages/<slug>/online/',
+        GetPageApi.as_view(),
+        name='GetPageApi'
     ),
     path(
         'api/page/<slug>/preview/',
@@ -45,36 +34,33 @@ urlpatterns = [
         name='GetPagePreviewApi'
     ),
     path(
-        'api/page/<slug>/<object>/create/<name>/',
-        CreateObjectApi.as_view(),
-        name='CreateObjectApi'
+        'api/pages/<slug>/<object>/<index>/',
+        PageDataApi.as_view(),
+        name='PageDataApi'
     ),
     path(
-        'api/page/<slug>/<object>/delete/<index>/',
-        DeleteObjectApi.as_view(),
-        name='DeleteObjectApi'
+        'api/pages/<slug>/<object>/move/<index>/<direction>/',
+        MovePageObjectApi.as_view(),
+        name='MovePageObjectApi'
     ),
     path(
-        'api/page/<slug>/<object>/move/<index>/<direction>/',
-        MoveObjectApi.as_view(),
-        name='MoveObjectApi'
-    ),
-    path(
-        'api/page/<slug>/column/change/<amount>/',
+        'api/pages/<slug>/column/change/<amount>/',
         ChangeColumnAmount.as_view(),
         name='ChangeColumnAmount'
     ),
     path(
-        'api/page/<slug>/component/update/<index>/',
+        'api/pages/<slug>/component/update/<index>/',
         UpdateComponentApi.as_view(),
         name='UpdateComponentApi'
     ),
     path(
-        'api/page/<slug>/section/update/<index>/',
+        'api/pages/<slug>/section/update/<index>/',
         UpdateSectionApi.as_view(),
         name='UpdateSectionApi'
     ),
     path(
-        'api/image/create/', UploadImageApi.as_view(), name='UploadImageApi'
+        'api/image/',
+        UploadImageApi.as_view(),
+        name='UploadImageApi'
     ),
 ]

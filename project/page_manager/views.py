@@ -1,28 +1,32 @@
-# from django.shortcuts import render
 from django.views import View
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+from django.http.multipartparser import MultiPartParser
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.decorators import method_decorator
+
 from bson.json_util import dumps
 import json
 
 from page_manager.utils import mongo_client
-from page_manager.models import Page
-
-from django.middleware.csrf import get_token
+from page_manager.models import Page, Image
 
 
-class GetAllPagesApi(View):
+class GetAllPagesApi(LoginRequiredMixin, View):
     def get(self, request):
         try:
             database = mongo_client.Bachelor
-            pages = database['pages'].find()
+            pages_objects = Page.objects.all().values()
+            for page in pages_objects:
+                data = json.loads(dumps(
+                    database['pages'].find_one(
+                        {'page_slug': page['slug']}
+                    )['data'])
+                )
+                page['data'] = data
+
             return JsonResponse(
                 {
-                    'pages': json.loads(dumps(pages)),
-                    'status': 200,
-                }
+                    'pages': json.loads(dumps(pages_objects)),
+                }, status=200
             )
         except Exception as e:
             return JsonResponse(
@@ -33,20 +37,19 @@ class GetAllPagesApi(View):
             )
 
 
-class GetPageApi(View):
+class PageApi(LoginRequiredMixin, View):
     def get(self, request, slug):
-        # TODO - add check if it's online
         try:
-            page = Page.objects.get(slug=slug, online=True)
+            page = Page.objects.get(slug=slug)
             database = mongo_client.Bachelor
             page_data = database['pages'].find_one({'page_slug': slug})['data']
 
         except Exception as e:
             return JsonResponse(
                 {
-                    'data': f'{e}',
-                    'status': 500,
-                }
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
             )
 
         return JsonResponse(
@@ -58,44 +61,31 @@ class GetPageApi(View):
                     'thumbnail_url': page.thumbnail_url,
                     'data': json.loads(dumps(page_data))
                 },
-                'status': 200,
-            }
+                'result': 'success'
+            }, status=200
         )
 
-
-class GetPagePreviewApi(View):
-    def get(self, request, slug, **kwargs):
-        # TODO - add check if it's online
-        try:
-            database = mongo_client.Bachelor
-            page = database['pages'].find_one({'page_slug': slug})
-        except Exception as e:
+    def post(self, request, slug):
+        if 'page_manager.add_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
-                    'data': f'{e}',
-                    'status': 500,
-                }
+                    'result': 'permission denied',
+                }, status=403
             )
-
-        return JsonResponse(
-            {
-                'data': json.loads(dumps(page)),
-                'status': 200,
-            }
-        )
-
-
-class CreateNewPageApi(View, LoginRequiredMixin):
-    def post(self, request):
         title = request.POST.get('title')
-        slug = request.POST.get('slug')
         try:
             Page.objects.create(
                 title=title,
                 slug=slug
             )
-        except Exception as ex:
-            print(ex)
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
+
         try:
             database = mongo_client.Bachelor
             pages = database['pages']
@@ -106,62 +96,78 @@ class CreateNewPageApi(View, LoginRequiredMixin):
                     'sections': {}
                 },
             }
-
             result = pages.insert_one(data)
             if result.inserted_id:
                 return JsonResponse(
                     {
                         'result': 'created',
-                        'page_slug': slug,
-                    },
-                    status=200
+                        'slug': slug,
+                    }, status=200
                 )
 
-        except Exception as ex:
+        except Exception as e:
             return JsonResponse(
                 {
-                    'result': f'error: {ex}',
-                },
-                status=500
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
             )
 
-
-class DeletePageApi(View, LoginRequiredMixin):
     def delete(self, request, slug):
+        if 'page_manager.delete_page' not in request.user.get_user_permissions():  # noqa
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
+            Page.objects.get(slug=slug).delete()
+
             database = mongo_client.Bachelor
             pages = database['pages']
-
             pages.delete_one({'page_slug': slug})
-            return JsonResponse({
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
+
+        return JsonResponse(
+            {
                 'result': 'deleted',
                 'page_slug': slug,
-                }, status=200)
+            }, status=200
+        )
 
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
-
-
-class UpdatePageApi(View, LoginRequiredMixin):
-    def post(self, request, slug):
+    def put(self, request, slug):
+        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
             page = Page.objects.get(slug=slug)
 
-            title = request.POST.get('title')
-            new_slug = request.POST.get('slug')
-            thumbnail = request.POST.get('thumbnail')
-            online = True if request.POST.get('online') == 'true' else False
+            PUT = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
 
-            if (page.title != title):
-                page.title = title
+            new_title = PUT.get('title')
+            new_slug = PUT.get('slug')
+            new_thumbnail = PUT.get('thumbnail')
+            new_online = True if PUT.get('online') == 'true' else False
+
+            if (page.title != new_title):
+                page.title = new_title
             if (page.slug != new_slug):
                 page.slug = new_slug
-            if (page.thumbnail_url != thumbnail):
-                page.thumbnail_url = thumbnail
-            if (page.online != online):
-                page.online = online
+            if (page.thumbnail_url != new_thumbnail):
+                page.thumbnail_url = new_thumbnail
+            if (page.online != new_online):
+                page.online = new_online
             page.save()
 
             database = mongo_client.Bachelor
@@ -173,31 +179,102 @@ class UpdatePageApi(View, LoginRequiredMixin):
                 },
                 {
                     '$set': {
-                        'page_title': title,
+                        'page_title': new_title,
                         'page_slug': new_slug,
                     }
                 }
             )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-            return JsonResponse({
+        return JsonResponse(
+            {
                 'result': 'updated',
                 'page_slug': new_slug,
-                }, status=200)
-
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
+            }, status=200
+        )
 
 
-class CreateObjectApi(View):
-    def post(self, request, slug, object, name):
-        print("CreateObjectApi")
+class GetPageApi(View):
+    def get(self, request, slug, **kwargs):
         try:
+            page = Page.objects.get(slug=slug, online=True)
+            database = mongo_client.Bachelor
+            page_data = database['pages'].find_one({'page_slug': slug})['data']
+
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
+
+        return JsonResponse(
+            {
+                'data': {
+                    'title': page.title,
+                    'online': page.online,
+                    'slug': page.slug,
+                    'thumbnail_url': page.thumbnail_url,
+                    'data': json.loads(dumps(page_data))
+                },
+                'result': 'success'
+            }, status=200
+        )
+
+
+class GetPagePreviewApi(View):
+    def get(self, request, slug, **kwargs):
+        try:
+            page = Page.objects.get(slug=slug)
+            database = mongo_client.Bachelor
+            page_data = database['pages'].find_one({'page_slug': slug})['data']
+
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
+
+        return JsonResponse(
+            {
+                'data': {
+                    'title': page.title,
+                    'online': page.online,
+                    'slug': page.slug,
+                    'thumbnail_url': page.thumbnail_url,
+                    'data': json.loads(dumps(page_data))
+                },
+                'result': 'success'
+            }, status=200
+        )
+
+
+class PageDataApi(LoginRequiredMixin, View):
+    def put(self, request, slug, object, index):
+        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
+        try:
+            PUT = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
+
             database = mongo_client.Bachelor
             pages = database['pages']
             page = pages.find_one({'page_slug': slug})
-            object_to_add = json.loads(request.POST.get('object_to_add'))
+            object_to_add = json.loads(PUT.get('object_to_add'))
 
             if object == 'section':
                 current_object_length = len(
@@ -206,8 +283,8 @@ class CreateObjectApi(View):
                 field_to_add_to = f'data.sections.{current_object_length + 1}'
 
             if object == 'component':
-                section_key = request.POST.get('section_key')
-                column_key = request.POST.get('column_key')
+                section_key = PUT.get('section_key')
+                column_key = PUT.get('column_key')
                 current_object_length = len(
                     json.loads(dumps(
                         page['data']['sections'][section_key]['columns'][column_key]['components']  # noqa
@@ -225,21 +302,33 @@ class CreateObjectApi(View):
                     }
                 }
             )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-            return JsonResponse({
+        return JsonResponse(
+            {
                 'result': 'updated',
                 'page_slug': slug,
-                }, status=200)
+            }, status=200
+        )
 
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
-
-
-class DeleteObjectApi(View):
-    def post(self, request, slug, object, index):
+    def delete(self, request, slug, object, index):
+        if 'page_manager.delete_page' not in request.user.get_user_permissions():  # noqa
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
+            DELETE = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
+
             database = mongo_client.Bachelor
             pages = database['pages']
             page = pages.find_one({'page_slug': slug})
@@ -251,8 +340,8 @@ class DeleteObjectApi(View):
                 field = 'data.sections'
 
             if object == 'component':
-                section_key = request.POST.get('section_key')
-                column_key = request.POST.get('column_key')
+                section_key = DELETE.get('section_key')
+                column_key = DELETE.get('column_key')
                 current_object_length = len(
                     json.loads(dumps(
                         page['data']['sections'][section_key]['columns'][column_key]['components']  # noqa
@@ -285,26 +374,40 @@ class DeleteObjectApi(View):
                         }
                     )
                     index_to_update += 1
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-            return JsonResponse({
+        return JsonResponse(
+            {
                 'result': 'deleted',
                 'page_slug': slug,
-                }, status=200)
-
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
+            }, status=200
+        )
 
 
-class MoveObjectApi(View):
-    def post(self, request, slug, object, index, direction):
+class MovePageObjectApi(View):
+    def put(self, request, slug, object, index, direction):
+        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
-            database = mongo_client.Bachelor
-            pages = database['pages']
+            PUT = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
 
             index_one = index if direction == 'down' else str(int(index) - 1)
             index_two = index if direction == 'up' else str(int(index) + 1)
+
+            database = mongo_client.Bachelor
+            pages = database['pages']
             page = pages.find_one({
                 'page_slug': slug
             })
@@ -314,8 +417,8 @@ class MoveObjectApi(View):
                 field = page['data']['sections']
 
             if object == 'component':
-                section_key = request.POST.get('section_key')
-                column_key = request.POST.get('column_key')
+                section_key = PUT.get('section_key')
+                column_key = PUT.get('column_key')
                 field_string = f'data.sections.{section_key}.columns.{column_key}.components'  # noqa
                 field = page['data']['sections'][section_key]['columns'][column_key]['components']  # noqa
 
@@ -333,23 +436,37 @@ class MoveObjectApi(View):
                         }
                     }
             )
+        except Exception as e:
             return JsonResponse({
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
+
+        return JsonResponse(
+            {
                 'result': 'moved',
                 'page_slug': slug,
-                }, status=200)
-
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
+            }, status=200
+        )
 
 
 class ChangeColumnAmount(View):
-    def post(self, request, slug, amount):
+    def put(self, request, slug, amount):
+        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
+            PUT = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
+
             database = mongo_client.Bachelor
             pages = database['pages']
-            section_key = request.POST.get('section_key')
+            section_key = PUT.get('section_key')
 
             if amount == '2':
                 pages.update_one(
@@ -376,27 +493,41 @@ class ChangeColumnAmount(View):
                         }
                     }
                 )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-            return JsonResponse({
+        return JsonResponse(
+            {
                 'result': 'updated',
                 'page_slug': slug,
-                }, status=200)
-
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
+            }, status=200
+        )
 
 
 class UpdateComponentApi(View):
-    def post(self, request, slug, index):
+    def put(self, request, slug, index):
+        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
+            PUT = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
+
             database = mongo_client.Bachelor
             pages = database['pages']
-            object_to_add = json.loads(request.POST.get('object_to_add'))
 
-            section_key = request.POST.get('section_key')
-            column_key = request.POST.get('column_key')
+            object_to_add = json.loads(PUT.get('object_to_add'))
+            section_key = PUT.get('section_key')
+            column_key = PUT.get('column_key')
             field_to_add_to = f'data.sections.{section_key}.columns.{column_key}.components.{index}'  # noqa
 
             pages.update_one(
@@ -409,25 +540,39 @@ class UpdateComponentApi(View):
                     }
                 }
             )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-            return JsonResponse({
+        return JsonResponse(
+            {
                 'result': 'updated',
                 'page_slug': slug,
-                }, status=200)
-
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
+            }, status=200
+        )
 
 
 class UpdateSectionApi(View):
-    def post(self, request, slug, index):
+    def put(self, request, slug, index):
+        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
+            PUT = MultiPartParser(
+                request.META, request, request.upload_handlers
+            ).parse()[0]
+
             database = mongo_client.Bachelor
             pages = database['pages']
-            background_color = request.POST.get('background_color')
-            wrap_reverse = request.POST.get('wrap_reverse')
+            background_color = PUT.get('background_color')
+            wrap_reverse = PUT.get('wrap_reverse')
 
             pages.update_one(
                 {
@@ -440,55 +585,61 @@ class UpdateSectionApi(View):
                     }
                 }
             )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-            return JsonResponse({
+        return JsonResponse(
+            {
                 'result': 'updated',
                 'page_slug': slug,
-                }, status=200)
-
-        except Exception as ex:
-            return JsonResponse({
-                'result': f'error: {ex}',
-                }, status=500)
+            }, status=200
+        )
 
 
 class UploadImageApi(View, LoginRequiredMixin):
     def post(self, request):
-        print('upload')
-        print(request.POST.get('image_url'))
+        if 'page_manager.add_image' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
+        try:
+            name = request.POST.get('name')
+            url = request.POST.get('url')
+            Image.objects.create(name=name, url=url)
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'result': 'error',
+                    'error': f'{e}',
+                }, status=500
+            )
 
-        return JsonResponse({
-            'result': 'uploaded',
-            'image_src': 'slug',
-            }, status=200)
+        return JsonResponse(
+            {
+                'result': 'uploaded',
+                'image_src': url,
+            }, status=200
+        )
 
-
-class CsrfTokenView(View):
-    """Send to the login interface the token CSRF as a cookie."""
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, *args, **kwargs):
-        """Return a empty response with the token CSRF.
-
-        Returns
-        -------
-        Response
-            The response with the token CSRF as a cookie.
-        """
-        return HttpResponse(status=204)
-
-
-class csrf(View):
     def get(self, request):
-        return JsonResponse({'csrfToken': get_token(request)})
-
-    def post(self, request):
-        return JsonResponse({'csrfToken': get_token(request)})
-
-
-class PingApi(View):
-    def get(self, request):
-        return JsonResponse({'result': 'OK'})
-
-    def post(self, request):
-        return JsonResponse({'result': 'OK'})
+        try:
+            images = Image.objects.all().values()
+            return JsonResponse(
+                {
+                    'images': json.loads(dumps(images)),
+                }, status=200
+            )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'data': f'{e}',
+                    'status': 500,
+                }
+            )

@@ -5,7 +5,6 @@ type Props = {
 };
 
 const ComponentWrapper = ({ component }: Props) => {
-  console.log(component);
   // @ts-ignore
   return RenderComponent({ component });
 };

@@ -1,8 +1,8 @@
-import { FormEvent, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { FormEvent } from "react";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Button, Flex, TextInput, Divider } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
+import { AuthenticationProps } from "../../Utils/Foundation/Types";
 
 type Props = {
   getPageInfo: Function;
@@ -10,28 +10,16 @@ type Props = {
 
 const App = ({ getPageInfo }: Props) => {
   const { slug } = useParams();
-  const csrftoken: string | undefined = Cookies.get("csrftoken");
-  axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.withCredentials = true;
-
-  useEffect(() => {
-    axios.get("http://127.0.0.1:8002/api/ping/").then((response) => {
-      if (response.status === 200) {
-        console.log("ping");
-      }
-    });
-  }, []);
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
 
   const createSection = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     const target = event.target as typeof event.target & {
       elements: {
         sectionname: { value: string };
       };
     };
-    // axios.defaults.headers.common["Conteknt-Type"] = "application/json";
     const sectionname = target.elements.sectionname.value;
     const sectionObject = JSON.stringify({
       name: sectionname,
@@ -43,18 +31,24 @@ const App = ({ getPageInfo }: Props) => {
     });
     const data = new FormData();
     data.append("object_to_add", sectionObject);
-    if (csrftoken !== undefined) {
-      data.append("csrfmiddlewaretoken", csrftoken);
-    }
+    data.append("csrfmiddlewaretoken", csrftoken);
 
+    axios.defaults.headers.common["Content-Type"] = "application/json";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .post(
-        `http://127.0.0.1:8002/api/page/${slug}/section/create/${sectionname}/`,
-        data,
-      )
+      .put(`http://127.0.0.1:8002/api/pages/${slug}/section/0/`, data)
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to add sections.",
+          );
+          setNotificationOpen(true);
         }
       });
   };

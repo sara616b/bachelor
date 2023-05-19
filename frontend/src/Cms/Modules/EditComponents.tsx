@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import {
   Text,
   Button,
@@ -12,17 +12,17 @@ import {
   SegmentedControl,
   Loader,
 } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
 import AccordionControl from "./AccordionControl";
 import ComponentsDetails from "../../Utils/Foundation/ComponentsDetails";
-import { PageObjectProps } from "../../Utils/Foundation/Types";
+import {
+  PageObjectProps,
+  ComponentObjectProps,
+  AuthenticationProps,
+} from "../../Utils/Foundation/Types";
 
 type Props = {
-  component: {
-    name: string;
-    [index: string]: string | boolean;
-  };
+  component: ComponentObjectProps;
   index: number;
   sectionKey: number;
   columnKey: number;
@@ -38,10 +38,8 @@ const App = ({
   getPageInfo,
   page,
 }: Props) => {
-  const csrftoken = Cookies.get("csrftoken");
-  axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.withCredentials = true;
+  const { isLoggedIn, csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   const { slug } = useParams();
   const [componentLength, setComponentLength] = useState<number | undefined>(
     undefined,
@@ -50,7 +48,9 @@ const App = ({
   const [booleans, setBooleans] = useState<{ [index: string]: boolean }>({
     bold: Boolean(component?.bold) || false,
   });
+
   useEffect(() => {
+    if (isLoggedIn === undefined || !isLoggedIn) return;
     if (page?.data) {
       setComponentLength(
         Object.keys(
@@ -58,20 +58,30 @@ const App = ({
         ).length,
       );
     }
-  }, [page, sectionKey, columnKey]);
+  }, [page, sectionKey, columnKey, isLoggedIn]);
 
   const deleteComponent = (index: number) => {
     const data = new FormData();
     data.append("section_key", sectionKey.toString());
     data.append("column_key", columnKey.toString());
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .post(
-        `http://127.0.0.1:8002/api/page/${slug}/component/delete/${index}/`,
+      .delete(`http://127.0.0.1:8002/api/pages/${slug}/component/${index}/`, {
         data,
-      )
+      })
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to delete components.",
+          );
+          setNotificationOpen(true);
         }
       });
   };
@@ -80,14 +90,26 @@ const App = ({
     const data = new FormData();
     data.append("section_key", sectionKey.toString());
     data.append("column_key", columnKey.toString());
+    data.append("csrfmiddlewaretoken", csrftoken);
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .post(
-        `http://127.0.0.1:8002/api/page/${slug}/component/move/${index}/${direction}/`,
+      .put(
+        `http://127.0.0.1:8002/api/pages/${slug}/component/move/${index}/${direction}/`,
         data,
       )
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to move components.",
+          );
+          setNotificationOpen(true);
         }
       });
   };
@@ -120,13 +142,21 @@ const App = ({
     );
     data.append("object_to_add", JSON.stringify(newValues));
     axios
-      .post(
-        `http://127.0.0.1:8002/api/page/${slug}/component/update/${index}/`,
+      .put(
+        `http://127.0.0.1:8002/api/pages/${slug}/component/update/${index}/`,
         data,
       )
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to edit components.",
+          );
+          setNotificationOpen(true);
         }
       });
   };
@@ -214,7 +244,7 @@ const App = ({
                     element = (
                       <label
                         htmlFor={key}
-                        key={`${key}${component}${component[key]}${booleans?.[key]}${booleans}`}
+                        key={`${key}${component}${booleans?.[key]}${booleans}`}
                       >
                         {`${field.name}`}
                         <input
@@ -234,7 +264,9 @@ const App = ({
                     break;
                   case "alignment":
                     element = (
-                      <div key={`${key}${component}${component[key]}`}>
+                      <div
+                        key={`${key}${component}${component[key] || alignment}`}
+                      >
                         <Text>{`${field.name}: `}</Text>
                         <SegmentedControl
                           defaultValue={component?.[key].toString()}

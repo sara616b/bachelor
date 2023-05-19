@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import Section from "../Modules/Section";
 import Column from "../Modules/Column";
 import ComponentWrapper from "../Modules/ComponentWrapper";
-import axios from "axios";
 import { PageObjectProps } from "../../Utils/Foundation/Types";
 
 const Page = () => {
@@ -14,16 +14,12 @@ const Page = () => {
   useEffect(() => {
     if (loaded === false) {
       axios
-        .get(
-          `http://127.0.0.1:8002/api/page/${slug}/${preview ? "preview/" : ""}`,
-        )
+        .get(`http://127.0.0.1:8002/api/pages/${slug}/online/`)
         .then(
           (response: { status: number; data: { data: PageObjectProps } }) => {
             if (response.status === 200) {
               setPage(response.data.data);
               setLoaded(true);
-            } else {
-              console.log(response);
             }
           },
         );

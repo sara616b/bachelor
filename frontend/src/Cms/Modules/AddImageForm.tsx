@@ -1,20 +1,35 @@
 import { FormEvent, useState } from "react";
-import { Button, FileInput, Flex, ActionIcon, Divider } from "@mantine/core";
-import Cookies from "js-cookie";
+import {
+  Button,
+  FileInput,
+  Flex,
+  ActionIcon,
+  Divider,
+  TextInput,
+  Loader,
+} from "@mantine/core";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
+import { AuthenticationProps } from "../../Utils/Foundation/Types";
 
-const App = () => {
-  const csrftoken = Cookies.get("csrftoken");
+const App = ({ onSuccess }: { onSuccess: Function | undefined }) => {
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   const uploadImage = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setUploading(true);
     const data = new FormData();
     if (imageFile !== null) {
       data.set("image", imageFile);
     }
     data.set("key", "61bf5339efd0f697d130a299c4c0cc02");
     delete axios.defaults.headers.common["X-CSRFToken"];
+    delete axios.defaults.headers.common["Access-Control-Allow-Origin"];
+    axios.defaults.headers.common["Content-Type"] = "application/json";
+    axios.defaults.withCredentials = false;
     axios
       .post(`https://api.imgbb.com/1/upload`, data)
       .then((response) => {
@@ -23,14 +38,33 @@ const App = () => {
         }
       })
       .then((image_url) => {
+        const target = event.target as typeof event.target & {
+          elements: {
+            imagename: { value: string };
+          };
+        };
         const image_data = new FormData();
-        image_data.set("image_url", image_url);
+        image_data.set("url", image_url);
+        image_data.set("name", target.elements.imagename.value);
+        axios.defaults.headers.common["Content-Type"] = "application/json";
         axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+        axios.defaults.withCredentials = true;
         axios
-          .post(`http://127.0.0.1:8002/api/image/create/`, image_data)
+          .post(`http://127.0.0.1:8002/api/image/`, image_data)
           .then((response) => {
             if (response.status === 200) {
-              console.log("success");
+              if (onSuccess) {
+                onSuccess();
+              }
+              setUploading(false);
+            }
+          })
+          .catch((error) => {
+            if (error.response.status === 403) {
+              setNotificationText(
+                "Permission denied! You're not allowed to upload images.",
+              );
+              setNotificationOpen(true);
             }
           });
       });
@@ -67,6 +101,12 @@ const App = () => {
             width: "100%",
           }}
         >
+          <TextInput
+            placeholder="Image Name..."
+            id="imagename"
+            name="imagename"
+            required
+          />
           <FileInput
             name="image"
             id="image"
@@ -83,7 +123,7 @@ const App = () => {
               </ActionIcon>
             }
           />
-          <Button type="submit">Upload Image</Button>
+          {uploading ? <Loader /> : <Button type="submit">Upload Image</Button>}
         </Flex>
       </Flex>
     </form>

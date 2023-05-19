@@ -8,16 +8,17 @@ import {
   Checkbox,
   MultiSelect,
 } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { AuthenticationProps } from "../../Utils/Foundation/Types";
 
 const CreateUser = () => {
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState<string[] | []>([]);
   const [chosenPermissions, setChosenPermissions] = useState<string[] | []>([]);
 
-  const csrftoken = Cookies.get("csrftoken");
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.withCredentials = true;
 
@@ -58,9 +59,16 @@ const CreateUser = () => {
           navigate("/users/");
         }
       })
-      .catch((response) => {
-        if (response.status === 400) {
-          console.log(response.data.result);
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to create users.",
+          );
+          setNotificationOpen(true);
+        }
+        if (error.response.status === 400) {
+          setNotificationText("Username and email must be unique.");
+          setNotificationOpen(true);
         }
       });
   };

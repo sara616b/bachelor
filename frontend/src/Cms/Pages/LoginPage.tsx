@@ -1,4 +1,12 @@
-import { Title, Container, Button, Flex, TextInput } from "@mantine/core";
+import {
+  Title,
+  Container,
+  Button,
+  Flex,
+  TextInput,
+  Text,
+  Mark,
+} from "@mantine/core";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FormEvent, useEffect } from "react";
@@ -33,7 +41,6 @@ const LoginPage = () => {
       return null;
     }
     axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
-    // axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     const data = new FormData();
     data.append("username", username);
@@ -47,7 +54,9 @@ const LoginPage = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status === 404) {
+          console.log("User doesn't exsist.");
+        }
       });
   };
 
@@ -99,6 +108,19 @@ const LoginPage = () => {
             </Button>
           </Flex>
         </form>
+        <Text bg="white" p="sm">
+          <Title order={3}>Test user</Title>
+          Log in with credentials:
+          <br />
+          <br />
+          Username: <Mark color="indigo">test</Mark>
+          <br />
+          Password: <Mark color="indigo">testpassword123</Mark>
+          <br />
+          <br />
+          to access the CMS with a test user. This user doesn't have permissions
+          to change anything, but can view all of the CMS.
+        </Text>
       </Flex>
     </Container>
   );

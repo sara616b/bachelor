@@ -10,15 +10,16 @@ import {
 } from "@mantine/core";
 import { Link, useOutletContext } from "react-router-dom";
 import axios from "axios";
-import { UserObjectProps } from "../../Utils/Foundation/Types";
+import {
+  AuthenticationProps,
+  UserObjectProps,
+} from "../../Utils/Foundation/Types";
 
 const UsersOverview = () => {
   const [users, setUsers] = useState<UserObjectProps[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
-  const { isLoggedIn, csrftoken } = useOutletContext<{
-    isLoggedIn: boolean;
-    csrftoken: string;
-  }>();
+  const { isLoggedIn, csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;
@@ -28,7 +29,7 @@ const UsersOverview = () => {
       }
       setHasLoaded(true);
     });
-  }, [hasLoaded]);
+  }, [hasLoaded, isLoggedIn]);
 
   const deleteUser = (username: string) => {
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
@@ -38,6 +39,14 @@ const UsersOverview = () => {
       .then((response) => {
         if (response.status === 200) {
           setHasLoaded(false);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to delete users.",
+          );
+          setNotificationOpen(true);
         }
       });
   };

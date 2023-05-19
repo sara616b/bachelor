@@ -1,14 +1,13 @@
 import React from "react";
 import { Title, Container, Button, Flex, TextInput } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { AuthenticationProps } from "../../Utils/Foundation/Types";
 
 const CreatePage = () => {
   const navigate = useNavigate();
-  const csrftoken = Cookies.get("csrftoken");
-  axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-  axios.defaults.withCredentials = true;
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
 
   const createPage = (form: React.FormEvent<HTMLFormElement>) => {
     form.preventDefault();
@@ -23,15 +22,22 @@ const CreatePage = () => {
     const data = new FormData();
     data.append("title", title);
     data.append("slug", slug);
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .post("http://127.0.0.1:8002/api/page/create/", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(`http://127.0.0.1:8002/api/pages/${slug}/`, data)
       .then((response) => {
         if (response.status === 200) {
-          navigate(`/page/edit/${response.data.page_slug}`);
+          navigate(`/pages/${response.data.slug}`);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to create pages.",
+          );
+          setNotificationOpen(true);
         }
       });
   };

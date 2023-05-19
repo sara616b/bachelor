@@ -1,6 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from project.settings.secrets import MONGO_PASSWORD
+from project.secrets import MONGO_PASSWORD
 from urllib.parse import quote_plus
 
 

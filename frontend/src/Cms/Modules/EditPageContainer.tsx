@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import {
   Flex,
   Accordion,
@@ -8,9 +8,11 @@ import {
   TextInput,
   Button,
 } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
-import { PageObjectProps } from "../../Utils/Foundation/Types";
+import {
+  AuthenticationProps,
+  PageObjectProps,
+} from "../../Utils/Foundation/Types";
 
 type Props = {
   children: React.ReactNode;
@@ -19,14 +21,12 @@ type Props = {
 };
 
 const App = ({ children, page, getPageInfo }: Props) => {
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   const [online, setOnline] = useState(page.online);
   useEffect(() => {
     setOnline(page.online);
   }, [page]);
-  const csrftoken = Cookies.get("csrftoken");
-  axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.withCredentials = true;
   const { slug } = useParams();
   const navigate = useNavigate();
 
@@ -42,16 +42,27 @@ const App = ({ children, page, getPageInfo }: Props) => {
     data.append("slug", target.elements.slug.value);
     data.append("thumbnail", target.elements.thumbnail.value);
     data.append("online", online.toString());
-    axios.post(`/api/page/update/${slug}/`, data).then((response) => {
-      if (response.status === 200) {
-        if (response.data.page_slug !== slug) {
-          navigate(
-            `http://127.0.0.1:8002/page/edit/${response.data.page_slug}`,
-          );
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.headers.common["Content-Type"] = "application/json";
+    axios.defaults.withCredentials = true;
+    axios
+      .put(`http://127.0.0.1:8002/api/pages/${slug}/`, data)
+      .then((response) => {
+        if (response.status === 200) {
+          if (response.data.page_slug !== slug) {
+            navigate(`/pages/${response.data.page_slug}`);
+          }
+          getPageInfo();
         }
-        getPageInfo();
-      }
-    });
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to edit pages.",
+          );
+          setNotificationOpen(true);
+        }
+      });
   };
 
   return (

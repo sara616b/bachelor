@@ -10,14 +10,15 @@ import {
   MultiSelect,
 } from "@mantine/core";
 import axios from "axios";
-import { UserObjectProps } from "../../Utils/Foundation/Types";
+import {
+  AuthenticationProps,
+  UserObjectProps,
+} from "../../Utils/Foundation/Types";
 
 const EditUser = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, csrftoken } = useOutletContext<{
-    isLoggedIn: boolean;
-    csrftoken: string;
-  }>();
+  const { isLoggedIn, csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   const { username } = useParams();
   const [user, setUser] = useState<UserObjectProps>();
   const [permissions, setPermissions] = useState<string[] | []>([]);
@@ -72,9 +73,18 @@ const EditUser = () => {
           navigate("/users/");
         }
       })
-      .catch((response) => {
-        if (response.status === 400) {
-          console.log(response.data.result);
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to edit users.",
+          );
+          setNotificationOpen(true);
+        }
+        if (error.response.status === 400) {
+          setNotificationText(
+            "Something went wrong. Please make sure the inputs are correct.",
+          );
+          setNotificationOpen(true);
         }
       });
   };

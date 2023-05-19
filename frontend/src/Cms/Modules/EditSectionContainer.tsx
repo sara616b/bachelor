@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Accordion } from "@mantine/core";
 import AccordionControl from "./AccordionControl";
-import Cookies from "js-cookie";
 import axios from "axios";
-import { PageObjectProps } from "../../Utils/Foundation/Types";
+import {
+  AuthenticationProps,
+  PageObjectProps,
+} from "../../Utils/Foundation/Types";
 
 type Props = {
   children: React.ReactNode;
@@ -17,40 +19,66 @@ type Props = {
 };
 
 const App = ({ children, section, sectionKey, page, getPageInfo }: Props) => {
-  const csrftoken = Cookies.get("csrftoken");
-  axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
-  axios.defaults.headers.common["Content-Type"] = "application/json";
-  axios.defaults.withCredentials = true;
+  const { isLoggedIn, csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
 
   const [sectionLength, setSectionLength] = useState<number | undefined>();
   const { slug } = useParams();
 
   useEffect(() => {
+    if (isLoggedIn === undefined || !isLoggedIn) return;
     if (page?.data) {
       setSectionLength(Object.keys(page.data.sections).length);
     }
-  }, [page]);
+  }, [page, isLoggedIn]);
 
   const deleteSection = (index: number) => {
+    const data = new FormData();
+    data.append("csrfmiddlewaretoken", csrftoken);
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .post(`http://127.0.0.1:8002/api/page/${slug}/section/delete/${index}/`)
+      .delete(`http://127.0.0.1:8002/api/pages/${slug}/section/${index}/`, {
+        data,
+      })
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to delete sections.",
+          );
+          setNotificationOpen(true);
         }
       });
   };
 
   const moveSection = (index: number, direction: string) => {
+    const data = new FormData();
+    data.append("csrfmiddlewaretoken", csrftoken);
+    axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    axios.defaults.withCredentials = true;
     axios
-      .post(
-        `http://127.0.0.1:8002/api/page/${slug}/section/move/${index}/${direction}/`,
+      .put(
+        `http://127.0.0.1:8002/api/pages/${slug}/section/move/${index}/${direction}/`,
+        data,
       )
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to move sections.",
+          );
+          setNotificationOpen(true);
         }
       });
   };

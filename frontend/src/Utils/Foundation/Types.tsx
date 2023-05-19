@@ -1,10 +1,13 @@
+export type ComponentObjectProps = {
+  name: string;
+  [index: string]: string | boolean;
+};
+
 export type PageObjectProps = {
   online: boolean;
   title: string;
   slug: string;
   thumbnail_url: string;
-  page_slug: string;
-  page_title: string;
   data: {
     sections: {
       [index: number]: {
@@ -16,9 +19,7 @@ export type PageObjectProps = {
             name: string;
             alignContent: string;
             components: {
-              [index: number]: {
-                name: string;
-              };
+              [index: number]: ComponentObjectProps;
             };
           };
         };
@@ -33,4 +34,11 @@ export type UserObjectProps = {
   username: string;
   email: string;
   is_superuser: boolean;
+};
+
+export type AuthenticationProps = {
+  isLoggedIn: boolean;
+  csrftoken: string;
+  setNotificationOpen: Function;
+  setNotificationText: Function;
 };

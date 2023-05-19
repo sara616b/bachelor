@@ -14,10 +14,7 @@ const App = () => {
     axios.get(`http://127.0.0.1:8002/logout/`, {}).then((response) => {
       if (response.status === 200) {
         navigate("/login/");
-      } else {
-        console.log(response);
       }
-      return response;
     });
   };
 
@@ -27,14 +24,14 @@ const App = () => {
         <Link to="/">
           <Button variant="default">Home</Button>
         </Link>
-        <Link to="/pages/create/">
-          <Button variant="default">Create New Page</Button>
-        </Link>
         <Link to="/pages/">
           <Button variant="default">Pages</Button>
         </Link>
         <Link to="/users/">
           <Button variant="default">Users</Button>
+        </Link>
+        <Link to="/images/">
+          <Button variant="default">Images</Button>
         </Link>
         <Button
           variant="default"

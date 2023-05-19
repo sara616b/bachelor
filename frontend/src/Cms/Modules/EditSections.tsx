@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Title, Button, Flex, Accordion, ColorInput } from "@mantine/core";
-import Cookies from "js-cookie";
 import axios from "axios";
+import { AuthenticationProps } from "../../Utils/Foundation/Types";
 
 type Props = {
   section: {
@@ -16,7 +16,8 @@ type Props = {
 };
 
 const App = ({ section, index, children, getPageInfo }: Props) => {
-  const csrftoken = Cookies.get("csrftoken");
+  const { csrftoken, setNotificationOpen, setNotificationText } =
+    useOutletContext<AuthenticationProps>();
   axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   axios.defaults.withCredentials = true;
@@ -27,18 +28,27 @@ const App = ({ section, index, children, getPageInfo }: Props) => {
     section.background_color || "#ffffff",
   );
   const { slug } = useParams();
-  console.log(wrapReverse);
-  console.log(backgroundColor);
 
   const saveSection = () => {
     const data = new FormData();
     data.append("background_color", backgroundColor);
     data.append("wrap_reverse", wrapReverse.toString());
     axios
-      .post(`/api/page/${slug}/section/update/${index}/`, data)
+      .put(
+        `http://127.0.0.1:8002/api/pages/${slug}/section/update/${index}/`,
+        data,
+      )
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setNotificationText(
+            "Permission denied! You're not allowed to edit sections.",
+          );
+          setNotificationOpen(true);
         }
       });
   };

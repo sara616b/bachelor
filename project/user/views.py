@@ -60,6 +60,12 @@ class UserApi(LoginRequiredMixin, View):
         return JsonResponse({'user': user_data}, status=200)
 
     def post(self, request, username):
+        if 'user.add_user' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         form = UserForm(request.POST)
 
         if form.is_valid():
@@ -111,6 +117,12 @@ class UserApi(LoginRequiredMixin, View):
         )
 
     def put(self, request, username):
+        if 'user.edit_user' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
@@ -119,13 +131,12 @@ class UserApi(LoginRequiredMixin, View):
             }, status=404)
 
         try:
-            put_data = MultiPartParser(
+            PUT = MultiPartParser(
                 request.META, request, request.upload_handlers
-            ).parse()
-            PUT = put_data[0]
+            ).parse()[0]
             put_dict = QueryDict(mutable=True)
-
             put_dict.update(PUT)
+
             form = UserForm(put_dict)
         except Exception as ex:
             return JsonResponse({
@@ -189,6 +200,12 @@ class UserApi(LoginRequiredMixin, View):
         )
 
     def delete(self, request, username):
+        if 'user.delete_user' not in request.user.get_user_permissions():
+            return JsonResponse(
+                {
+                    'result': 'permission denied',
+                }, status=403
+            )
         try:
             User.objects.get(username=username).delete()
         except User.DoesNotExist:
