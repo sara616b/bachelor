@@ -1,43 +1,7 @@
 FROM node:14
 
-ARG SITE
-ENV SITE=${SITE}
-
 COPY ./frontend/package.json /app/frontend/package.json
-# COPY ./frontend/public /app/frontend/public
-# COPY ./frontend/src/Utils /app/frontend/src/Utils
-# COPY ./frontend/src/$SITE /app/frontend/src/$SITE
-# COPY ./frontend/src/Website/Components /app/frontend/src/Website/Components
-# COPY ./frontend/src/index.css /app/frontend/src/index.css
-# COPY ./frontend/src/index.$SITE.tsx /app/frontend/src/index.tsx
-# COPY ./frontend/package.json /app/frontend/package.json
-# COPY ./frontend/tsconfig.json /app/frontend/tsconfig.json
-# COPY ./frontend/tailwind.config.js /app/frontend/tailwind.config.js
 
 WORKDIR /app/frontend
 
 RUN npm install
-
-# FROM node:14
-
-# # RUN apk add nodejs npm
-
-# ARG SITE
-# ENV SITE=${SITE}
-# RUN echo "hello ${SITE}"
-
-# COPY ./frontend /app/frontend
-# # COPY ./frontend/src/Utils /app/frontend/src/Utils
-# # COPY ./frontend/src/$SITE /app/frontend/src/$SITE
-# # COPY ./frontend/src/Website/Components /app/frontend/src/Website/Components
-# # COPY ./frontend/src/index.css /app/frontend/src/index.css
-# # COPY ./frontend/src/index.tsx /app/frontend/src/index.tsx
-# # COPY ./frontend/package.json /app/frontend/package.json
-# # COPY ./frontend/tsconfig.json /app/frontend/tsconfig.json
-# # COPY ./frontend/tailwind.config.js /app/frontend/tailwind.config.js
-
-# WORKDIR /app/frontend
-
-
-# RUN npm install
-

@@ -24,17 +24,17 @@ const EditPage = () => {
 
   const getPageInfo = React.useCallback(async () => {
     axios.defaults.headers.common["Content-Type"] = "application/json";
-    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
+    // axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .get(`http://127.0.0.1:8002/api/pages/${slug}/`, {})
+      .get(`${process.env.REACT_APP_API_HOST}/api/pages/${slug}/`, {})
       .then((response) => {
         if (response.status === 200) {
           setPage(response?.data?.data);
           setHasLoaded(true);
         }
       });
-  }, [slug, csrftoken]);
+  }, [slug]);
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;

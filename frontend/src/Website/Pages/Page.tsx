@@ -14,7 +14,7 @@ const Page = () => {
   useEffect(() => {
     if (loaded === false) {
       axios
-        .get(`http://127.0.0.1:8002/api/pages/${slug}/online/`)
+        .get(`${process.env.REACT_APP_API_HOST}/api/pages/${slug}/online/`)
         .then(
           (response: { status: number; data: { data: PageObjectProps } }) => {
             if (response.status === 200) {

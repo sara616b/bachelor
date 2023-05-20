@@ -44,8 +44,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.frontend
-      args:
-        - SITE=Website
     environment:
       - SITE=Website
       - WATCHPACK_POLLING=true
@@ -81,8 +79,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.frontend
-      args:
-        - SITE=Cms
     environment:
       - SITE=Cms
       - WATCHPACK_POLLING=true
@@ -92,6 +88,7 @@ services:
     volumes:
       - ./frontend/src/Utils:/app/frontend/src/Utils
       - ./frontend/src/Cms:/app/frontend/src/Cms
+      - ./frontend/cms_build:/app/frontend/cms_build
       - ./frontend/src/index.css:/app/frontend/src/index.css
       - ./frontend/src/index.Cms.tsx:/app/frontend/src/index.tsx
       - ./frontend/src/react-app-env.d.ts:/app/frontend/src/react-app-env.d.ts

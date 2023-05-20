@@ -11,11 +11,13 @@ const App = () => {
     const csrftoken = Cookies.get("csrftoken");
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.headers.common["Content-Type"] = "application/json";
-    axios.get(`http://127.0.0.1:8002/logout/`, {}).then((response) => {
-      if (response.status === 200) {
-        navigate("/login/");
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_HOST}/logout/`, {})
+      .then((response) => {
+        if (response.status === 200) {
+          navigate("/login/");
+        }
+      });
   };
 
   return (

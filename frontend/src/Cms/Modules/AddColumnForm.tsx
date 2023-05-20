@@ -30,7 +30,7 @@ const AddColumnForm = ({ section, sectionKey, getPageInfo }: Props) => {
       axios.defaults.withCredentials = true;
       axios
         .put(
-          `http://127.0.0.1:8002/api/pages/${slug}/column/change/${columnAmount}/`,
+          `${process.env.REACT_APP_API_HOST}/api/pages/${slug}/column/change/${columnAmount}/`,
           data,
         )
         .then((response) => {

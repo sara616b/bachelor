@@ -28,9 +28,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-website": "PORT=3000 react-scripts start",
-    "start-cms": "PORT=3002 react-scripts start",
+    "start-website": "REACT_APP_API_HOST=http://127.0.0.1:8002 PORT=3000 react-scripts start",
+    "start-cms": "REACT_APP_API_HOST=http://127.0.0.1:8002 PORT=3002 react-scripts start",
     "build": "react-scripts build",
+    "build-website": "REACT_APP_API_HOST=https://sarahisabella.info BUILD_PATH='./website_build' react-scripts build",
+    "build-cms": "REACT_APP_API_HOST=https://sarahisabella.info BUILD_PATH='./cms_build' react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!axios)/'",
     "eject": "react-scripts eject"
   },

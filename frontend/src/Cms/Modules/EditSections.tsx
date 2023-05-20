@@ -35,7 +35,7 @@ const App = ({ section, index, children, getPageInfo }: Props) => {
     data.append("wrap_reverse", wrapReverse.toString());
     axios
       .put(
-        `http://127.0.0.1:8002/api/pages/${slug}/section/update/${index}/`,
+        `${process.env.REACT_APP_API_HOST}/api/pages/${slug}/section/update/${index}/`,
         data,
       )
       .then((response) => {

@@ -46,7 +46,7 @@ const App = ({ children, page, getPageInfo }: Props) => {
     axios.defaults.headers.common["Content-Type"] = "application/json";
     axios.defaults.withCredentials = true;
     axios
-      .put(`http://127.0.0.1:8002/api/pages/${slug}/`, data)
+      .put(`${process.env.REACT_APP_API_HOST}/api/pages/${slug}/`, data)
       .then((response) => {
         if (response.status === 200) {
           if (response.data.page_slug !== slug) {

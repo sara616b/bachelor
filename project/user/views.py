@@ -60,7 +60,7 @@ class UserApi(LoginRequiredMixin, View):
         return JsonResponse({'user': user_data}, status=200)
 
     def post(self, request, username):
-        if 'user.add_user' not in request.user.get_user_permissions():
+        if 'auth.add_user' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -117,7 +117,7 @@ class UserApi(LoginRequiredMixin, View):
         )
 
     def put(self, request, username):
-        if 'user.edit_user' not in request.user.get_user_permissions():
+        if 'auth.change_user' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -200,7 +200,7 @@ class UserApi(LoginRequiredMixin, View):
         )
 
     def delete(self, request, username):
-        if 'user.delete_user' not in request.user.get_user_permissions():
+        if 'auth.delete_user' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',

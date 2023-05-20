@@ -23,9 +23,11 @@ const CreateUser = () => {
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8002/api/permissions/").then((response) => {
-      setPermissions(response.data.permissions);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_HOST}/api/permissions/`)
+      .then((response) => {
+        setPermissions(response.data.permissions);
+      });
   }, []);
 
   const SubmitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -51,7 +53,7 @@ const CreateUser = () => {
     }
     axios
       .post(
-        `http://127.0.0.1:8002/api/users/${target.elements.username.value}/`,
+        `${process.env.REACT_APP_API_HOST}/api/users/${target.elements.username.value}/`,
         data,
       )
       .then((response) => {

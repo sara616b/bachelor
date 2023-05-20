@@ -1,4 +1,4 @@
---- # yamllint disable-line
+---
 version: "3.9"
 
 services:
@@ -15,7 +15,7 @@ services:
     networks:
       - dbnetwork
     restart: always
-  website:
+  api:
     build:
       context: ./
       dockerfile: Dockerfile.prod
@@ -35,60 +35,46 @@ services:
       - "8080:8080"
     depends_on:
       - database
-      - assets
     restart: always
     links:
       - database:database
     networks:
       - dbnetwork
       - webnetwork
-  # cms:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - SITE=cms
-  #     - POSTGRES_USER=user
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=pagemanager
-  #   working_dir: /app/project
-  #   volumes:
-  #     - media:/app/project/media/
-  #     - static:/app/project/static/
-  #     - .:/app/
-  #   command: sh -c '' # yamllint disable-line
-  #   ports:
-  #     - "8001:8000"
-  #   depends_on:
-  #     - database
-  #     - assets
-  #   links:
-  #     - database:database
-  #   restart: always
-  #   networks:
-  #     - dbnetwork
-  #     - webnetwork
-  assets:
+  website:
     build:
       context: ./
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.frontend
     environment:
-      - SITE=website
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
-    working_dir: /app
-    volumes:
-      - media:/app/project/media/
-      - static:/app/project/static/
-      - .:/app/
-    command: sh -c 'npm run dev'
+      - SITE=Website
     ports:
-      - 3000:3000
+      - "3000:3000"
+    depends_on:
+      - database
+      - api
+    restart: always
+    links:
+      - database:database
+    networks:
+      - dbnetwork
+      - webnetwork
+  cms:
+    build:
+      context: ./
+      dockerfile: Dockerfile.frontend
+    environment:
+      - SITE=Cms
+    ports:
+      - "3002:3002"
+    depends_on:
+      - database
+      - api
+    links:
+      - database:database
     restart: always
     networks:
-      - webnetwork
       - dbnetwork
+      - webnetwork
   nginx:
     image: nginx:latest
     volumes:

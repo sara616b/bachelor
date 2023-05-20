@@ -23,19 +23,21 @@ const UsersOverview = () => {
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;
-    axios.get("http://127.0.0.1:8002/api/users/").then((response) => {
-      if (response.status === 200) {
-        setUsers(response.data.users);
-      }
-      setHasLoaded(true);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_HOST}/api/users/`)
+      .then((response) => {
+        if (response.status === 200) {
+          setUsers(response.data.users);
+        }
+        setHasLoaded(true);
+      });
   }, [hasLoaded, isLoggedIn]);
 
   const deleteUser = (username: string) => {
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .delete(`http://127.0.0.1:8002/api/users/${username}/`)
+      .delete(`${process.env.REACT_APP_API_HOST}/api/users/${username}/`)
       .then((response) => {
         if (response.status === 200) {
           setHasLoaded(false);

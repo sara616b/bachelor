@@ -50,7 +50,7 @@ const App = ({ onSuccess }: { onSuccess: Function | undefined }) => {
         axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
         axios.defaults.withCredentials = true;
         axios
-          .post(`http://127.0.0.1:8002/api/image/`, image_data)
+          .post(`${process.env.REACT_APP_API_HOST}/api/image/`, image_data)
           .then((response) => {
             if (response.status === 200) {
               if (onSuccess) {

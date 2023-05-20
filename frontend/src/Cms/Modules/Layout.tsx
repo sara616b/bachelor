@@ -3,6 +3,7 @@ import { useNavigate, Outlet } from "react-router-dom";
 import useIsAuthenticated from "../Hooks/useIsAuthenticated";
 import Navigation from "./Navigation";
 import { Notification, Container } from "@mantine/core";
+import Cookies from "js-cookie";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Layout = () => {
       navigate("/login/");
     }
   }, [isLoggedIn, navigate]);
+  console.log("layout", Cookies.get());
 
   return (
     <div>

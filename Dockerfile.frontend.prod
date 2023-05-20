@@ -1,0 +1,13 @@
+FROM node:14
+
+COPY ./frontend/package.json /app/frontend/package.json
+COPY ./frontend/src /app/frontend/src
+COPY ./frontend/public /app/frontend/public
+
+WORKDIR /app/frontend
+
+RUN npm install
+RUN npm run build
+
+FROM nginx:alpine
+COPY /app/frontend/build/ /var/www/sarahisabella.info

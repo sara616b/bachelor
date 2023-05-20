@@ -11,11 +11,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FormEvent, useEffect } from "react";
 import useIsAuthenticated from "../Hooks/useIsAuthenticated";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { isLoggedIn, csrftoken } = useIsAuthenticated();
   useEffect(() => {
+    console.log(process.env);
+    console.log(process.env.REACT_APP_API_HOST);
     if (isLoggedIn === undefined) return;
     if (isLoggedIn) {
       navigate("/");
@@ -41,15 +44,18 @@ const LoginPage = () => {
       return null;
     }
     axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
+    axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     const data = new FormData();
     data.append("username", username);
     data.append("password", password);
     data.append("csrfmiddlewaretoken", csrftoken);
     axios
-      .post("http://127.0.0.1:8002/login/", data)
+      .post(`${process.env.REACT_APP_API_HOST}/login/`, data)
       .then((response) => {
+        console.log(response);
         if (response.status === 200) {
+          Cookies.set("authenticatedCsrfToken", response.data.csrftoken);
           navigate("/");
         }
       })

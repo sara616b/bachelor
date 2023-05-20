@@ -35,7 +35,10 @@ const AddComponentForm = ({ sectionKey, columnKey, getPageInfo }: Props) => {
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .put(`http://127.0.0.1:8002/api/pages/${slug}/component/0/`, data)
+      .put(
+        `${process.env.REACT_APP_API_HOST}/api/pages/${slug}/component/0/`,
+        data,
+      )
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();

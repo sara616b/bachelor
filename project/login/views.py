@@ -12,7 +12,10 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             return JsonResponse(
-                {'result': 'logged in'},
+                {
+                    'result': 'logged in',
+                    'csrftoken': get_token(request)
+                },
                 status=200
             )
         else:

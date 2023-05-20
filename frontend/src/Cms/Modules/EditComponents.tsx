@@ -68,9 +68,12 @@ const App = ({
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .delete(`http://127.0.0.1:8002/api/pages/${slug}/component/${index}/`, {
-        data,
-      })
+      .delete(
+        `${process.env.REACT_APP_API_HOST}/api/pages/${slug}/component/${index}/`,
+        {
+          data,
+        },
+      )
       .then((response) => {
         if (response.status === 200) {
           getPageInfo();
@@ -96,7 +99,7 @@ const App = ({
     axios.defaults.withCredentials = true;
     axios
       .put(
-        `http://127.0.0.1:8002/api/pages/${slug}/component/move/${index}/${direction}/`,
+        `${process.env.REACT_APP_API_HOST}/api/pages/${slug}/component/move/${index}/${direction}/`,
         data,
       )
       .then((response) => {
@@ -143,7 +146,7 @@ const App = ({
     data.append("object_to_add", JSON.stringify(newValues));
     axios
       .put(
-        `http://127.0.0.1:8002/api/pages/${slug}/component/update/${index}/`,
+        `${process.env.REACT_APP_API_HOST}/api/pages/${slug}/component/update/${index}/`,
         data,
       )
       .then((response) => {

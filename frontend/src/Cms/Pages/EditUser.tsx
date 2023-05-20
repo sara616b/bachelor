@@ -26,15 +26,17 @@ const EditUser = () => {
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;
-    axios.get("http://127.0.0.1:8002/api/permissions/").then((response) => {
-      setPermissions(response.data.permissions);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_HOST}/api/permissions/`)
+      .then((response) => {
+        setPermissions(response.data.permissions);
+      });
   }, [isLoggedIn]);
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;
     axios
-      .get(`http://127.0.0.1:8002/api/users/${username}/`)
+      .get(`${process.env.REACT_APP_API_HOST}/api/users/${username}/`)
       .then((response) => {
         setUser(response.data.user);
         setChosenPermissions(response.data.user.permissions);
@@ -67,7 +69,7 @@ const EditUser = () => {
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .put(`http://127.0.0.1:8002/api/users/${username}/`, data)
+      .put(`${process.env.REACT_APP_API_HOST}/api/users/${username}/`, data)
       .then((response) => {
         if (response.status === 200) {
           navigate("/users/");

@@ -20,12 +20,14 @@ const ImagesOverview = () => {
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;
-    axios.get("http://127.0.0.1:8002/api/image/").then((response) => {
-      if (response.status === 200) {
-        setImages(response.data.images);
-      }
-      setHasLoaded(true);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_HOST}/api/image/`)
+      .then((response) => {
+        if (response.status === 200) {
+          setImages(response.data.images);
+        }
+        setHasLoaded(true);
+      });
   }, [hasLoaded, isLoggedIn]);
 
   return (

@@ -23,12 +23,14 @@ const PageOverview = () => {
 
   useEffect(() => {
     if (isLoggedIn === undefined || !isLoggedIn) return;
-    axios.get("http://127.0.0.1:8002/api/pages/").then((response) => {
-      if (response.status === 200) {
-        setPages(response.data.pages);
-      }
-      setHasLoaded(true);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_HOST}/api/pages/`)
+      .then((response) => {
+        if (response.status === 200) {
+          setPages(response.data.pages);
+        }
+        setHasLoaded(true);
+      });
   }, [isLoggedIn, hasLoaded]);
 
   const deletePage = (
@@ -40,7 +42,7 @@ const PageOverview = () => {
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .delete(`http://127.0.0.1:8002/api/pages/${page.slug}`)
+      .delete(`${process.env.REACT_APP_API_HOST}/api/pages/${page.slug}`)
       .then(() => {
         setHasLoaded(false);
       })

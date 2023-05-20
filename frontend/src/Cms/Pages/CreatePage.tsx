@@ -26,7 +26,7 @@ const CreatePage = () => {
     axios.defaults.headers.common["X-CSRFToken"] = csrftoken;
     axios.defaults.withCredentials = true;
     axios
-      .post(`http://127.0.0.1:8002/api/pages/${slug}/`, data)
+      .post(`${process.env.REACT_APP_API_HOST}/api/pages/${slug}/`, data)
       .then((response) => {
         if (response.status === 200) {
           navigate(`/pages/${response.data.slug}`);

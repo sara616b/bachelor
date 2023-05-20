@@ -6,14 +6,24 @@ const useIsAuthenticated = () => {
   const [status, setStatus] = useState<boolean | undefined>(undefined);
   const [csrftoken, setCsrftoken] = useState<string>("");
   useEffect(() => {
-    axios.get("http://127.0.0.1:8002/csrf/").then((response) => {
+    axios.get(process.env.REACT_APP_API_HOST + "/csrf/").then((response) => {
+      console.log(response);
+      console.log("get csrf");
       Cookies.set("csrftoken", response.data.csrfToken);
       setCsrftoken(response.data.csrfToken);
+      console.log("csrftoken get", csrftoken);
+      console.log("csrftok", Cookies.get("csrftoken"));
     });
-    axios.get("http://127.0.0.1:8002/authenticated/").then((response) => {
-      setStatus(response.data.result === "authenticated" ? true : false);
-    });
-  }, []);
+    axios
+      .get(process.env.REACT_APP_API_HOST + "/authenticated/")
+      .then((response) => {
+        console.log(response);
+        console.log("get authenticated");
+        setStatus(response.data.result === "authenticated" ? true : false);
+        console.log("csrftoken auth", csrftoken);
+      });
+  }, [status]);
+  console.log("csrftoken", csrftoken);
   return {
     isLoggedIn: status,
     csrftoken: csrftoken,
