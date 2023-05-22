@@ -1,10 +1,10 @@
 <div
-    style="order:{{column_key}};"
+    style="order:{{column.order}};"
     class="grid mb-2"
 >
     <hr class="my-4 border-2 border-indigo-50" />
-    <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Column {{column_key}}</h2>
-    {% for component_key, component in column.components.items %}
-        {% include "Cms/Modules/ComponentEdit.html" %}
+    <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Column {{column.order}}</h2>
+    {% for component in column.components %}
+        {% include "Cms/Modules/ComponentEdit.html" with values=component.values %}
     {% endfor %}
 </div>

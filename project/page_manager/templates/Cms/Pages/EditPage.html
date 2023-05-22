@@ -6,7 +6,7 @@
 
 {% block header %}
     {% include "cms/Components/Title.html" with text="Edit" %}
-    {% include "cms/Components/Button.html" with text="Delete?" %}
+    {% include "cms/Components/Button.html" with text="Delete?" color="#ce6060" %}
 {% endblock %}
 
 {% block main_content %}
@@ -20,13 +20,12 @@
 
         {% include "cms/Components/Button.html" with text="Update Page" type="submit" %} 
     </form>
-    <h2>Sections</h2>
-    <div class="flex flex-col gap-8">
-        {% for section_key, section in page_data.sections.items %}
-            {% include "Cms/Modules/SectionEdit.html" %}
+    <div class="flex flex-col gap-8 py-8">
+        {% for section in sections %}
+            {% include "Cms/Modules/SectionEdit.html" with section=section %}
         {% endfor %}
     </div>
-    {% include "cms/Components/Button.html" with text="Add Section Form" %}
+    {% include "Cms/Modules/AddSectionForm.html" %}
     {% include "cms/Components/Button.html" with text="Add Image Form" %}
 
 {% endblock %}

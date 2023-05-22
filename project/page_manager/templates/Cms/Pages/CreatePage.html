@@ -1,0 +1,32 @@
+{% extends "cms/Layout.html" %}
+
+{% block navigation %}
+    {% include "cms/Modules/Navigation.html" with selected="Pages" %}
+{% endblock %}
+
+{% block header %}
+    {% include "cms/Components/Title.html" with text="Create Page" %}
+{% endblock %}
+
+
+{% block messages %}
+  {% for message in messages %}
+    {% include "cms/Components/Messages.html" %}
+  {% endfor %}
+{% endblock %}
+
+{% block main_content %}
+    <form id="form"
+        hx-post="/pages/create/"
+        hx-push-url="true"
+        hx-target="#main"
+        hx-swap="innerhtml"
+        class="flex flex-col"
+    >
+        {% include "cms/Components/TextInput.html" with name="title" label="Title" value=title %}
+        {% include "cms/Components/TextInput.html" with name="slug" label="Slug" value=slug %}
+        {% include "cms/Components/TextInput.html" with name="thumbnail" label="Thumbnail Image" value=thumbnail_url not_required="True" %}
+
+        {% include "cms/Components/Button.html" with text="Create Page" type="submit" %} 
+    </form>
+{% endblock %}

@@ -5,7 +5,7 @@
             class="mdc-checkbox__native-control accent-pink-700"
             name="{{name}}"
             id="{{name}}"
-            {% if value or value == "True" %}checked{% endif %}
+            {% if value and value == "True" %}checked{% endif %}
         />
         <div class="bg-pink-700 mdc-checkbox__background">
         <svg class="mdc-checkbox__checkmark"

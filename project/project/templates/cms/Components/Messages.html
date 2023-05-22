@@ -1,0 +1,29 @@
+<div
+    class="flex flex-row border"
+    role="alertdialog"
+    aria-live="assertive"
+    id="error"
+>
+    <div class="mdc-banner__graphic-text-wrapper">
+        <div class="items-center self-center rounded-full mdc-banner__graphic material-icons" role="img" alt="Error">
+            error_outline
+        </div>
+        <div class="mdc-banner__text ">
+            {{ message }}
+        </div>
+    </div>
+    <div class="mdc-banner__actions">
+        <button type="button" class="mdc-button mdc-banner__primary-action">
+        <div class="mdc-button__ripple"></div>
+        <div
+            class="mdc-button__label"
+            hx-trigger="click"
+            hx-target="#error"
+            hx-swap="delete"
+            hx-get=""
+        >
+            Close
+        </div>
+        </button>
+    </div>
+</div>

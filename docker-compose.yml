@@ -11,7 +11,7 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
+      - POSTGRES_DB=postgres
     networks:
       - dbnetwork
     restart: always
@@ -23,13 +23,13 @@ services:
       - SITE=website
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
+      - POSTGRES_DB=postgres
     working_dir: /app/project
     volumes:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
+    command: sh -c 'python manage.py check && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
     ports:
       - "8002:8000"
     depends_on:
@@ -49,46 +49,41 @@ services:
       - SITE=cms
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pagemanager
+      - POSTGRES_DB=postgres
     working_dir: /app/project
     volumes:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
     command: sh -c 'python manage.py check && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
-    # command: sh -c 'python manage.py check && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
     ports:
       - "8001:8000"
     depends_on:
       - database
-      # - assets
+      - cms-assets
     links:
       - database:database
     restart: always
     networks:
       - dbnetwork
       - webnetwork
-  # assets:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - SITE=website
-  #     - POSTGRES_USER=user
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=pagemanager
-  #   working_dir: /app
-  #   volumes:
-  #     - media:/app/project/media/
-  #     - static:/app/project/static/
-  #     - .:/app/
-  #   command: sh -c 'npm run dev'
-  #   ports:
-  #     - 3000:3000
-  #   restart: always
-  #   networks:
-  #     - webnetwork
-  #     - dbnetwork
+  cms-assets:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - media:/app/project/media/
+      - static:/app/project/static/
+      - .:/app/
+    command: sh -c './tailwindcss-linux-x64 -i ./project/project/static/Cms/input.css -o ./project/project/static/Cms/output.css --watch' # yamllint disable-line
+    # ./tailwindcss -i input.css -o output.css --minify
+    ports:
+      - 3000:3000
+    restart: always
+    networks:
+      - webnetwork
+      - dbnetwork
   nginx:
     image: nginx:latest
     volumes:
