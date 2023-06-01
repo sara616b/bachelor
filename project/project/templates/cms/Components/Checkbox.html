@@ -1,11 +1,30 @@
-<div class="mdc-form-field">
+<div>
+    <input
+        type="checkbox"
+        class="accent-pink-700"
+        name="{{name}}"
+        id="{{name}}"
+        {% if value is True or value == "True" %}checked{% endif %}
+    />
+    <label
+        for="{{name}}"
+        {% if label == 'Wrap Reverse?' %}
+        class="cursor-help"
+        title="The order of the columns on mobile as they are listed here. When the viewport width expands the columns will lay beside eachother with the first on the left unless 'Wrap-reverse' is active in which case the second column will be on the left."
+        {% endif %}
+    >
+        {{label}}
+    </label>
+</div>
+
+{% comment %} <div class="mdc-form-field">
     <div class="mdc-checkbox">
         <input
             type="checkbox"
             class="mdc-checkbox__native-control accent-pink-700"
             name="{{name}}"
             id="{{name}}"
-            {% if value and value == "True" %}checked{% endif %}
+            {% if value is True or value == "True" %}checked{% endif %}
         />
         <div class="bg-pink-700 mdc-checkbox__background">
         <svg class="mdc-checkbox__checkmark"
@@ -33,4 +52,4 @@
             mdc.checkbox.MDCCheckbox.attachTo(checkbox);
         })
     </script>
-{% endblock %}
+{% endblock %} {% endcomment %}

@@ -1,13 +1,17 @@
 {% extends "website/base.html" %}
 
+{% block favicon %}
+  {{page.thumbnail_url}}
+{% endblock %}
+
 {% block title %}
-  {{title}}
+  {{page.title}}
 {% endblock %}
 
 {% block content %}
-  <main class="grid transition-all">
-    {% for section_key, section in page.data.sections.items %}
-      {% include "website/Partials/Section.html" %}
+  <main class="grid w-screen overflow-x-hidden transition-all">
+    {% for section in sections %}
+      {% include "website/Modules/Section.html" %}
     {% endfor %}
   </main>
 {% endblock  %}

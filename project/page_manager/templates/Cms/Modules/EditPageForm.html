@@ -1,0 +1,19 @@
+{% include "cms/Modules/MessagesList.html" %}
+<form id="form"
+    hx-put="/pages/{{page.slug}}/"
+    hx-swap="outerhtml"
+    hx-target="#form"
+>
+    {% include "cms/Components/TextInput.html" with name="title" label="Title" value=page.title %}
+    {% include "cms/Components/TextInput.html" with name="slug" label="Slug" value=page.slug %}
+    {% include "cms/Components/Checkbox.html" with name="online" label="Is Online" value=page.online %}
+    {% include "cms/Components/TextInput.html" with name="thumbnail" label="Thumbnail Image" value=page.thumbnail_url not_required="True" %}
+
+    {% include "cms/Components/Button.html" with text="Update Page" type="submit" %} 
+    {% if not page.online %}
+        {% url 'PagePreview' slug=page.slug online=False as preview_url %}
+        {% include "cms/Components/Button.html" with text="Preview" href="http://127.0.0.1:8001"|add:preview_url color="#396fd7" %}
+    {% else %}
+        {% include "cms/Components/Button.html" with text="View on Page" href="http://127.0.0.1:8002/"|add:page.slug color="#396fd7" %}
+    {% endif %}
+</form>

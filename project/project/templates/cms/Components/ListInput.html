@@ -1,0 +1,20 @@
+<div
+    class="relative w-full my-4 overflow-hidden"
+>
+    <input
+        class="list-value relative top-0 left-0 w-full p-4 bg-white border border-gray-300 outline-none rounded-lg text-base focus:ring-4 focus:ring-inset focus:pb-2 focus:pt-6 peer [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:px-4 [&:not(:placeholder-shown)]:pb-2 [&::placeholder]:text-base [&:not(:focus)::placeholder]:opacity-0"
+        id="{% if id_for %}{{id_for}}{% else %}{{name}}{% endif %}"
+        name="{{name}}"
+        placeholder="{{label}}"
+        {% if not not_required %}required{% endif %} 
+        type="text"
+        value="{% if value %}{{value}}{% endif %}"
+    />
+    <label
+        for="{% if id_for %}{{id_for}}{% else %}{{name}}{% endif %}"
+        class="text-base absolute top-0 bottom-0 left-0 flex items-center w-full px-4 py-1 text-gray-700 transition-all rounded-ss-lg rounded-se-lg  peer-focus:bg-violet-800 peer-focus:text-white peer-focus:text-xs peer-focus:z-10 peer-focus:uppercase peer-focus:h-5 peer-[&:not(:placeholder-shown)]:bg-violet-800 peer-[&:not(:placeholder-shown)]:text-white peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:z-10 peer-[&:not(:placeholder-shown)]:uppercase peer-[&:not(:placeholder-shown)]:h-5"
+    >
+        {{label}}
+    </label>
+</div>
+

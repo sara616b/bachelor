@@ -3,7 +3,7 @@ FROM python:3.10-alpine
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-RUN apk add python3-dev postgresql-client postgresql-dev musl-dev build-base
+RUN apk add python3-dev postgresql-client postgresql-dev musl-dev build-base gcompat libstdc++
 
 COPY . /app
 

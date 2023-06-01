@@ -1,0 +1,23 @@
+{% include "cms/Modules/MessagesList.html" %}
+<div
+    class="p-4 my-4 bg-white border"
+    {% if not target %}hx-target="this"{% endif %}
+>
+    <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Upload new image</h2>
+    <form
+        class="flex flex-col items-center gap-2 "
+        hx-post="/images/"
+        hx-swap="outerHTML"
+        hx-encoding="multipart/form-data"
+        {% if target %}hx-target="{{target}}"{% endif %}
+        hx-indicator="#loader"
+    >
+        {% csrf_token %}
+        {% include "cms/Components/TextInput.html" with name="image_name" label="Image Name" %}
+        <div>
+            <label for="image">Image file: </label>
+            <input type="file" name="image" id="image" />
+        </div>
+        {% include "cms/Components/Button.html" with text="Upload Image" type="submit" loader=True %}
+    </form>
+</div>

@@ -1,13 +1,22 @@
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from project.settings.secrets import MONGO_PASSWORD
-from urllib.parse import quote_plus
 
 
-mongo_client = MongoClient(
-    f'mongodb+srv://sarah:{quote_plus(MONGO_PASSWORD)}@bachelor.rjkfkr1.mongodb.net/?retryWrites=true&w=majority',  # noqa
-    server_api=ServerApi('1')
-)
+def get_put_data(request):
+    if not request.content_type == 'application/json':
+        if hasattr(request, '_post'):
+            del request._post
+            del request._files
+
+        try:
+            request.method = 'POST'
+            request._load_post_and_files()
+            request.method = 'PUT'
+        except AttributeError:
+            request.META['REQUEST_METHOD'] = 'POST'
+            request._load_post_and_files()
+            request.META['REQUEST_METHOD'] = 'PUT'
+        request.PUT = request.POST
+    return request
+
 
 customization_data = {
     "Title": {
@@ -74,5 +83,28 @@ customization_data = {
                 "name": "Link"
             }
         }
-    }
+    },
+    "CardSlider": {
+        "component": "CardSlider",
+        "values": {
+            "name": "CardSlider",
+            "image_links": "",
+            "links": "",
+            "titles": "",
+        },
+        "customization": {
+            "image_links": {
+                "type": "list",
+                "name": "Image Links"
+            },
+            "titles": {
+                "type": "list",
+                "name": "Titles"
+            },
+            "links": {
+                "type": "list",
+                "name": "Links"
+            },
+        }
+    },
 }

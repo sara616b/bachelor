@@ -30,6 +30,12 @@ ALLOWED_HOSTS = [
     '127.0.0.1:8001',
     '127.0.0.1:8000',
     '127.0.0.1',
+    'sarahisabella.info',
+    'https://sarahisabella.info',
+    'http://sarahisabella.info',
+    'sarahisabella.info:8000',
+    'http://sarahisabella.info:8000',
+    'https://sarahisabella.info:8000',
 ]
 
 
@@ -50,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

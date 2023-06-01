@@ -1,10 +1,31 @@
+{% include "cms/Modules/MessagesList.html" %}
 <div
-    style="order:{{column.order}};"
-    class="grid mb-2"
+    hx-target="this"
 >
-    <hr class="my-4 border-2 border-indigo-50" />
-    <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Column {{column.order}}</h2>
-    {% for component in column.components %}
-        {% include "Cms/Modules/ComponentEdit.html" with values=component.values %}
+    {% url 'ToggleColumnAmountView' slug=page.slug section_id=section.id as column_url %}
+    <div
+        class="relative flex mx-2 my-4 bg-white border rounded-md cursor-pointer h-14"
+        hx-post="{{column_url}}"
+        hx-swap="innerhtml"
+        hx-confirm="Are you sure you wish to change the amount of columns? If you change to one column, the second column will be deleted, including any components in it."
+    >
+        <span
+            class="absolute top-0 bottom-0 right-0 w-1/2 m-2 flex justify-center items-center transition-all pointer-events-none before:content-['Two_Columns'] cursor-default peer-checked/input:left-0 {% if section.columns|length == 2 %}right-auto before:content-['One_Column']{% endif %} text-black h-auto"
+        ></span>
+        <span
+            class="absolute top-0 bottom-0 left-0 w-1/2 m-2 flex justify-center items-center transition-all rounded-md before:content-['One_Column'] cursor-default bg-pink-600 text-white h-auto {% if section.columns|length == 2 %}left-auto right-0 before:content-['Two_Columns']{% endif %}"
+        ></span>
+    </div>
+
+    {% for column in section.columns %}
+        <div
+            style="order:{{column.order}};"
+            class="flex flex-col mb-2 columnedit"
+        >
+            <hr class="my-4 border-2 border-indigo-50" />
+            <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Column {{column.order}}</h2>
+            {% include "Cms/Modules/ComponentList.html" %}
+            {% include "Cms/Modules/AddComponentForm.html" %}
+        </div>
     {% endfor %}
 </div>

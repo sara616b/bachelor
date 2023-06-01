@@ -1,0 +1,19 @@
+<div
+    class="w-screen overflow-hidden text-center"
+>
+    <div
+        class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth"
+    >
+        {% with image_links=component.values|get_value_by_key:'image_links'|create_array:',' %}
+        {% with titles=component.values|get_value_by_key:'titles'|create_array:',' %}
+        {% with links=component.values|get_value_by_key:'links'|create_array:',' %}
+        {% for image_link in image_links %}
+            {% with i=forloop.counter %}
+            {% include 'website/Components/Card.html' with image_link=image_link link=links|get_index:i title=titles|get_index:i %}
+            {% endwith %}
+        {% endfor %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+</div>

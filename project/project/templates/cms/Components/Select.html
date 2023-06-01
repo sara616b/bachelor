@@ -1,0 +1,14 @@
+<label
+    for="{{name}}"
+    class="grow"
+>
+    <select
+        name="{{name}}"
+        id="{{name}}"
+        class="w-full mdc-text-field mdc-text-field--filled"
+    >
+        {% for value in values %}
+            <option value="{{value}}">{{value}}</option>
+        {% endfor %}
+    </select>
+</label>

@@ -5,6 +5,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('login.urls')),
     path('', include('page_manager.urls.cms')),
-    path('', include('page_manager.urls.api')),
+    # path('', include('page_manager.urls.api')),
     path('', include('user.urls')),
 ]

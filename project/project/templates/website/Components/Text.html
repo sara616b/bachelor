@@ -1,15 +1,15 @@
-<h1
+<p
     class="
         w-full
         max-w-sm
         mx-auto
         text-base
-        {% if component.alignment == 'center' %}text-center{% endif %}
-        {% if component.alignment == 'right' %}text-right{% endif %}
-        {% if component.alignment == 'left' %}text-left{% endif %}
-        {% if component.bold == 'true' %}font-bold{% endif %}
+        {% if component.values|get_value_by_key:'alignment' == 'center' %}text-center{% endif %}
+        {% if component.values|get_value_by_key:'alignment' == 'right' %}text-right{% endif %}
+        {% if component.values|get_value_by_key:'alignment' == 'left' %}text-left{% endif %}
+        {% if component.values|get_value_by_key:'bold' == 'true' %}font-bold{% endif %}
     "
-    style="color:{{component.text_color}};"
+    style="color:{{component.values|get_value_by_key:'text_color'}};"
 >
-    {{component.text}}
-</h1>
+    {{component.values|get_value_by_key:'text'}}
+</p>

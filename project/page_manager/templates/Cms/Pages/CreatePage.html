@@ -8,14 +8,8 @@
     {% include "cms/Components/Title.html" with text="Create Page" %}
 {% endblock %}
 
-
-{% block messages %}
-  {% for message in messages %}
-    {% include "cms/Components/Messages.html" %}
-  {% endfor %}
-{% endblock %}
-
 {% block main_content %}
+    {% include "cms/Modules/MessagesList.html" %}
     <form id="form"
         hx-post="/pages/create/"
         hx-push-url="true"

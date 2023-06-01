@@ -1,0 +1,31 @@
+<section
+    class="w-screen px-2 py-8 transition-all md:px-12"
+    style="
+        background:{{ section.values|get_value:'background_color' }};order:{{section.order}};
+        {% with image=section.values|get_value:'background_image' %}
+        {% if image != None %}
+            background-image: url({{image}});
+            min-height: 80vh;
+            background-position: center;
+            background-size: cover;
+            justify-content: center;
+            display: flex;
+        {% endif %}
+        {% endwith %}
+    "
+>   
+    <div
+        class="
+            container
+            grid
+            gap-4
+            mx-auto
+            transition-all
+            {% if section.columns|length == 2 %}md:grid-cols-2{% else %}md:grid-cols-1{% endif %}
+        "
+    >
+    {% for column in section.columns %}
+        {% include "website/Modules/Column.html" %}
+    {% endfor %}
+    </div>
+</section>

@@ -12,8 +12,8 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=pagemanager
-    networks:
-      - dbnetwork
+    # networks:
+    #   - dbnetwork
     restart: always
   website:
     build:
@@ -31,84 +31,74 @@ services:
       - .:/app/
     command: sh -c 'python manage.py check --deploy && python manage.py collectstatic --noinput && gunicorn project.asgi:application -b 0.0.0.0:8080 -k uvicorn.workers.UvicornWorker' # yamllint disable-line
     ports:
-      - "8002:8000"
       - "8080:8080"
     depends_on:
       - database
-      - assets
     restart: always
     links:
       - database:database
-    networks:
-      - dbnetwork
-      - webnetwork
-  # cms:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - SITE=cms
-  #     - POSTGRES_USER=user
-  #     - POSTGRES_PASSWORD=password
-  #     - POSTGRES_DB=pagemanager
-  #   working_dir: /app/project
-  #   volumes:
-  #     - media:/app/project/media/
-  #     - static:/app/project/static/
-  #     - .:/app/
-  #   command: sh -c '' # yamllint disable-line
-  #   ports:
-  #     - "8001:8000"
-  #   depends_on:
-  #     - database
-  #     - assets
-  #   links:
-  #     - database:database
-  #   restart: always
-  #   networks:
-  #     - dbnetwork
-  #     - webnetwork
-  assets:
+      # networks:
+      #   - dbnetwork
+      #   - webnetwork
+  cms:
     build:
       context: ./
       dockerfile: Dockerfile.prod
     environment:
-      - SITE=website
+      - SITE=cms
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=pagemanager
-    working_dir: /app
+    working_dir: /app/project
     volumes:
       - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
-    command: sh -c 'npm run dev'
+    command: sh -c 'python manage.py check --deploy && python manage.py collectstatic --noinput && gunicorn project.asgi:application -b 0.0.0.0:8080 -k uvicorn.workers.UvicornWorker' # yamllint disable-line
     ports:
-      - 3000:3000
+      - "8000:8080"
+    depends_on:
+      - database
     restart: always
-    networks:
-      - webnetwork
-      - dbnetwork
+    links:
+      - database:database
+      # networks:
+      #   - dbnetwork
+      #   - webnetwork
+  assets:
+    build:
+      context: ./
+      dockerfile: Dockerfile.styling
+    working_dir: /app
+    volumes:
+      - ./tailwind.config.js:/app/tailwind.config.js
+      - ./project/project/static/Cms/input.css:/app/project/project/static/Cms/input.css
+      - ./project/project/static/Cms/output.css:/app/project/project/static/Cms/output.css
+      - ./project/page_manager/templates/Cms:/app/project/page_manager/templates/Cms
+      - ./project/project/templates:/app/project/project/templates
+      - ./project/login/templates:/app/project/login/templates
+      - ./project/user/templates:/app/project/login/user
+      - ./tailwindcss-linux-x64:/app/tailwindcss-linux-x64
+    command: sh -c './tailwindcss-linux-x64 -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --minify' # yamllint disable-line
+    # networks:
+    #   - webnetwork
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx/prod/conf.d:/etc/nginx/conf.d/sarahisabella.info.conf
-      # - ./certs/:/etc/letsencrypt/
+      - ./certs/:/etc/letsencrypt/
       - static:/static/
       - media:/media/
     ports:
       - 443:443
       - 80:80
-    depends_on:
-      - website
-    networks:
-      - webnetwork
+      # networks:
+      #   - webnetwork
 
 volumes:
   postgres_data:
   media:
   static:
-
-networks:
-  dbnetwork:
-  webnetwork:
+# networks:
+#   dbnetwork:
+#   webnetwork:

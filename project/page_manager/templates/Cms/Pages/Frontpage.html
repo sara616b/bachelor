@@ -14,11 +14,16 @@
 {% endblock %}
 
 {% block main_content %}
-    {% include "cms/Components/Text.html" with text="This is the CMS for the bachelor project PageManager. Here, you can create and edit Pages." %}
+    {% include "cms/Modules/MessagesList.html" %}
     <div
-      class="flex justify-center gap-2"
+        class="flex flex-col gap-4 p-4 pt-0 mt-4 bg-white rounded-md"
     >
-      {% include "cms/Components/Button.html" with text="View Pages" get="/pages/" %}
-      {% include "cms/Components/Button.html" with text="Create New Page" get="/pages/create/" %}
+      {% include "cms/Components/Text.html" with text="This is the CMS for the bachelor project PageManager. Here, you can create and edit Pages." %}
+      <div
+        class="flex justify-center gap-2"
+      >
+        {% include "cms/Components/Button.html" with text="View Pages" get="/pages/" %}
+        {% include "cms/Components/Button.html" with text="Create New Page" get="/pages/create/" %}
+      </div>
     </div>
 {% endblock %}

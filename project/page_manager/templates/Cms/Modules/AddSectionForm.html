@@ -1,12 +1,15 @@
+{% include "cms/Modules/MessagesList.html" %}
 <div
-    class="p-4 my-4 border"
+    class="p-4 my-4 bg-white border"
 >
     <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Add new section</h2>
     <form
         class="flex flex-row items-center gap-2 "
         hx-post="/pages/{{page.slug}}/sections/"
+        hx-swap="innerhtml"
+        hx-target="#main"
     >
-        {% include "cms/Components/TextInput.html" with name="name" label="Section Name" %}
+        {% include "cms/Components/TextInput.html" with name="new_name" label="Section Name" %}
         {% include "cms/Components/Button.html" with text="Add" %}
     </form>
 </div>

@@ -34,7 +34,6 @@ services:
       - "8002:8000"
     depends_on:
       - database
-      # - assets
     restart: always
     links:
       - database:database
@@ -60,7 +59,6 @@ services:
       - "8001:8000"
     depends_on:
       - database
-      - cms-assets
     links:
       - database:database
     restart: always
@@ -70,39 +68,23 @@ services:
   cms-assets:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.styling
+    tty: true
+    stdin_open: true
     working_dir: /app
     volumes:
-      - media:/app/project/media/
-      - static:/app/project/static/
-      - .:/app/
-    command: sh -c './tailwindcss-linux-x64 -i ./project/project/static/Cms/input.css -o ./project/project/static/Cms/output.css --watch' # yamllint disable-line
-    # ./tailwindcss -i input.css -o output.css --minify
-    ports:
-      - 3000:3000
+      - ./tailwind.config.js:/app/tailwind.config.js
+      - ./project/project/static/Cms/input.css:/app/project/project/static/Cms/input.css
+      - ./project/project/static/Cms/output.css:/app/project/project/static/Cms/output.css
+      - ./project/page_manager/templates/Cms:/app/project/page_manager/templates/Cms
+      - ./project/project/templates:/app/project/project/templates
+      - ./project/login/templates:/app/project/login/templates
+      - ./project/user/templates:/app/project/login/user
+      - ./tailwindcss-linux-x64:/app/tailwindcss-linux-x64
+    command: sh -c './tailwindcss-linux-x64 -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --watch --poll' # yamllint disable-line
     restart: always
     networks:
       - webnetwork
-      - dbnetwork
-  nginx:
-    image: nginx:latest
-    volumes:
-      # - media:/media/
-      - static:/static/
-      - ./nginx/:/etc/nginx/conf.d/
-
-      # - ./nginx/${RTE}/conf.d:/etc/nginx/conf.d/sarahisabella.info.conf
-      # - ./certs/:/etc/letsencrypt/
-      # - static:/static/
-      # - media:/media/
-    ports:
-      - 443:443
-      - 80:80
-    depends_on:
-      - website
-    networks:
-      - webnetwork
-
 volumes:
   postgres_data:
   media:

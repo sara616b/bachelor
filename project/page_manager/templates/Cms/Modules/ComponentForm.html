@@ -1,0 +1,65 @@
+{% include "cms/Modules/MessagesList.html" %}
+{% load get_item %}
+{% with values=component.values %}
+{% with data=customization_data|get_item:component.name|get_item:'customization' %}
+    {% for value in data %}
+        {% if data|get_item:value|get_item:'type' == 'text' %}
+
+            {% include "cms/Components/TextInput.html" with name=value label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value id_for=value|add_as_string:column.id %}
+
+        {% elif data|get_item:value|get_item:'type' == 'textarea' %}
+
+            {% include "cms/Components/Textarea.html" with name=value label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value %}
+
+        {% elif data|get_item:value|get_item:'type' == 'list' %}
+
+            {% include "cms/Components/ListInput.html" with name=value label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value id_for=value|add_as_string:column.id %}
+
+        {% elif data|get_item:value|get_item:'type' == 'color' %}
+
+            {% include "cms/Components/ColorInput.html" with name=value label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value %}
+
+        {% elif data|get_item:value|get_item:'type' == 'boolean' %}
+
+            {% include "cms/Components/Checkbox.html" with name=value label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value %}
+
+        {% elif data|get_item:value|get_item:'type' == 'alignment' %}
+
+            {% include "cms/Components/Alignment.html" with name=data|get_item:value|get_item:'name' label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value %}
+
+        {% endif %}
+    {% endfor %}
+    {% comment %} {% if data|items_contains_value:'list' %}
+        <div>
+            <p>Values</p>
+            <ol class="list-display-{{component.id}}">
+            </ol>
+        </div>
+    {% endif %} {% endcomment %}
+{% endwith %}
+{% endwith %}
+{% include "cms/Components/Button.html" with text="Save "|add:component.name type="submit" %}
+
+{% comment %} {% block scripts %}
+    <script>
+        console.log('hello')
+        window.addEventListener("DOMContentLoaded", () => {
+
+            document.querySelectorAll(".list-value").forEach((input) => {
+                console.log(input)
+                const list = document.querySelector(".list-display-{{component.id}}")
+                console.log(list)
+                const valueArray = input.value.split(",")
+                valueArray.forEach((value) => {
+                    list.appendChild(document.createElement("li").appendChild(document.createTextNode(value)))
+                })
+                input.addEventListener("input", (event) => {
+                    console.log(event)
+                    console.log(event.target.value)
+                    console.log(event.target.previousElementSibling)
+                    console.log(event.target.previousElementSibling.value)
+                })
+            })
+        })
+    </script>
+{% endblock %} {% endcomment %}

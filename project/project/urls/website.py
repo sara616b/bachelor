@@ -17,5 +17,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('page_manager.urls.website')),
-    path('', include('page_manager.urls.api')),
+    # path('', include('page_manager.urls.api')),
 ]

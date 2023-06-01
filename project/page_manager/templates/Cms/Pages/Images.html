@@ -1,0 +1,57 @@
+{% extends "cms/Layout.html" %}
+
+{% block navigation %}
+  {% include "cms/Modules/Navigation.html" with selected="Images" %}
+{% endblock %}
+
+{% block header %}
+    {% include "cms/Components/Title.html" with text="All Pages" %}
+{% endblock %}
+
+{% block main_content %}
+  {% include "cms/Modules/MessagesList.html" %}
+  <ul
+      class="mdc-list mdc-list--two-line {% if item.thumbnail_url %}mdc-list--image-list{% else %}mdc-list--icon-list{% endif %}"
+      id="imagelist"
+  >
+      {% for item in images %}
+          <div class="my-2 mdc-card">
+              <li
+                  class="py-2 mdc-list-item"
+                  tabindex="0"
+                  hx-get="/pages/{{item.slug}}/"
+                  hx-swap="innerhtml"
+                  hx-target="#main"
+                  hx-push-url="true"
+              >
+                  <span class="flex items-center mx-2 w-9 mdc-list-item__avatar">
+                      <img class="rounded" src="{{item.url}}" alt="Thumbnail Image"/>
+                  </span>
+                  <span class="mdc-list-item__ripple"></span>
+                  <span class="mdc-list-item__text">
+                  <span class="mdc-list-item__primary-text">{{item.name}}</span>
+                  <span class="mdc-list-item__secondary-text">
+                    {{item.url}}
+                  </span>
+                  </span>
+              </li>
+              <li role="separator" class="mdc-list-divider"></li>
+              <div class="justify-end mdc-card__actions">
+                  <button
+                      class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100"
+                      hx-delete="/images/{{item.id}}/"
+                      hx-confirm="Are you sure you wish to delete the image?"
+                      hx-target="#main"
+                      hx-swap="outerHTML"
+                  >
+                      <div class="mdc-button__ripple"></div>
+                      <span class="text-red-800 mdc-button__label">Delete</span>
+                  </button>
+              </div>
+          </div>
+      {% empty %}
+          <li>There're no images yet!</li>
+      {% endfor %}
+  </ul>
+  {% include "Cms/Modules/AddImageForm.html" with target="#main" %}
+{% endblock %}

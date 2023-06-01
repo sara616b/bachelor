@@ -6,15 +6,11 @@
 
 
 {% block content %}
+  {% include "cms/Modules/MessagesList.html" %}
   <main 
-    class="flex flex-col justify-center min-h-full p-2 transition-all lg:px-8 sm:mx-auto sm:w-full md:max-w-xl"
+    class="flex flex-col min-h-full p-2 transition-all lg:px-8 sm:mx-auto sm:w-full md:max-w-xl"
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
   >
-    {% block messages %}
-      {% for message in messages %}
-        {% include "cms/Components/Messages.html" %}
-      {% endfor %}
-    {% endblock %}
     <div
       class="flex flex-row flex-wrap items-end justify-between gap-2"
     >
@@ -24,4 +20,14 @@
     {% block main_content %}
     {% endblock %}
   </main>
+
+  <footer
+    class="flex items-center justify-center p-8 text-white bg-violet-700 saturate-5"
+  >
+    <p
+      class="w-auto text-sm text-white "
+    >
+      Bachelor project summer 2023
+    </p>
+  </footer>
 {% endblock  %}

@@ -8,7 +8,7 @@
         <title>{% block title %}{% endblock %} CMS</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.svg' %}"/>
+        <link rel="shortcut icon" type="image/x-icon" href="{% block favicon %}{% static 'Foundation/Icons/favicon.svg' %}{% endblock %}"/>
         <script src="https://unpkg.com/htmx.org@1.9.2"></script>
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
@@ -27,6 +27,8 @@
     </head>
     <body
         id="main"
+        class="grid min-h-screen bg-slate-100"
+        style="grid-template-rows: auto 1fr auto;"
     >
     {% block navigation %}
         {% include "cms/Modules/Navigation.html" %}

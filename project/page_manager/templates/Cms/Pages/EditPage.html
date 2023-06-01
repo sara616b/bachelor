@@ -1,5 +1,9 @@
 {% extends "cms/Layout.html" %}
 
+{% block favicon %}
+    {{page.thumbnail_url}}
+{% endblock %}
+
 {% block navigation %}
     {% include "cms/Modules/Navigation.html" with selected="Pages" %}
 {% endblock %}
@@ -10,32 +14,14 @@
 {% endblock %}
 
 {% block main_content %}
-    <form id="form"
-        hx-post="/api/htmx/pages/{{page.slug}}/"
-    >
-        {% include "cms/Components/TextInput.html" with name="title" label="Title" value=page.title %}
-        {% include "cms/Components/TextInput.html" with name="slug" label="Slug" value=page.slug %}
-        {% include "cms/Components/Checkbox.html" with name="online" label="Is Online" value=page.online %}
-        {% include "cms/Components/TextInput.html" with name="thumbnail" label="Thumbnail Image" value=page.thumbnail_url not_required="True" %}
-
-        {% include "cms/Components/Button.html" with text="Update Page" type="submit" %} 
-    </form>
+    {% include "cms/Modules/MessagesList.html" %}
+    {% include "Cms/Modules/EditPageForm.html" %}
     <div class="flex flex-col gap-8 py-8">
         {% for section in sections %}
-            {% include "Cms/Modules/SectionEdit.html" with section=section %}
+            {% include "Cms/Modules/SectionEdit.html" with section=section sections=sections %}
         {% endfor %}
     </div>
     {% include "Cms/Modules/AddSectionForm.html" %}
-    {% include "cms/Components/Button.html" with text="Add Image Form" %}
+    {% include "Cms/Modules/AddImageForm.html" %}
 
-{% endblock %}
-
-{% block script %}
-    <script>
-        const form = document.querySelector("#form")
-        form.onSubmit((e)=>{
-            e.preventDefault();
-            console.log(e)
-        })
-    </script>
 {% endblock %}

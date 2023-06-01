@@ -1,5 +1,62 @@
 <button
-    class="mb-2 mdc-button mdc-button--raised"
+    class="font-light h-auto {% if loader %}flex{% endif %} gap-2 {% if compact %}p-1{% else %}py-2{% endif %} text-white bg-violet-700 h-auto rounded-md shadow-md px-4 uppercase tracking-wider hover:bg-violet-500 transition-colors active:bg-pink-500 text-base {% if classes %}{{classes}}{% endif %}"
+    type="{{type}}"
+    {% if post %}
+        hx-post={{post}}
+        {% if target == None %}
+        {% elif target %}
+            hx-target={{target}}
+        {% else %}
+            hx-target="#main"
+        {% endif %}
+        hx-swap="innerhtml"
+        {% if pushurl == True %}
+            hx-push-url="true"
+        {% elif pushurl %}
+            hx-push-url="{{pushurl}}"
+        {% endif %}
+    {% endif %}
+    {% if get %}
+        hx-get={{get}}
+        hx-target="#main"
+        hx-push-url="true"
+        hx-swap="innerhtml"
+    {% endif %}
+    {% if delete %}
+        hx-delete={{delete}}
+        {% if target == None %}
+        {% elif target %}
+            hx-target={{target}}
+        {% else %}
+            hx-target="#main"
+        {% endif %}
+        {% if swap %}
+            hx-swap={{swap}}
+        {% else %}
+            hx-swap="innerhtml"
+        {% endif %}
+    {% endif %}
+    {% if confirm %}
+        hx-confirm="{{confirm}}"
+    {% endif %}
+
+    style="{% if color %}background-color:{{color}}{% endif %}"
+>
+    {% if href %}
+        <a
+            href="{{href}}"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open in new tab: {{href}}"
+        >
+    {% endif %}
+        {{text}}{% if loader %} <svg id="loader" class="htmx-indicator animate-spin fill-white" xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30"><path d="M481-158q-131 0-225.5-94.5T161-478v-45l-80 80-39-39 149-149 149 149-39 39-80-80v45q0 107 76.5 183.5T481-218q29 0 55-5t49-15l43 43q-36 20-72.5 28.5T481-158Zm289-169L621-476l40-40 79 79v-41q0-107-76.5-183.5T480-738q-29 0-55 5.5T376-719l-43-43q36-20 72.5-28t74.5-8q131 0 225.5 94.5T800-478v43l80-80 39 39-149 149Z"/></svg>{% endif %}
+    {% if href %}
+        </a>
+    {% endif %}
+</button>
+{% comment %} <button
+    class="h-auto py-2 mb-2 mdc-button mdc-button--raised {% if compact %}p-2 h-5{% endif %}"
     type="{{type}}"
     {% if post %}
         hx-post={{post}}
@@ -15,10 +72,26 @@
         hx-push-url="true"
         hx-swap="innerhtml"
     {% endif %}
+    {% if delete %}
+        hx-delete={{delete}}
+        hx-target="#main"
+        hx-swap="innerhtml"
+    {% endif %}
     style="{% if color %}background-color:{{color}}{% endif %}"
 >
-    <span class="mdc-button__ripple"></span>
-    <span class="mdc-button__label">{{text}}</span>
+    {% if href %}
+        <a
+            href="{{href}}"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open in new tab: {{href}}"
+        >
+    {% endif %}
+        <span class="mdc-button__ripple"></span>
+        <span class="mdc-button__label">{{text}}</span>
+    {% if href %}
+        </a>
+    {% endif %}
 </button>
 {% block scripts %}
     <script>
@@ -26,4 +99,4 @@
             mdc.ripple.MDCRipple.attachTo(button);
         })
     </script>
-{% endblock %}
+{% endblock %} {% endcomment %}

@@ -1,0 +1,16 @@
+{% include "cms/Modules/MessagesList.html" %}
+{% load get_item %}
+<div
+    id="componentslist{{column.id}}"
+    class="flex flex-col"
+>
+{% for component in column.components %}
+    {% include "Cms/Modules/ComponentEdit.html" with values=component.values components=column.components %}
+{% empty %}
+    <p
+        class="grid p-2 mx-2 my-4 text-center border-2 border-red-500 border-dashed"
+    >
+        This Column has no components. Add some below!
+    </p>
+{% endfor %}
+</div>

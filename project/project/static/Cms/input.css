@@ -12,3 +12,8 @@
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
   color: #002761 !important;
 }
+
+details summary.hide-marker::marker {
+  display: none;
+  content: "";
+}

@@ -1,7 +1,7 @@
 {% extends "cms/Layout.html" %}
 
 {% block navigation %}
-  {% include "cms/Modules/Navigation.html" with selected="Pages" %}
+    {% include "cms/Modules/Navigation.html" with selected="Pages" %}
 {% endblock %}
 
 {% block header %}
@@ -10,5 +10,6 @@
 {% endblock %}
 
 {% block main_content %}
+    {% include "cms/Modules/MessagesList.html" %}
     {% include "cms/Components/List.html" with items=pages %}
 {% endblock %}
