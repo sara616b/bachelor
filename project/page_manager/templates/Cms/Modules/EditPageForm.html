@@ -1,6 +1,6 @@
 {% include "cms/Modules/MessagesList.html" %}
 <form id="form"
-    hx-put="/pages/{{page.slug}}/"
+    hx-put="{% url 'EditPageView' slug=page.slug %}"
     hx-swap="outerhtml"
     hx-target="#form"
 >

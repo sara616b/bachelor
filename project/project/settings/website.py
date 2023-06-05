@@ -14,6 +14,4 @@ from project.settings.common import *
 
 ROOT_URLCONF = 'project.urls.website'
 
-STATIC_URL = 'static/'
-
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']

@@ -21,6 +21,7 @@ from django.db.utils import IntegrityError
 from django.contrib import messages
 import requests
 import base64
+from django.core.paginator import Paginator
 
 
 class FrontpageView(LoginRequiredMixin, View):
@@ -37,7 +38,15 @@ class FrontpageView(LoginRequiredMixin, View):
 class PagesView(View):
     def get(self, request):
         try:
-            pages = [model_to_dict(page) for page in Page.objects.all()]
+            pages = [
+                model_to_dict(page)
+                for page
+                in Page.objects.all().order_by('-online', 'title')
+            ]
+            paginator = Paginator(pages, 5)
+
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
         except Exception as e:
             return JsonResponse(
                 {
@@ -50,7 +59,7 @@ class PagesView(View):
             'Cms/Pages/Pages.html',
             {
                 'title': 'All Pages | ',
-                'pages': pages
+                'pages': page_obj
             }
         )
 
@@ -70,10 +79,10 @@ class CreatePageView(LoginRequiredMixin, View):
 
     def post(self, request):
         if 'page_manager.add_page' not in request.user.get_user_permissions():
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to create pages."
             )
         try:
             title = request.POST['title']
@@ -83,6 +92,11 @@ class CreatePageView(LoginRequiredMixin, View):
                 title=title,
                 slug=slug,
                 thumbnail_url=thumbnail_url,
+            )
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Page created!"
             )
         except IntegrityError:
             messages.add_message(
@@ -130,10 +144,10 @@ class EditPageView(View):
 
     def put(self, request, slug):
         if 'page_manager.change_page' not in request.user.get_user_permissions():  # noqa
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to edit pages."
             )
         try:
             page = Page.objects.get(slug=slug)
@@ -154,6 +168,11 @@ class EditPageView(View):
             if (page.online != new_online):
                 page.online = new_online
             page.save()
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Page updated!"
+            )
         except Exception as e:
             return JsonResponse(
                 {
@@ -177,21 +196,29 @@ class EditPageView(View):
 class DeletePageView(LoginRequiredMixin, View):
     def delete(self, request, slug):
         if 'page_manager.delete_page' not in request.user.get_user_permissions():  # noqa
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to delete pages."
             )
         try:
             Page.objects.get(slug=slug).delete()
-        except Exception as e:
-            return JsonResponse(
-                {
-                    'result': 'error',
-                    'error': f'{e}',
-                }, status=500
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Page deleted."
             )
-        return HttpResponseRedirect(reverse('PagesView'))
+        except Exception as e:
+            messages.add_message(
+                request,
+                messages.INFO,
+                f"Something went wrong. Please try again. ({e})"
+            )
+        return render(
+            request,
+            'Cms/Modules/Empty.html',
+            {}
+        )
 
 
 class CreateSectionView(LoginRequiredMixin, View):
@@ -244,6 +271,11 @@ class CreateSectionView(LoginRequiredMixin, View):
                     order=1,
                     section=section,
                 )
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Section created."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -268,11 +300,6 @@ class EditSectionView(LoginRequiredMixin, View):
                 messages.INFO,
                 'Permission denied. You are not allowed to delete sections.'
             )
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
-            )
         try:
             page = Page.objects.get(slug=slug)
             section = Section.objects.get(id=section_id)
@@ -283,6 +310,11 @@ class EditSectionView(LoginRequiredMixin, View):
                 for section in sections:
                     section.order = section.order - 1
                 Section.objects.bulk_update(sections, ['order'])
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Section deleted."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -305,10 +337,10 @@ class EditSectionView(LoginRequiredMixin, View):
 
     def put(self, request, slug, section_id):
         if 'page_manager.change_section' not in request.user.get_user_permissions():  # noqa
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to edit sections."  # noqa
             )
         try:
             page = Page.objects.get(slug=slug)
@@ -328,6 +360,11 @@ class EditSectionView(LoginRequiredMixin, View):
                         f'{value.key}{section.order}'
                     )
             SectionValue.objects.bulk_update(sectionvalues, ['value'])
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Section updated."
+            )
         except Exception as e:
             return JsonResponse(
                 {
@@ -371,6 +408,11 @@ class DeleteSectionView(LoginRequiredMixin, View):
                         print(section.order)
                         section.order = section.order - 1
                         section.save()
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Section deleted."
+                )
             except Exception as e:
                 messages.add_message(
                     request,
@@ -423,6 +465,11 @@ class CreateComponentView(LoginRequiredMixin, View):
                         in data
                     ]
                 )
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Component created."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -459,26 +506,32 @@ class DeleteComponentView(LoginRequiredMixin, View):
             messages.add_message(
                 request,
                 messages.INFO,
-                'Permission denied. You are not allowed to delete sections.'
+                'Permission denied. You are not allowed to delete components.'
             )
-        try:
-            with transaction.atomic():
-                order = component.order
-                component.delete()
-                components = Component.objects.filter(
-                    page=page,
-                    column=column,
-                    order__gte=order
+        else:
+            try:
+                with transaction.atomic():
+                    order = component.order
+                    component.delete()
+                    components = Component.objects.filter(
+                        page=page,
+                        column=column,
+                        order__gte=order
+                    )
+                    for component in components:
+                        component.order = component.order - 1
+                    Component.objects.bulk_update(components, ['order'])
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Component deleted."
                 )
-                for component in components:
-                    component.order = component.order - 1
-                Component.objects.bulk_update(components, ['order'])
-        except Exception as e:
-            messages.add_message(
-                request,
-                messages.INFO,
-                f'Something went wrong. Please try again! Error: {e}'
-            )
+            except Exception as e:
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    f'Something went wrong. Please try again! Error: {e}'
+                )
         page.refresh_from_db()
         section_data = {}
         for section in page.sections:
@@ -504,10 +557,10 @@ class DeleteComponentView(LoginRequiredMixin, View):
 class EditComponentView(LoginRequiredMixin, View):
     def put(self, request, slug, component_id):
         if 'page_manager.change_component' not in request.user.get_user_permissions():  # noqa
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to edit components."  # noqa
             )
         try:
             page = Page.objects.get(slug=slug)
@@ -525,6 +578,11 @@ class EditComponentView(LoginRequiredMixin, View):
                 else:
                     value.value = request.PUT.get(f'{value.key}')
             ComponentValue.objects.bulk_update(componentvalues, ['value'])
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Component updated."
+            )
         except Exception as e:
             return JsonResponse(
                 {
@@ -576,6 +634,11 @@ class ToggleColumnAmountView(LoginRequiredMixin, View):
                         column.delete()
             elif len(columns) == 1:
                 Column.objects.create(page=page, section=section, order=2)
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Column amount updated."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -603,10 +666,10 @@ class ToggleColumnAmountView(LoginRequiredMixin, View):
 class MoveSectionView(LoginRequiredMixin, View):
     def post(self, request, slug, section_id, direction):
         if 'page_manager.change_section' not in request.user.get_user_permissions():  # noqa
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to edit sections."  # noqa
             )
         page = Page.objects.get(slug=slug)
         try:
@@ -652,6 +715,11 @@ class MoveSectionView(LoginRequiredMixin, View):
                 section_to_switch.save(update_fields=['order'])
                 section.save(update_fields=['order'])
 
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Section order updated."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -674,10 +742,10 @@ class MoveSectionView(LoginRequiredMixin, View):
 class MoveComponentView(LoginRequiredMixin, View):
     def post(self, request, slug, component_id, direction):
         if 'page_manager.change_component' not in request.user.get_user_permissions():  # noqa
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Permission denied. You don't have permission to edit components."  # noqa
             )
         page = Page.objects.get(slug=slug)
         component = Component.objects.get(pk=component_id)
@@ -720,6 +788,11 @@ class MoveComponentView(LoginRequiredMixin, View):
                 component_to_switch.save(update_fields=['order'])
                 component.save(update_fields=['order'])
 
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Component order updated."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -789,6 +862,11 @@ class UploadImageView(LoginRequiredMixin, View):
                         messages.INFO,
                         f'Something went wrong. Please try again. (Error: {e})'
                     )
+            messages.add_message(
+                request,
+                messages.INFO,
+                "New image uploaded."
+            )
         except Exception as e:
             messages.add_message(
                 request,
@@ -814,6 +892,10 @@ class UploadImageView(LoginRequiredMixin, View):
     def get(self, request):
         try:
             images = Image.objects.all().values()
+            paginator = Paginator(images, 5)
+
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
         except Exception as e:
             return JsonResponse(
                 {
@@ -826,7 +908,7 @@ class UploadImageView(LoginRequiredMixin, View):
             'Cms/Pages/Images.html',
             {
                 'title': 'All Images | ',
-                'images': images,
+                'images': page_obj,
             }
         )
 
@@ -837,16 +919,20 @@ class DeleteImageView(LoginRequiredMixin, View):
             messages.add_message(
                 request,
                 messages.INFO,
-                "Permission denied. You're not allowed to upload images."
+                "Permission denied. You're not allowed to delete images."
             )
         try:
             Image.objects.get(id=image_id).delete()
-        except Exception as e:
-            return JsonResponse(
-                {
-                    'data': f'{e}',
-                    'status': 500,
-                }
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Image deleted."
+            )
+        except Exception:
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Something went wrong, please try again."
             )
         images = Image.objects.all().values()
         return render(

@@ -1,0 +1,59 @@
+
+    <div
+        class="flex items-center justify-center w-full gap-2"
+        hx-swap="innerhtml"
+        hx-target="#main"
+        hx-push-url="true"
+    >
+        <button
+            title="First"
+            class="p-2 transition-all rotate-180 hover:opacity-80 disabled:opacity-50 enabled:hover:bg-violet-500 group"
+            {% if not page_obj.has_previous %}
+                disabled
+            {% else %}
+                hx-get="{{url}}?page=1"
+            {% endif %}
+        >
+            <svg class="group-[&:hover:enabled]:fill-white" xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 -960 960 960" width="22"><path d="m272-245-43-43 192-192-192-192 43-43 235 235-235 235Zm388 5v-480h60v480h-60Z"/></svg>
+        </button>
+        <button
+            title="Previous"
+            class="p-3 transition-all rotate-180 hover:opacity-80 disabled:opacity-50 enabled:hover:bg-violet-500 group"
+            {% if not page_obj.has_previous %}
+                disabled
+            {% else %}
+                hx-get="{{url}}?page={{ page_obj.previous_page_number }}"
+            {% endif %}
+        >
+            <svg class="group-[&:hover:enabled]:fill-white" xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" width="15"><path d="m304-82-56-57 343-343-343-343 56-57 400 400L304-82Z"/></svg>
+        </button>
+
+        <p
+            class="px-2"
+        >
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </p>
+
+        <button
+            title="Next"
+            class="p-3 transition-all hover:opacity-80 disabled:opacity-50 enabled:hover:bg-violet-500 group"
+            {% if not page_obj.has_next %}
+                disabled
+            {% else %}
+                hx-get="{{url}}?page={{ page_obj.next_page_number }}"
+            {% endif %}
+        >
+            <svg class="group-[&:hover:enabled]:fill-white" xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" width="15"><path d="m304-82-56-57 343-343-343-343 56-57 400 400L304-82Z"/></svg>
+        </button>
+        <button
+            title="Last"
+            class="p-2 transition-all hover:opacity-80 disabled:opacity-50 enabled:hover:bg-violet-500 group"
+            {% if not page_obj.has_next %}
+                disabled
+            {% else %}
+                hx-get="{{url}}?page={{ page_obj.paginator.num_pages }}"
+            {% endif %}
+        >
+            <svg class="group-[&:hover:enabled]:fill-white" xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 -960 960 960" width="22"><path d="m272-245-43-43 192-192-192-192 43-43 235 235-235 235Zm388 5v-480h60v480h-60Z"/></svg>
+        </button>
+    </div>

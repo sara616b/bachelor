@@ -6,7 +6,8 @@
 
 {% block header %}
     {% include "cms/Components/Title.html" with text="All Users" %}
-    {% include "cms/Components/Button.html" with text="Create New User" get="/users/new/" %}
+    {% url 'CreateUserView' as create_url %}
+    {% include "cms/Components/Button.html" with text="Create New User" get=create_url %}
 {% endblock %}
 
 {% block main_content %}
@@ -18,7 +19,7 @@
             <li
                 class="py-2 mdc-list-item"
                 tabindex="0"
-                hx-get="/users/{{user.username}}"
+                hx-get="{% url 'EditUserView' username=user.username %}"
                 hx-swap="innerhtml"
                 hx-target="#main"
                 hx-push-url="true"
@@ -49,19 +50,19 @@
             </li>
             <li role="separator" class="mdc-list-divider"></li>
             <div class="justify-end mdc-card__actions">
-                {% comment %} <button
+                <button
                     class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100"
-                    hx-delete="/api/htmx/pages/delete/{{item.slug}}"
-                    hx-confirm="Are you sure you wish to delete the page?"
-                    hx-target="closest .mdc-card"
-                    hx-swap="delete"
+                    hx-delete="{% url 'EditUserView' username=user.username %}"
+                    hx-confirm="Are you sure you wish to delete {{user.username}}?"
+                    hx-target="#main"
+                    hx-swap="outerhtml"
                 >
                     <div class="mdc-button__ripple"></div>
                     <span class="text-red-800 mdc-button__label">Delete</span>
-                </button> {% endcomment %}
+                </button>
                 <button
                     class="mdc-button mdc-card__action mdc-card__action--button"
-                    hx-get="/users/{{user.username}}"
+                    hx-get="{% url 'EditUserView' username=user.username %}"
                     hx-swap="innerhtml"
                     hx-target="#main"
                     hx-push-url="true"
@@ -75,6 +76,10 @@
         <li>There're no users yet!</li>
     {% endfor %}
 </ul>
+
+{% url 'UsersView' as users_url %}
+{% include "cms/Modules/Pagination.html" with page_obj=users url=users_url %}
+
 {% endblock %}
 
 

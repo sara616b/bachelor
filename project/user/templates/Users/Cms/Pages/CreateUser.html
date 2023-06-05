@@ -6,9 +6,30 @@
 
 {% block header %}
     {% include "cms/Components/Title.html" with text="Create User" %}
-    {% include "cms/Components/Button.html" with text="Create" %}
 {% endblock %}
 
 {% block main_content %}
-MISSING
+    <form
+        hx-post="{% url 'CreateUserView' %}"
+        hx-target="#main"
+        hx-swap="innerhtml"
+    >
+        {% include "cms/Components/TextInput.html" with name="first_name" label="First Name" %}
+        {% include "cms/Components/TextInput.html" with name="last_name" label="Last Name" %}
+        {% include "cms/Components/TextInput.html" with name="username" label="Username" %}
+        {% include "cms/Components/TextInput.html" with name="email" label="Email" %}
+        {% include "cms/Components/TextInput.html" with name="password" label="Password" type="password" %}
+        {% include "cms/Components/Checkbox.html" with name="is_superuser" label="Is Superuser" %}
+
+        <p class="pt-8 font-bold">Permissions</p>
+        <div
+            class="h-40 p-4 mb-4 overflow-scroll bg-white border"
+        >
+            {% for permission in permissions %}
+                {% include "cms/Components/Checkbox.html" with name=permission.value label=permission.label %}
+            {% endfor %}
+        </div>
+
+        {% include "cms/Components/Button.html" with text="Create user" type="submit" %}
+    </form>
 {% endblock %}

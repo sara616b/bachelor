@@ -65,7 +65,7 @@
         </button>
         <button
             class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100 {% if section.order == 1 %}opacity-30{% endif%}"
-            hx-post="{% url 'MoveSectionView' slug=page.slug section_id=section.id direction="up" %}"
+            hx-post="{% url 'MoveSectionView' slug=page.slug section_id=section.id direction='up' %}"
             hx-target="#main"
             hx-swap="innerhtml"
             {% if section.order == 1 %}disabled{% endif%}

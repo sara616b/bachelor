@@ -1,17 +1,22 @@
 <nav
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
 >
+  {% url 'FrontpageView' as frontpage_url %}
+  {% url 'PagesView' as pages_url %}
+  {% url 'UsersView' as users_url %}
+  {% url 'UploadImageView' as images_url %}
+  {% url 'LoginView' as login_url %}
+  {% url 'LogoutView' as logout_url %}
   <div class="hidden mdc-tab-bar md:block" role="tablist">
     <div class="mdc-tab-scroller">
       <div class="mdc-tab-scroller__scroll-area">
         <div class=" mdc-tab-scroller__scroll-content">
-        
-          {% include "cms/Modules/MenuItems.html" with label="Frontpage" link="/" icon="home" %}
-          {% include "cms/Modules/MenuItems.html" with label="Pages" link="/pages/" icon="web" %}
-          {% include "cms/Modules/MenuItems.html" with label="Users" link="/users/" icon="face" %}
-          {% include "cms/Modules/MenuItems.html" with label="Images" link="/images/" icon="collections" %}
+          {% include "cms/Modules/MenuItems.html" with label="Frontpage" link=frontpage_url icon="home" %}
+          {% include "cms/Modules/MenuItems.html" with label="Pages" link=pages_url icon="web" %}
+          {% include "cms/Modules/MenuItems.html" with label="Users" link=users_url icon="face" %}
+          {% include "cms/Modules/MenuItems.html" with label="Images" link=images_url icon="collections" %}
           <div class="m-2">
-              {% include "cms/Components/Button.html" with text="Log Out" post="/logout/" pushurl="/login/" %}
+              {% include "cms/Components/Button.html" with text="Log Out" post=logout_url pushurl=login_url target="body" %}
           </div>
         </div>
       </div>
@@ -24,12 +29,12 @@
     <div
       class="flex flex-col"
     >
-      {% include "cms/Modules/MenuItems.html" with label="Frontpage" link="/" icon="home" %}
-      {% include "cms/Modules/MenuItems.html" with label="Pages" link="/pages/" icon="web" %}
-      {% include "cms/Modules/MenuItems.html" with label="Users" link="/users/" icon="face" %}
-      {% include "cms/Modules/MenuItems.html" with label="Images" link="/users/" icon="collections" %}
+      {% include "cms/Modules/MenuItems.html" with label="Frontpage" link=frontpage_url icon="home" %}
+      {% include "cms/Modules/MenuItems.html" with label="Pages" link=pages_url icon="web" %}
+      {% include "cms/Modules/MenuItems.html" with label="Users" link=users_url icon="face" %}
+      {% include "cms/Modules/MenuItems.html" with label="Images" link=images_url icon="collections" %}
       <div class="m-2">
-          {% include "cms/Components/Button.html" with text="Log Out" post="/logout/" pushurl="/login/" %}
+          {% include "cms/Components/Button.html" with text="Log Out" post=logout_url pushurl=login_url %}
       </div>
     </div>
   </details>

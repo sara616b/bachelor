@@ -79,7 +79,7 @@ services:
       - ./project/page_manager/templates/Cms:/app/project/page_manager/templates/Cms
       - ./project/project/templates:/app/project/project/templates
       - ./project/login/templates:/app/project/login/templates
-      - ./project/user/templates:/app/project/login/user
+      - ./project/user/templates:/app/project/user/templates
       - ./tailwindcss-linux-x64:/app/tailwindcss-linux-x64
     command: sh -c './tailwindcss-linux-x64 -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --watch --poll' # yamllint disable-line
     restart: always

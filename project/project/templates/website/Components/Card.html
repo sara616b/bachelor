@@ -1,18 +1,18 @@
 <a
-    class="relative flex flex-col items-center justify-center my-4 mr-4 transition-all origin-center scale-100 bg-white rounded-md shadow-md cursor-pointer snap-start shrink-0 w-80 hover:scale-105"
+    class="relative flex flex-col items-center justify-center my-4 mr-4 overflow-hidden transition-all origin-center scale-100 bg-white rounded-md shadow-md cursor-pointer snap-start shrink-0 w-96 hover:scale-105"
     hx-get="/preview{{link}}False/"
     hx-push-url="true"
     hx-swap="innerhtml"
 >
     <picture
-        class="overflow-hidden transition-all rounded-md h-60"
+        class="flex items-center transition-all rounded-md h-60"
     >
         <source media="(min-width:650px)" srcset="{{image_link}}">
         <source media="(min-width:465px)" srcset="{{image_link}}">
         <img src="{{image_link}}" alt="component">
     </picture>
     <p
-        class="w-full p-4 text-center"
+        class="w-full p-4 text-center bg-white"
     >
         {{title}}
     </p>

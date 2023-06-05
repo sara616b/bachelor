@@ -22,8 +22,10 @@
       <div
         class="flex justify-center gap-2"
       >
-        {% include "cms/Components/Button.html" with text="View Pages" get="/pages/" %}
-        {% include "cms/Components/Button.html" with text="Create New Page" get="/pages/create/" %}
+        {% url 'PagesView' as pages_url %}
+        {% include "cms/Components/Button.html" with text="View Pages" get=pages_url %}
+        {% url 'CreatePageView' as create_url %}
+        {% include "cms/Components/Button.html" with text="Create New Page" get=create_url %}
       </div>
     </div>
 {% endblock %}

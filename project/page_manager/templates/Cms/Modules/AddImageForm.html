@@ -6,7 +6,7 @@
     <h2 class="flex justify-center text-sm font-bold text-indigo-900 uppercase">Upload new image</h2>
     <form
         class="flex flex-col items-center gap-2 "
-        hx-post="/images/"
+        hx-post="{% url 'UploadImageView' %}"
         hx-swap="outerHTML"
         hx-encoding="multipart/form-data"
         {% if target %}hx-target="{{target}}"{% endif %}

@@ -9,3 +9,5 @@ secrets.py
 project/project/settings/static/
 
 webpack-stats.json
+
+certs/

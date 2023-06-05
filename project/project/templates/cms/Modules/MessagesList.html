@@ -1,9 +1,11 @@
-<div
-    class="fixed z-50 flex flex-col gap-2 left-4 bottom-4"
->
-    {% block messages %}
-    {% for message in messages %}
-        {% include "cms/Components/Messages.html" %}
-    {% endfor %}
-    {% endblock %}
-</div>
+{% if messages %}
+    <div
+        class="fixed z-50 flex flex-col gap-2 left-4 bottom-4"
+    >
+        {% block messages %}
+        {% for message in messages %}
+            {% include "cms/Components/Messages.html" %}
+        {% endfor %}
+        {% endblock %}
+    </div>
+{% endif %}

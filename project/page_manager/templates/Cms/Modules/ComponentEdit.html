@@ -43,7 +43,7 @@
         </summary>
         <form
             class="grid gap-2 p-4 border"
-            hx-put="/pages/{{page.slug}}/component/{{component.id}}/"
+            hx-put="{% url 'EditComponentView' slug=page.slug component_id=component.id %}"
             hx-target="this"
             hx-swap="innerhtml"
         >

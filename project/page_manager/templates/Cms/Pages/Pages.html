@@ -6,10 +6,15 @@
 
 {% block header %}
     {% include "cms/Components/Title.html" with text="All Pages" %}
-    {% include "cms/Components/Button.html" with text="Create New Page" get="/pages/create/" %}
+    {% url 'CreatePageView' as create_url %}
+    {% include "cms/Components/Button.html" with text="Create New Page" get=create_url %}
 {% endblock %}
 
 {% block main_content %}
     {% include "cms/Modules/MessagesList.html" %}
     {% include "cms/Components/List.html" with items=pages %}
+
+    {% url 'PagesView' as pages_url %}
+    {% include "cms/Modules/Pagination.html" with page_obj=pages url=pages_url %}
+
 {% endblock %}

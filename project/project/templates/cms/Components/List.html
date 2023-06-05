@@ -6,7 +6,7 @@
             <li
                 class="py-2 mdc-list-item"
                 tabindex="0"
-                hx-get="/pages/{{item.slug}}/"
+                hx-get="{% url 'EditPageView' slug=item.slug %}"
                 hx-swap="innerhtml"
                 hx-target="#main"
                 hx-push-url="true"
@@ -40,7 +40,7 @@
             <div class="justify-end mdc-card__actions">
                 <button
                     class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100"
-                    hx-delete="/api/htmx/pages/delete/{{item.slug}}/"
+                    hx-delete="{% url 'DeletePageView' slug=item.slug %}"
                     hx-confirm="Are you sure you wish to delete the page?"
                     hx-target="closest .mdc-card"
                     hx-swap="delete"
@@ -50,13 +50,36 @@
                 </button>
                 <button
                     class="mdc-button mdc-card__action mdc-card__action--button"
-                    hx-get="/pages/{{item.slug}}"
+                    hx-get="{% url 'EditPageView' slug=item.slug %}"
                     hx-swap="innerhtml"
                     hx-target="#main"
                     hx-push-url="true"
                 >
                     <div class="mdc-button__ripple"></div>
                     <span class="mdc-button__label">Edit</span>
+                </button>
+                <button
+                    class="mdc-button mdc-card__action mdc-card__action--button"
+                >
+                    <div class="mdc-button__ripple"></div>
+                    {% if not item.online %}
+                        {% url 'PagePreview' slug=item.slug online=False as preview_url %}
+                        <a
+                            class="mdc-button__label"
+                            href="{{'http://127.0.0.1:8001'|add:preview_url}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Open in new tab: {{'http://127.0.0.1:8001'|add:preview_url}}"
+                        >Preview</a>
+                    {% else %}
+                        <a
+                            class="mdc-button__label"
+                            href="{{'http://127.0.0.1:8002/'|add:item.slug}}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Open in new tab: {{'http://127.0.0.1:8002/'|add:item.slug}}"
+                        >View</a>
+                    {% endif %}
                 </button>
             </div>
         </div>

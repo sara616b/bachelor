@@ -13,6 +13,28 @@ from django.forms.models import model_to_dict
 from page_manager.utils import customization_data
 
 
+class IndexView(View):
+    def get(self, request):
+        try:
+            page = Page.objects.get(slug='test')
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'data': f'{e}',
+                    'status': 404,
+                }
+            )
+        return render(
+            request,
+            'website/Pages/Page.html',
+            {
+                'page': model_to_dict(page),
+                'sections': page.sections,
+                'customization_data': customization_data,
+            }
+        )
+
+
 class PageView(View):
     def get(self, request, slug, online=True):
         try:

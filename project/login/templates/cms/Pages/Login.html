@@ -13,7 +13,8 @@
 {% endblock %}
 
 {% block main_content %}
-    <form class="m-auto space-y-6 sm:max-w-xs" hx-post="/login/" hx-target="#main">
+    {% url 'LoginView' as login_url %}
+    <form class="m-auto space-y-6 sm:max-w-xs" hx-post=login_url hx-target="#main">
         <div>
         {% include "cms/Components/TextInput.html" with name="username" label="Username" %}
         {% include "cms/Components/TextInput.html" with name="password" label="Password" type="password" %}
@@ -21,7 +22,8 @@
         <div
             class="text-center"
         >
-        {% include "cms/Components/Button.html" with text="Log In" type="submit" post="/login/" pushurl="/" %}
+        {% url 'FrontpageView' as frontpage_url %}
+        {% include "cms/Components/Button.html" with text="Log In" type="submit" post=login_url pushurl=frontpage_url %}
         </div>
     </form>
 {% endblock %}

@@ -11,7 +11,7 @@
 {% block main_content %}
     {% include "cms/Modules/MessagesList.html" %}
     <form id="form"
-        hx-post="/pages/create/"
+        hx-post="{% url 'CreatePageView' %}"
         hx-push-url="true"
         hx-target="#main"
         hx-swap="innerhtml"

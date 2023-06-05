@@ -1,9 +1,10 @@
 <section
-    class="w-screen px-2 py-8 transition-all md:px-12"
+    class="w-screen px-4 py-16 transition-all md:px-12"
     style="
-        background:{{ section.values|get_value:'background_color' }};order:{{section.order}};
+        background:{{ section.values|get_value:'background_color' }};
+        order:{{section.order}};
         {% with image=section.values|get_value:'background_image' %}
-        {% if image != None %}
+        {% if image != None and image != '' %}
             background-image: url({{image}});
             min-height: 80vh;
             background-position: center;
@@ -18,7 +19,7 @@
         class="
             container
             grid
-            gap-4
+            gap-16
             mx-auto
             transition-all
             {% if section.columns|length == 2 %}md:grid-cols-2{% else %}md:grid-cols-1{% endif %}

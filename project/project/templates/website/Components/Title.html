@@ -6,7 +6,7 @@
         {% if component.values|get_value_by_key:'alignment' == 'center' %}text-center mx-auto{% endif %}
         {% if component.values|get_value_by_key:'alignment' == 'right' %}text-right{% endif %}
         {% if component.values|get_value_by_key:'alignment' == 'left' %}text-left{% endif %}
-        {% if component.values|get_value_by_key:'bold' == 'true' %}font-bold{% endif %}
+        {% if component.values|get_value_by_key:'bold' == 'True' %}font-bold{% endif %}
     "
     style="color:{{component.values|get_value_by_key:'title_color'}};"
 >
