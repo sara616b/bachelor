@@ -12,14 +12,15 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=pagemanager
-    # networks:
-    #   - dbnetwork
+    networks:
+      - dbnetwork
     restart: always
   website:
     build:
       context: ./
       dockerfile: Dockerfile.prod
     environment:
+      - RTE=prod
       - SITE=website
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -37,14 +38,15 @@ services:
     restart: always
     links:
       - database:database
-      # networks:
-      #   - dbnetwork
-      #   - webnetwork
+    networks:
+      - dbnetwork
+      - webnetwork
   cms:
     build:
       context: ./
       dockerfile: Dockerfile.prod
     environment:
+      - RTE=prod
       - SITE=cms
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -62,9 +64,9 @@ services:
     restart: always
     links:
       - database:database
-      # networks:
-      #   - dbnetwork
-      #   - webnetwork
+    networks:
+      - dbnetwork
+      - webnetwork
   assets:
     build:
       context: ./
@@ -79,9 +81,9 @@ services:
       - ./project/login/templates:/app/project/login/templates
       - ./project/user/templates:/app/project/login/user
       - ./tailwindcss-linux-x64:/app/tailwindcss-linux-x64
-    command: sh -c './tailwindcss-linux-x64 -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --minify' # yamllint disable-line
-    # networks:
-    #   - webnetwork
+    command: sh -c 'tailwindcss -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --minify' # yamllint disable-line
+    networks:
+      - webnetwork
   nginx:
     image: nginx:latest
     volumes:
@@ -92,13 +94,13 @@ services:
     ports:
       - 443:443
       - 80:80
-      # networks:
-      #   - webnetwork
+    networks:
+      - webnetwork
 
 volumes:
   postgres_data:
   media:
   static:
-# networks:
-#   dbnetwork:
-#   webnetwork:
+networks:
+  dbnetwork:
+  webnetwork:

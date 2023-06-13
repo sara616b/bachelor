@@ -14,8 +14,6 @@ from page_manager.models import (
 )
 from django.forms.models import model_to_dict
 from page_manager.utils import customization_data, get_put_data
-from django.http import JsonResponse
-# from bson.json_util import dumps
 import json
 from django.db.utils import IntegrityError
 from django.contrib import messages
@@ -35,25 +33,17 @@ class FrontpageView(LoginRequiredMixin, View):
         )
 
 
-class PagesView(View):
+class PagesView(LoginRequiredMixin, View):
     def get(self, request):
-        try:
-            pages = [
-                model_to_dict(page)
-                for page
-                in Page.objects.all().order_by('-online', 'title')
-            ]
-            paginator = Paginator(pages, 5)
+        pages = [
+            model_to_dict(page)
+            for page
+            in Page.objects.all().order_by('-online', 'title')
+        ]
+        paginator = Paginator(pages, 5)
 
-            page_number = request.GET.get('page')
-            page_obj = paginator.get_page(page_number)
-        except Exception as e:
-            return JsonResponse(
-                {
-                    'data': f'{e}',
-                    'status': 500,
-                }
-            )
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         return render(
             request,
             'Cms/Pages/Pages.html',
@@ -65,7 +55,7 @@ class PagesView(View):
 
 
 class CreatePageView(LoginRequiredMixin, View):
-    def get(self, request, **kwargs):
+    def get(self, request):
         return render(
             request,
             'Cms/Pages/CreatePage.html',
@@ -83,6 +73,13 @@ class CreatePageView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 "Permission denied. You don't have permission to create pages."
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         try:
             title = request.POST['title']
@@ -120,16 +117,22 @@ class CreatePageView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('PagesView'))
 
 
-class EditPageView(View):
+class EditPageView(LoginRequiredMixin, View):
     def get(self, request, slug):
         try:
             page = Page.objects.get(slug=slug)
-        except Exception as e:
-            return JsonResponse(
-                {
-                    'data': f'{e}',
-                    'status': 500,
-                }
+        except Page.DoesNotExist:
+            messages.add_message(
+                request,
+                messages.INFO,
+                'Page not found. Please try again.'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         return render(
             request,
@@ -148,6 +151,13 @@ class EditPageView(View):
                 request,
                 messages.INFO,
                 "Permission denied. You don't have permission to edit pages."
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         try:
             page = Page.objects.get(slug=slug)
@@ -174,11 +184,17 @@ class EditPageView(View):
                 "Page updated!"
             )
         except Exception as e:
-            return JsonResponse(
-                {
-                    'result': 'error',
-                    'error': f'{e}',
-                }, status=500
+            messages.add_message(
+                request,
+                messages.INFO,
+                f'Something went wrong. Error: {e}'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
 
         return render(
@@ -201,6 +217,13 @@ class DeletePageView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You don't have permission to delete pages."
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         try:
             Page.objects.get(slug=slug).delete()
             messages.add_message(
@@ -213,6 +236,13 @@ class DeletePageView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 f"Something went wrong. Please try again. ({e})"
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         return render(
             request,
@@ -229,10 +259,12 @@ class CreateSectionView(LoginRequiredMixin, View):
                 messages.INFO,
                 'Permission denied. You are not allowed to create sections.'
             )
-            return JsonResponse(
-                {
-                    'result': 'permission denied',
-                }, status=403
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         try:
             name = request.POST['new_name']
@@ -282,8 +314,12 @@ class CreateSectionView(LoginRequiredMixin, View):
                 messages.INFO,
                 f'An error occured. {e}'
             )
-            return HttpResponseRedirect(
-                reverse('EditPageView', kwargs={'slug': slug})
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
 
         return HttpResponseRedirect(reverse(
@@ -299,6 +335,13 @@ class EditSectionView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 'Permission denied. You are not allowed to delete sections.'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         try:
             page = Page.objects.get(slug=slug)
@@ -342,6 +385,13 @@ class EditSectionView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You don't have permission to edit sections."  # noqa
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         try:
             page = Page.objects.get(slug=slug)
             section = Section.objects.get(id=section_id)
@@ -366,11 +416,17 @@ class EditSectionView(LoginRequiredMixin, View):
                 "Section updated."
             )
         except Exception as e:
-            return JsonResponse(
-                {
-                    'result': 'error',
-                    'error': f'{e}',
-                }, status=500
+            messages.add_message(
+                request,
+                messages.INFO,
+                f"Something went wrong. Error: {e}"
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
 
         return render(
@@ -393,6 +449,13 @@ class DeleteSectionView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 'Permission denied. You are not allowed to delete sections.'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         else:
             try:
@@ -419,6 +482,13 @@ class DeleteSectionView(LoginRequiredMixin, View):
                     messages.INFO,
                     f'Something went wrong. Please try again. (Error: {e})'
                 )
+                return render(
+                    request,
+                    'Cms/Modules/MessagesList.html',
+                    {},
+                    None,
+                    500
+                )
         page.refresh_from_db()
         return render(
             request,
@@ -439,6 +509,13 @@ class CreateComponentView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 'Permission denied. You are not allowed to create components.'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         try:
             name = request.POST['name']
@@ -476,6 +553,13 @@ class CreateComponentView(LoginRequiredMixin, View):
                 messages.INFO,
                 f'Something went wrong. Please try again! Error: {e}'
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
+            )
         page.refresh_from_db()
         section_data = {}
         for section_dict in page.sections:
@@ -508,6 +592,13 @@ class DeleteComponentView(LoginRequiredMixin, View):
                 messages.INFO,
                 'Permission denied. You are not allowed to delete components.'
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         else:
             try:
                 with transaction.atomic():
@@ -531,6 +622,13 @@ class DeleteComponentView(LoginRequiredMixin, View):
                     request,
                     messages.INFO,
                     f'Something went wrong. Please try again! Error: {e}'
+                )
+                return render(
+                    request,
+                    'Cms/Modules/MessagesList.html',
+                    {},
+                    None,
+                    500
                 )
         page.refresh_from_db()
         section_data = {}
@@ -562,6 +660,13 @@ class EditComponentView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You don't have permission to edit components."  # noqa
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         try:
             page = Page.objects.get(slug=slug)
             component = Component.objects.get(id=component_id)
@@ -584,11 +689,17 @@ class EditComponentView(LoginRequiredMixin, View):
                 "Component updated."
             )
         except Exception as e:
-            return JsonResponse(
-                {
-                    'result': 'error',
-                    'error': f'{e}',
-                }, status=500
+            messages.add_message(
+                request,
+                messages.INFO,
+                f"Something went wrong. Error: {e}"
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
 
         page.refresh_from_db()
@@ -623,6 +734,13 @@ class ToggleColumnAmountView(LoginRequiredMixin, View):
                 messages.INFO,
                 'Permission denied. You are not allowed to update column amounts.'  # noqa
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         page = Page.objects.get(slug=slug)
         try:
             section = Section.objects.get(pk=section_id)
@@ -644,6 +762,13 @@ class ToggleColumnAmountView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 f'Something went wrong. Please try again. (Error: {e})'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         page.refresh_from_db()
         section_data = {}
@@ -670,6 +795,13 @@ class MoveSectionView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 "Permission denied. You don't have permission to edit sections."  # noqa
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         page = Page.objects.get(slug=slug)
         try:
@@ -726,6 +858,13 @@ class MoveSectionView(LoginRequiredMixin, View):
                 messages.INFO,
                 f'Something went wrong. Please try again. (Error: {e})'
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
+            )
         page.refresh_from_db()
         return render(
             request,
@@ -746,6 +885,13 @@ class MoveComponentView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 "Permission denied. You don't have permission to edit components."  # noqa
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         page = Page.objects.get(slug=slug)
         component = Component.objects.get(pk=component_id)
@@ -799,6 +945,13 @@ class MoveComponentView(LoginRequiredMixin, View):
                 messages.INFO,
                 f'Something went wrong. Please try again. (Error: {e})'
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
+            )
         page.refresh_from_db()
         section_data = {}
         for section in page.sections:
@@ -828,6 +981,13 @@ class UploadImageView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 "Permission denied. You're not allowed to upload images."
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
             )
         try:
             file = base64.standard_b64encode(request.FILES['image'].read())
@@ -862,6 +1022,13 @@ class UploadImageView(LoginRequiredMixin, View):
                         messages.INFO,
                         f'Something went wrong. Please try again. (Error: {e})'
                     )
+                    return render(
+                        request,
+                        'Cms/Modules/MessagesList.html',
+                        {},
+                        None,
+                        500
+                    )
             messages.add_message(
                 request,
                 messages.INFO,
@@ -872,6 +1039,13 @@ class UploadImageView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 f'Something went wrong. Please try again. (Error: {e})'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         if request.path == '/images/':
             images = Image.objects.all().values()
@@ -897,11 +1071,17 @@ class UploadImageView(LoginRequiredMixin, View):
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
         except Exception as e:
-            return JsonResponse(
-                {
-                    'data': f'{e}',
-                    'status': 500,
-                }
+            messages.add_message(
+                request,
+                messages.INFO,
+                f'Something went wrong. Please try again. (Error: {e})'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         return render(
             request,
@@ -921,6 +1101,13 @@ class DeleteImageView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You're not allowed to delete images."
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         try:
             Image.objects.get(id=image_id).delete()
             messages.add_message(
@@ -928,11 +1115,18 @@ class DeleteImageView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Image deleted."
             )
-        except Exception:
+        except Exception as e:
             messages.add_message(
                 request,
                 messages.INFO,
-                "Something went wrong, please try again."
+                f'Something went wrong. Please try again. (Error: {e})'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         images = Image.objects.all().values()
         return render(

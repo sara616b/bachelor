@@ -11,38 +11,36 @@
 {% block main_content %}
     {% include "cms/Modules/MessagesList.html" %}
     <ul
-        class="mdc-list mdc-list--two-line {% if item.thumbnail_url %}mdc-list--image-list{% else %}mdc-list--icon-list{% endif %}"
+        class="py-2 list-none"
         id="imagelist"
     >
         {% for item in images %}
-            <div class="my-2 mdc-card">
+            <div class="relative flex flex-col my-4 bg-white rounded-md shadow-md card">
                 <li
-                    class="py-2 mdc-list-item"
+                    class="relative flex items-stretch justify-start px-4 py-2"
                     tabindex="0"
                 >
-                    <span class="flex items-center mx-2 w-9 mdc-list-item__avatar">
+                    <span class="flex items-center mx-2 w-9">
                         <img class="rounded" src="{{item.url}}" alt="Thumbnail Image"/>
                     </span>
-                    <span class="mdc-list-item__ripple"></span>
-                    <span class="mdc-list-item__text">
-                    <span class="mdc-list-item__primary-text">{{item.name}}</span>
-                    <span class="flex flex-row mdc-list-item__secondary-text">
-                    {{item.url}}
-                    <svg title="Copy URL" onclick="navigator.clipboard.writeText('{{item.url}}');" class="mx-2 fill-black hover:bg-violet-500 hover:fill-white" xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" width="15"><path d="M180-81q-24 0-42-18t-18-42v-603h60v603h474v60H180Zm120-120q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560Zm0 0v-560 560Z"/></svg>
-                    </span>
+                    <span>
+                        <span class="text-base leading-8">{{item.name}}</span>
+                        <span class="flex flex-row mt-0 text-sm text-gray-500">
+                        {{item.url}}
+                        <svg title="Copy URL" onclick="navigator.clipboard.writeText('{{item.url}}');" class="mx-2 hover:cursor-pointer fill-black hover:bg-violet-500 hover:fill-white" xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" width="15"><path d="M180-81q-24 0-42-18t-18-42v-603h60v603h474v60H180Zm120-120q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560Zm0 0v-560 560Z"/></svg>
+                        </span>
                     </span>
                 </li>
-                <li role="separator" class="mdc-list-divider"></li>
-                <div class="justify-end mdc-card__actions">
+                <li role="separator" class="bg-gray-200 h-[1px]"></li>
+                <div class="flex flex-row flex-wrap items-center justify-end p-2">
                     <button
-                        class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100"
+                        class="relative inline-flex flex-row items-center justify-center px-4 mx-1 text-sm text-red-700 uppercase bg-transparent border-none rounded-md outline-none cursor-pointer select-none hover:bg-red-50 h-9"
                         hx-delete="{% url 'DeleteImageView' image_id=item.id %}"
                         hx-confirm="Are you sure you wish to delete the image?"
                         hx-target="#main"
                         hx-swap="outerHTML"
                     >
-                        <div class="mdc-button__ripple"></div>
-                        <span class="text-red-800 mdc-button__label">Delete</span>
+                        <span class="tracking-wider">Delete</span>
                     </button>
                 </div>
             </div>

@@ -1,83 +1,80 @@
 <ul
-    class="mdc-list mdc-list--two-line {% if item.thumbnail_url %}mdc-list--image-list{% else %}mdc-list--icon-list{% endif %}"
+    class="py-2 list-none"
 >
     {% for item in items %}
-        <div class="my-2 mdc-card">
+        <div class="relative flex flex-col my-4 bg-white rounded-md shadow-md card">
             <li
-                class="py-2 mdc-list-item"
+                class="relative flex items-stretch justify-start px-4 py-2 hover:cursor-pointer"
                 tabindex="0"
                 hx-get="{% url 'EditPageView' slug=item.slug %}"
                 hx-swap="innerhtml"
                 hx-target="#main"
                 hx-push-url="true"
+                title="Edit Page"
             >
                 {% if item.thumbnail_url %}
-                    <span class="flex items-center mx-2 w-9 mdc-list-item__avatar">
+                    <span class="flex items-center mx-2 w-9">
                         <img class="rounded" src="{{item.thumbnail_url}}" alt="Thumbnail Image"/>
                     </span>
                 {% else %}
-                    <span class="flex items-center mx-2 text-4xl mdc-list-item__graphic material-icons">
+                    <span class="flex items-center mx-2 text-4xl material-icons">
                         web
                     </span>
                 {% endif %}
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">
-                <span class="mdc-list-item__primary-text">{{item.title}}</span>
-                <span class="mdc-list-item__secondary-text">
-                    {% if item.online %}
-                        <span class="inline-flex px-1 text-center bg-green-200 rounded-full w-fit">
-                            <span class="mr-2 text-sm material-icons">desktop_windows</span>Online
-                        </span>
-                    {% else %}
-                        <span class="inline-flex px-1 text-center bg-red-100 rounded-full w-fit">
-                            <span class="mr-2 text-sm material-icons">desktop_access_disabled</span>Offline
-                        </span>
-                    {% endif %}
-                </span>
+                <span>
+                    <span class="text-base leading-8">{{item.title}}</span>
+                    <span class="block mt-0 text-sm text-gray-500">
+                        {% if item.online %}
+                            <span class="inline-flex px-2 text-center bg-green-200 rounded-full w-fit">
+                                <span class="mr-2 text-sm material-icons">desktop_windows</span>Online
+                            </span>
+                        {% else %}
+                            <span class="inline-flex px-2 text-center bg-red-100 rounded-full w-fit">
+                                <span class="mr-2 text-sm material-icons">desktop_access_disabled</span>Offline
+                            </span>
+                        {% endif %}
+                    </span>
                 </span>
             </li>
-            <li role="separator" class="mdc-list-divider"></li>
-            <div class="justify-end mdc-card__actions">
+            <li role="separator" class="bg-gray-200 h-[1px]"></li>
+            <div class="flex flex-row flex-wrap items-center justify-end p-2">
                 <button
-                    class="mdc-button mdc-card__action mdc-card__action--button hover:bg-red-100"
+                    class="relative inline-flex flex-row items-center justify-center px-4 mx-1 text-sm text-red-700 uppercase bg-transparent border-none rounded-md outline-none cursor-pointer select-none hover:bg-red-50 h-9"
                     hx-delete="{% url 'DeletePageView' slug=item.slug %}"
                     hx-confirm="Are you sure you wish to delete the page?"
-                    hx-target="closest .mdc-card"
+                    hx-target="closest .card"
                     hx-swap="delete"
                 >
-                    <div class="mdc-button__ripple"></div>
-                    <span class="text-red-800 mdc-button__label">Delete</span>
+                    <span class="tracking-wider">Delete</span>
                 </button>
                 <button
-                    class="mdc-button mdc-card__action mdc-card__action--button"
+                    class="relative inline-flex flex-row items-center justify-center px-4 mx-1 text-sm uppercase bg-transparent border-none rounded-md outline-none cursor-pointer select-none hover:bg-violet-50 h-9 text-violet-700"
                     hx-get="{% url 'EditPageView' slug=item.slug %}"
                     hx-swap="innerhtml"
                     hx-target="#main"
                     hx-push-url="true"
                 >
-                    <div class="mdc-button__ripple"></div>
-                    <span class="mdc-button__label">Edit</span>
+                    <span class="tracking-wider">Edit</span>
                 </button>
                 <button
-                    class="mdc-button mdc-card__action mdc-card__action--button"
+                    class="relative inline-flex flex-row items-center justify-center px-4 mx-1 text-sm uppercase bg-transparent border-none rounded-md outline-none cursor-pointer select-none hover:bg-violet-50 h-9 text-violet-700"
                 >
-                    <div class="mdc-button__ripple"></div>
                     {% if not item.online %}
                         {% url 'PagePreview' slug=item.slug online=False as preview_url %}
                         <a
-                            class="mdc-button__label"
-                            href="{{'http://127.0.0.1:8001'|add:preview_url}}"
+                            class="tracking-wider"
+                            href="{{preview_url}}"
                             target="_blank"
                             rel="noopener noreferrer"
-                            title="Open in new tab: {{'http://127.0.0.1:8001'|add:preview_url}}"
+                            title="Open in new tab: {{preview_url}}"
                         >Preview</a>
                     {% else %}
                         <a
-                            class="mdc-button__label"
-                            href="{{'http://127.0.0.1:8002/'|add:item.slug}}"
+                            class="tracking-wider"
+                            href="{{item.slug}}"
                             target="_blank"
                             rel="noopener noreferrer"
-                            title="Open in new tab: {{'http://127.0.0.1:8002/'|add:item.slug}}"
+                            title="Open in new tab: {{item.slug}}"
                         >View</a>
                     {% endif %}
                 </button>
@@ -87,8 +84,3 @@
         <li>There're no pages yet!</li>
     {% endfor %}
 </ul>
-{% block scripts %}
-    <script>
-        mdc.list.MDCList.attachTo(document.querySelector('.mdc-list'));
-    </script>
-{% endblock %}

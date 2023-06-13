@@ -1,17 +1,18 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>{% block title %}{% endblock %} CMS</title>
-        <meta name="description" content="">
+        <meta name="description" content="Cms for website builder">
+        <meta name="title" content="This would be the website title">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/x-icon" href="{% block favicon %}{% static 'Foundation/Icons/favicon.svg' %}{% endblock %}"/>
         <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        {% comment %} <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> {% endcomment %}
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="{% static 'Cms/output.css' %}" />
         <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
@@ -23,6 +24,20 @@
             }
         </style>
         {% block scripts %}
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    const body = document.querySelector('body');
+                    body.addEventListener('htmx:beforeSwap', function(evt) {
+                        if((evt.detail.xhr.status === 403) || (evt.detail.xhr.status === 500)) {
+                            evt.detail.isError = false;
+                            const responseHTML = evt.detail.serverResponse;
+                            const container = document.querySelector('#messages');
+                            container.innerHTML = responseHTML;
+                            _hyperscript.processNode(container);
+                        }
+                    });
+                })
+            </script>
             {{ block.super }}
         {% endblock %}
     </head>

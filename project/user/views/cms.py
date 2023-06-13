@@ -54,6 +54,13 @@ class CreateUserView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You don't have permission to create users."
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         permissions = Permission.objects.all().annotate(
             value=F('codename'),
             label=F('name')
@@ -100,12 +107,25 @@ class CreateUserView(LoginRequiredMixin, View):
                 messages.INFO,
                 'Username and email must be unique.'
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
+            )
         except Exception as e:
-            print(e)
             messages.add_message(
                 request,
                 messages.INFO,
-                'Something went wrong. Please try again.'
+                f'Something went wrong. Please try again. Error: {e}'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         user.refresh_from_db()
         for permission in permissions:
@@ -159,6 +179,13 @@ class EditUserView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You don't have permission to edit users."
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         permissions = Permission.objects.all().annotate(
             value=F('codename'),
             label=F('name')
@@ -207,11 +234,17 @@ class EditUserView(LoginRequiredMixin, View):
                 'User updated.'
             )
         except Exception as e:
-            print(e)
             messages.add_message(
                 request,
                 messages.INFO,
-                'Something went wrong. Please try again.'
+                f'Something went wrong. Please try again. Error: {e}'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         user.refresh_from_db()
         for permission in permissions:
@@ -233,6 +266,13 @@ class EditUserView(LoginRequiredMixin, View):
                 messages.INFO,
                 "Permission denied. You don't have permission to delete users."
             )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                403
+            )
         try:
             User.objects.get(username=username).delete()
         except User.DoesNotExist:
@@ -240,6 +280,13 @@ class EditUserView(LoginRequiredMixin, View):
                 request,
                 messages.INFO,
                 'Something went wrong. Please try again.'
+            )
+            return render(
+                request,
+                'Cms/Modules/MessagesList.html',
+                {},
+                None,
+                500
             )
         users = User.objects.all()
         return render(

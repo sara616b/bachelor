@@ -1,5 +1,6 @@
 {% include "cms/Modules/MessagesList.html" %}
-<form id="form"
+<form
+    id="form"
     hx-put="{% url 'EditPageView' slug=page.slug %}"
     hx-swap="outerhtml"
     hx-target="#form"
@@ -12,8 +13,12 @@
     {% include "cms/Components/Button.html" with text="Update Page" type="submit" %} 
     {% if not page.online %}
         {% url 'PagePreview' slug=page.slug online=False as preview_url %}
-        {% include "cms/Components/Button.html" with text="Preview" href="http://127.0.0.1:8001"|add:preview_url color="#396fd7" %}
+        {% include "cms/Components/Button.html" with text="Preview" href=preview_url color="#396fd7" %}
     {% else %}
-        {% include "cms/Components/Button.html" with text="View on Page" href="http://127.0.0.1:8002/"|add:page.slug color="#396fd7" %}
+        {% if ''|get_env == 'dev' %}
+            {% include "cms/Components/Button.html" with text="View on Page" href="http://127.0.0.1:8002/"|add:page.slug color="#396fd7" %}
+        {% elif ''|get_env == 'prod' %}
+            {% include "cms/Components/Button.html" with text="View on Page" href="https://sarahisabella.info/"|add:page.slug color="#396fd7" %}
+        {% endif %}
     {% endif %}
 </form>

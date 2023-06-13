@@ -25,7 +25,7 @@
 
         {% elif data|get_item:value|get_item:'type' == 'alignment' %}
 
-            {% include "cms/Components/Alignment.html" with name=data|get_item:value|get_item:'name' label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value %}
+            {% include "cms/Components/Alignment.html" with name=data|get_item:value|get_item:'name' label=data|get_item:value|get_item:'name' value=values|get_value_by_key:value id=component.id %}
 
         {% endif %}
     {% endfor %}

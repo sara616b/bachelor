@@ -2,17 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: #f2f7ff !important;
-}
-.mdc-text-field--filled.mdc-ripple-upgraded--background-focused {
-  background-color: #e3eeff !important;
-}
-
-.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
-  color: #002761 !important;
-}
-
 details summary.hide-marker::marker {
   display: none;
   content: "";

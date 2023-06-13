@@ -16,10 +16,8 @@
     "
 >
     {% for component in column.components %}
-        <div>
-            {% with template_name=component.name|stringformat:"s"|add:".html" %}
-                {% include "website/Components/"|add:template_name %}
-            {% endwith %}
-        </div>
+        {% with template_name=component.name|stringformat:"s"|add:".html" %}
+            {% include "website/Components/"|add:template_name %}
+        {% endwith %}
     {% endfor %}
 </div>

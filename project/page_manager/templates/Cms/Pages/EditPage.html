@@ -10,7 +10,7 @@
 
 {% block header %}
     {% include "cms/Components/Title.html" with text="Edit" %}
-    {% include "cms/Components/Button.html" with text="Delete?" color="#ce6060" %}
+    {% comment %} {% include "cms/Components/Button.html" with text="Delete" color="#ce6060" %} {% endcomment %}
 {% endblock %}
 
 {% block main_content %}
@@ -19,6 +19,8 @@
     <div class="flex flex-col gap-8 py-8">
         {% for section in sections %}
             {% include "Cms/Modules/SectionEdit.html" with section=section sections=sections %}
+        {% empty %}
+            {% include "cms/Components/Text.html" with text="No sections. Add one below!" %}
         {% endfor %}
     </div>
     {% include "Cms/Modules/AddSectionForm.html" %}

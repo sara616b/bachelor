@@ -107,4 +107,37 @@ customization_data = {
             },
         }
     },
+    "Button": {
+        "component": "Button",
+        "values": {
+            "name": "Button",
+            "button_color": "#fff",
+            "text": "Click here!",
+            "text_color": "#000",
+            "alignment": "center",
+            "link": "",
+        },
+        "customization": {
+            "text": {
+                "type": "text",
+                "name": "Button Text"
+            },
+            "button_color": {
+                "type": "color",
+                "name": "Button Color"
+            },
+            "alignment": {
+                "type": "alignment",
+                "name": "Button Alignment"
+            },
+            "text_color": {
+                "type": "color",
+                "name": "Text Color"
+            },
+            "link": {
+                "type": "text",
+                "name": "Link"
+            }
+        }
+    },
 }

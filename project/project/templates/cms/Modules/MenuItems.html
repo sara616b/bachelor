@@ -1,5 +1,5 @@
 <button 
-    class="grow justify-start mdc-tab bg-white {% if selected == label %}mdc-tab--active{% endif %}" 
+    class="relative flex justify-start h-12 px-6 text-center uppercase bg-white border-none cursor-pointer whitespace-nowrap grow" 
     role="tab"       
     aria-selected="false" 
     {% if selected == label %}aria-selected="true"{% endif %} 
@@ -9,12 +9,13 @@
     hx-target="#main"
     hx-push-url="true"
 >
-    <span class="mdc-tab__content">
-    <span class="mdc-tab__icon material-icons" aria-hidden="true">{{icon}}</span>
-    <span class="mdc-tab__text-label">{{label}}</span>
+    <span
+        class="relative flex items-center justify-center "
+    >
+        <span class="material-icons text-gray-600 {% if selected == label %}text-violet-800{% endif %}" aria-hidden="true">{{icon}}</span>
+        <span class="z-20 inline-block pl-2 pr-0 transition-all text-gray-600 {% if selected == label %}text-violet-800{% endif %}">{{label}}</span>
     </span>
-    <span class="mdc-tab-indicator {% if selected == label %}mdc-tab-indicator--active{% endif %}" >
-    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+    <span class="absolute top-0 left-0 z-10 flex justify-center w-full h-full" >
+        <span class="self-end w-full transition-all border-t-2 border-solid {% if selected == label %}border-violet-800{% endif %}"></span>
     </span>
-    <span class="mdc-tab__ripple"></span>
 </button>

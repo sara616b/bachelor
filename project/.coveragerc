@@ -1,0 +1,10 @@
+[run]
+[report]
+omit =
+    */migrations/*
+    manage.py
+    project/asgi.py
+    project/secrets.py
+    project/settings/__init__.py
+    project/settings/website.py
+    project/wsgi.py

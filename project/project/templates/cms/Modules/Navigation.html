@@ -7,10 +7,10 @@
   {% url 'UploadImageView' as images_url %}
   {% url 'LoginView' as login_url %}
   {% url 'LogoutView' as logout_url %}
-  <div class="hidden mdc-tab-bar md:block" role="tablist">
-    <div class="mdc-tab-scroller">
-      <div class="mdc-tab-scroller__scroll-area">
-        <div class=" mdc-tab-scroller__scroll-content">
+  <div class="hidden w-full md:block" role="tablist">
+    <div class="overflow-y-hidden">
+      <div class="flex overflow-x-scroll">
+        <div class="relative flex grow">
           {% include "cms/Modules/MenuItems.html" with label="Frontpage" link=frontpage_url icon="home" %}
           {% include "cms/Modules/MenuItems.html" with label="Pages" link=pages_url icon="web" %}
           {% include "cms/Modules/MenuItems.html" with label="Users" link=users_url icon="face" %}
@@ -39,10 +39,3 @@
     </div>
   </details>
 </nav>
-
-
-{% block scripts %}
-    <script>
-        mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.mdc-tab-bar'));
-    </script>
-{% endblock %}

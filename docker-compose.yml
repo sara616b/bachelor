@@ -20,13 +20,13 @@ services:
       context: ./
       dockerfile: Dockerfile
     environment:
+      - RTE=dev
       - SITE=website
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
     working_dir: /app/project
     volumes:
-      - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
     command: sh -c 'python manage.py check && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
@@ -45,13 +45,13 @@ services:
       context: ./
       dockerfile: Dockerfile
     environment:
+      - RTE=dev
       - SITE=cms
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
     working_dir: /app/project
     volumes:
-      - media:/app/project/media/
       - static:/app/project/static/
       - .:/app/
     command: sh -c 'python manage.py check && python manage.py runserver 0.0.0.0:8000' # yamllint disable-line
@@ -65,7 +65,7 @@ services:
     networks:
       - dbnetwork
       - webnetwork
-  cms-assets:
+  assets:
     build:
       context: ./
       dockerfile: Dockerfile.styling
@@ -80,14 +80,12 @@ services:
       - ./project/project/templates:/app/project/project/templates
       - ./project/login/templates:/app/project/login/templates
       - ./project/user/templates:/app/project/user/templates
-      - ./tailwindcss-linux-x64:/app/tailwindcss-linux-x64
-    command: sh -c './tailwindcss-linux-x64 -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --watch --poll' # yamllint disable-line
+    command: sh -c 'tailwindcss -i /app/project/project/static/Cms/input.css -o /app/project/project/static/Cms/output.css --watch --poll' # yamllint disable-line
     restart: always
     networks:
       - webnetwork
 volumes:
   postgres_data:
-  media:
   static:
 
 networks:

@@ -5,10 +5,10 @@
     <select
         name="{{name}}"
         id="{{name}}"
-        class="w-full mdc-text-field mdc-text-field--filled"
+        class="relative inline-flex items-baseline w-full h-10 px-4 overflow-hidden rounded-sm cursor-pointer bg-indigo-50"
     >
         {% for value in values %}
-            <option value="{{value}}">{{value}}</option>
+            <option class="hover:cursor-pointer hover:bg-white" value="{{value}}">{{value}}</option>
         {% endfor %}
     </select>
 </label>

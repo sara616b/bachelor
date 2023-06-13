@@ -6,7 +6,9 @@
 
 
 {% block content %}
-  {% include "cms/Modules/MessagesList.html" %}
+  <div id="messages" class="absolute">
+    {% include "cms/Modules/MessagesList.html" %}
+  </div>
   <main 
     class="flex flex-col min-h-full p-2 transition-all lg:px-8 sm:mx-auto sm:w-full md:max-w-xl"
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

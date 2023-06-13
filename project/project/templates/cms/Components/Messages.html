@@ -4,11 +4,11 @@
     aria-live="assertive"
     _="on load wait 2s then transition opacity to 0 then remove me"
 >
-    <div class="mdc-banner__graphic-text-wrapper">
-        <div class="items-center self-center rounded-full mdc-banner__graphic material-icons" role="img" alt="Error">
+    <div class="flex w-full gap-4 px-4">
+        <div class="items-center self-center rounded-full text-violet-700 material-icons" role="img" alt="Error">
             error_outline
         </div>
-        <div class="mdc-banner__text ">
+        <div class="py-4 grow">
             {{ message }}
         </div>
     </div>
