@@ -142,7 +142,7 @@ class PageApi(LoginRequiredMixin, View):
         )
 
     def put(self, request, slug):
-        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+        if 'page_manager.change_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -260,7 +260,7 @@ class GetPagePreviewApi(View):
 
 class PageDataApi(LoginRequiredMixin, View):
     def put(self, request, slug, object, index):
-        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+        if 'page_manager.change_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -392,7 +392,7 @@ class PageDataApi(LoginRequiredMixin, View):
 
 class MovePageObjectApi(View):
     def put(self, request, slug, object, index, direction):
-        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+        if 'page_manager.change_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -453,7 +453,7 @@ class MovePageObjectApi(View):
 
 class ChangeColumnAmount(View):
     def put(self, request, slug, amount):
-        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+        if 'page_manager.change_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -511,7 +511,7 @@ class ChangeColumnAmount(View):
 
 class UpdateComponentApi(View):
     def put(self, request, slug, index):
-        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+        if 'page_manager.change_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',
@@ -558,7 +558,7 @@ class UpdateComponentApi(View):
 
 class UpdateSectionApi(View):
     def put(self, request, slug, index):
-        if 'page_manager.edit_page' not in request.user.get_user_permissions():
+        if 'page_manager.change_page' not in request.user.get_user_permissions():
             return JsonResponse(
                 {
                     'result': 'permission denied',

@@ -29,7 +29,7 @@ describe("LoginPage", () => {
     render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
@@ -38,10 +38,11 @@ describe("LoginPage", () => {
   });
 
   test("submits the login form with the correct data", async () => {
+    process.env.REACT_APP_API_HOST = "http://127.0.0.1:8002";
     render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     const postData = {
@@ -67,7 +68,7 @@ describe("LoginPage", () => {
       expect(axios.post).toHaveBeenCalledTimes(1);
       expect(axios.post).toHaveBeenCalledWith(
         "http://127.0.0.1:8002/login/",
-        expect.any(FormData),
+        expect.any(FormData)
       );
     });
 
@@ -87,7 +88,7 @@ describe("LoginPage", () => {
     render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     // Submit the form without filling it out

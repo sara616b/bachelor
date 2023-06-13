@@ -149,7 +149,6 @@ class UserApi(LoginRequiredMixin, View):
             firstname = cleaned_data['firstname']
             lastname = cleaned_data['lastname']
             email = cleaned_data['email']
-            password = cleaned_data['password']
             is_superuser = cleaned_data.get('is_superuser', False)
             permissions = cleaned_data.get('permissions', '').split(',')
             try:
@@ -164,9 +163,6 @@ class UserApi(LoginRequiredMixin, View):
                     if user.email != email:
                         user.email = email
                         updated_fields.append('email')
-                    if user.password != password:
-                        user.password = password
-                        updated_fields.append('password')
                     if user.is_superuser != is_superuser:
                         user.is_superuser = is_superuser
                         updated_fields.append('is_superuser')
